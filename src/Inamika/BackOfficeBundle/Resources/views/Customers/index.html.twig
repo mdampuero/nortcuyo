@@ -1,0 +1,134 @@
+{% set pathBase='inamika_backoffice_customers' %}
+{% set pathBaseApi='api_customers' %}
+{% extends "InamikaBackOfficeBundle::layout.html.twig" %}
+{% block body %} 
+{{ parent()}}
+<h3 class="card-title">
+    {% if app.request.attributes.get('_route_params')._breadcrumbs is defined %}
+        {{ (app.request.attributes.get('_route_params')['_breadcrumbs']|last)['label'] | trans }}
+    {% endif %}
+    <button type="button" class="btn btn-success btn-rounded pull-right" onclick="location.href='{{ path(pathBase~'_add')}}'"><i class="fa fa-plus"></i> {{ 'ADD' | trans }}</button>
+</h3>
+<div class="table-responsive">
+    <table id="{{ pathBase }}_dataTable" class="display nowrap table table-striped table-bordered" cellspacing="0" width="100%">
+    </table>
+</div>
+
+{{ form_start(formDelete, {'attr': {'id':id|default('formDelete')}}) }}
+{{ form_widget(formDelete) }}
+{{ form_end(formDelete) }}
+<div class="modal fade" id="modalBlankPassword" tabindex="-1" role="dialog" aria-labelledby="modalBlankPasswordLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalBlankPasswordLabel">Blanquear contraseña</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {{ form_start(formBlankPassword, {'attr': {'class': 'form-material','novalidate':'novalidate','id':id|default('formBlankPassword')}}) }}
+            <div class="modal-body">
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{form_label(formBlankPassword.password)}}
+                                {{form_widget(formBlankPassword.password)}}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{form_label(formBlankPassword.passwordRepeat)}}
+                                {{form_widget(formBlankPassword.passwordRepeat)}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="saveChangeStatus">
+                <i class="fa fa-check"></i>
+                {{ 'SAVE' | trans }}</button>
+            </div>
+            {{ form_end(formBlankPassword) }}
+        </div>
+    </div>
+</div>
+{% endblock body %} 
+{% block javascripts %} 
+{{ parent() }}
+{% include 'InamikaBackOfficeBundle:_partials:dataTableScripts.html.twig' with { pathBase:pathBase,loadData:pathBaseApi } %}
+<script type="text/javascript">
+    $(function () {
+        var form=$("#formBlankPassword");
+        var url=form.attr("action");
+        var id=null;
+        $("#saveChangeStatus").on("click",function (){
+            loading.show();
+            var data={
+                password:$("#password").val(),
+                passwordRepeat:$("#passwordRepeat").val(),
+                id:id
+            }
+            $.ajax({
+                url: url,
+                type: 'PUT',
+                data:JSON.stringify(data),
+                crossDomain: true,
+                success: function(data) {
+                    $.toast({
+                        heading: '{{ 'SUCCESS' | trans }}',
+                        text: 'La contraseña se blanqueó correctamente para '+data.name,
+                        position: 'top-right',
+                        icon: 'success',
+                        hideAfter: 3000, 
+                        stack: 6
+                    });
+                    $("#modalBlankPassword").modal('hide');
+                },  
+                complete:function(){
+                    $("#password").val('');
+                    $("#passwordRepeat").val('');
+                    loading.hide();
+                },
+                error: function(data, status, error) {
+                    $.toast({
+                        heading: '{{ 'ERROR' | trans }}',
+                        text: data.responseJSON.message,
+                        position: 'top-right',
+                        icon: 'error',
+                        hideAfter: 3000, 
+                        stack: 6
+                    });
+                }
+            });
+        });
+        $('#{{ pathBase }}_dataTable').DataTable({
+            order: [[ 0, 'desc' ]],
+            "processing": false,
+            "serverSide": true,
+            columns: [
+                { title:"{{ 'NAME' | trans }}",data: "name" },
+                { title:"Categoría",data: "customerCategory.name" },
+                { title:"CUIT/CUIL",data: "document" },
+                { title:"Teléfono",data: "phone" },
+                {
+                    data: null,
+                    orderable: false,
+                    className: "text-center",
+                    defaultContent: `
+                    <button type="button" class="btn-blank-password btn btn-outline-warning btn-circle"><i class="fa fa-key"></i></button>
+                    <button type="button" class="btn-edit btn btn-outline-info btn-circle"><i class="fa fa-pencil"></i></button>
+                    <button type="button" class="btn-remove btn btn-outline-danger btn-circle"><i class="fa fa-trash"></i></button>
+                    `
+                }
+            ]
+        });
+        $('#{{ pathBase }}_dataTable').on('click', 'button.btn-blank-password', function () {
+            var data = $('#{{ pathBase }}_dataTable').DataTable().row( $(this).parents('tr') ).data();
+            id=data.id;
+            $("#modalBlankPassword").modal('show');
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,16 @@
+
+inamika_frontend:
+    resource: "@InamikaFrontendBundle/Resources/config/routing.yml"
+    prefix:   /
+
+inamika_api:
+    resource: "@InamikaApiBundle/Resources/config/routing.yml"
+    prefix:   /api
+    defaults:
+        _format: json
+    
+inamika_backend:
+    resource: "@InamikaBackOfficeBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
+

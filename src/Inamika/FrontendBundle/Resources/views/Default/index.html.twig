@@ -1,0 +1,381 @@
+{% extends "InamikaFrontendBundle::layout.html.twig" %}
+{% block body %}
+{{ parent()}}
+
+<section id="hero">
+{{ render(controller('InamikaFrontendBundle:Default:sliders')) }}
+
+</section> 
+
+  <main id="main">
+
+    <!--==========================
+      About Us Section
+    ============================-->
+    <section id="about">
+      <div class="container">
+        <div class="row about-container">
+          <div class="col-lg-12 ">
+            <h2 class="title text-center">¿QUIÉNES SOMOS?</h2>
+            <div class="box-blue uppercase bold italic text-center title-upper">
+              <p>&quot;UNA EMPRESA CON MÁS DE 40 AÑOS DE EXPERIENCIA&quot;</p>
+            </div>
+          </div>
+          <div class="col-lg-6 content order-lg-1 order-2">
+            <p>
+              Somos una empresa familiar creada en el año 1.980, dedicada a la venta de herramientas en las provincias de Mendoza, San Luis, San Juan, La Rioja y Catamarca.
+            </p>
+            <p>
+              Nuestro local comercial está ubicado en Guaymallén, un lugar de fácil y rápido acceso con estacionamiento propio y muy cerca del centro de Mendoza.
+            </p>
+            <p>
+              Actualmente somos especialistas en la distribución mayorista de herramientas, seguridad y protección industrial, abrasivos, bulonería y productos para el hogar y exteriores.
+            </p>
+            <br>
+            <hr>
+            <br>
+            <p class="bold italic">
+              Somos líderes en la distribución de las mejores marcas en las áreas de:
+            </p>
+            <ul>
+              <li>HERRAMIENTAS MANUALES</li>
+              <li>HERRAMIENTAS ELÉCTRICAS Y EXPLOSIÓN</li>
+              <li>SOLDADURA Y EQUIPOS</li>
+              <li>ABRASIVOS SÓLIDOS Y REVESTIDOS</li>
+              <li>BULONERÍA MAYORISTA</li>
+              <li>PROTECCIÓN Y SEGURIDAD INDUSTRIAL</li>
+              <li>PRODUCTOS ARTIFICIALES DE JARDÍN</li>
+              <li>PRODUCTOS PARA PISCINAS</li>
+              <li>VARIOS: LUBRICANTES, PINTURAS, CEMENTO</li>
+              <li>ADHESIVO, SOGAS Y SILICONAS</li>
+            </ul>
+          </div>
+          <div class="col-lg-6 order-lg-2 order-1 ">
+            <div class="aboutUs wow fadeInRight" data-wow-delay="0.2s"><img src="{{ asset('bundles/inamikafrontend/') }}img/aboutUS-1.jpeg"></div>
+            <div class="aboutUs wow fadeInRight" data-wow-delay="0.3s"><img src="{{ asset('bundles/inamikafrontend/') }}img/aboutUS-2.jpeg"></div>
+          </div>
+        </div>
+        <div class="row about-container">
+          <div class="col-lg-6 order-lg-2 order-1 ">
+            <div class="aboutUs wow fadeInLeft" data-wow-delay="0.4s"><img src="{{ asset('bundles/inamikafrontend/') }}img/aboutUS-3.jpeg"></div>
+          </div>
+          <div class="col-lg-6 order-lg-2 order-1 " data-wow-delay="0.4s">
+            <div class="box-blue wow fadeInRight bold italic inmundo" style="margin:0; font-size:1.3rem;">&quot;En NORTCUYO disponemos de un amplio portfolio de productos y las principales marcas de
+cada rubro. Nuestras marcas de primer nivel, tanto internacionales como nacionales, con
+calificación ISO y los productos de primera calidad, nos permiten atender las necesidades de
+clientes exigentes a precios competitivos&quot;</div>
+          </div>
+        </div>
+      </div>
+    </section><!-- #about -->
+
+    <!--==========================
+      Facts Section
+    ============================-->
+    <section id="facts">
+      <div class="container wow fadeIn">
+        <div class="section-header">
+          <h3 class="section-title">nortcuyo En números</h3>
+          <p class="section-description" style="padding-bottom:0">Contamos con un stock de más de 300 rubros y más de 52.000 artículos en nuestro centro de distribución, trabajamos con un equipo de vendedores especializados para asesorarlo en su compra en forma personalizada, a través de una asistencia permanente.</p>
+          <p class="section-description">Somos distribuidores en las zonas de Mendoza, San Juan, San Luis, La Rioja y Catamarca de reconocidas marcas locales e internacionales de herramientas.</p>
+        </div>
+        <div class="row counters">
+
+  				<div class="col-lg-3 col-6 text-center">
+            <span data-toggle="counter-up">1254</span>
+            <p>Clientes Activos</p>
+  				</div>
+
+          <div class="col-lg-3 col-6 text-center">
+            <span data-toggle="counter-up">52152</span>
+            <p>Productos</p>
+  				</div>
+
+          <div class="col-lg-3 col-6 text-center">
+            <span data-toggle="counter-up">5</span>
+            <p>Provincias</p>
+  				</div>
+
+          <div class="col-lg-3 col-6 text-center">
+            <span data-toggle="counter-up">45</span>
+            <p>Marcas</p>
+  				</div>
+
+  			</div>
+
+      </div>
+    </section><!-- #facts -->
+
+    <!--==========================
+      Services Section
+    ============================-->
+    <section id="services">
+      <div class="container wow fadeIn">
+        <div class="section-header">
+          <h3 class="section-title">CONOZCA NUESTROS SERVICIOS</h3>
+          <p class="section-description">Nortcuyo Tools S.A cuenta con un centro de distribución con más de 3.500 mts2 de bodega,
+vehículos destinados al reparto de mercaderías, vendedores especializados y atención personalizada en nuestro local. Buscamos asesorarlo personalmente en su compra para que
+pueda ofrecer a sus clientes herramientas de alta calidad.</p>
+        </div>
+        <div class="row">
+          <div class="col-sm-5 text-center wow fadeInLeft" data-wow-delay="0.2s">
+            {# <i class="fa fa-truck"></i> #}
+            <img src="{{ asset('bundles/inamikafrontend/') }}img/logo-express.png" style="width:150px; margin-top:17px">
+          </div>
+          <div class="col-sm-7 wow fadeInRight" data-wow-delay="0.2s">
+            <p style="margin:0;" class="italic bold">NORTCUYO EXPRESS / ENVÍO GRATIS</p>
+            <p style="margin:0;">Entrega a domicilio sin cargo en las zonas de Mendoza y Gran Mendoza<br/>Entregamos en todo el país o en el expreso de su preferencia</p>
+          </div>
+        </div>
+        <br/>
+        <div class="row">
+          <div class="col-sm-5 text-center wow fadeInLeft" data-wow-delay="0.3s">
+            <i class="fa fa-users fa-3x" style=""></i>
+          </div>
+          <div class="col-sm-7 wow fadeInRight" data-wow-delay="0.3s">
+            <p style="margin:0;" class="italic bold">EQUIPO</p>
+            <p style="margin:0;">Ejecutivos de venta especializados</p>
+          </div>
+        </div>
+        <br/>
+        <div class="row">
+          <div class="col-sm-5 text-center wow fadeInLeft" data-wow-delay="0.4s">
+            <i class="fa fa-headphones fa-3x" style=""></i>
+          </div>
+          <div class="col-sm-7 wow fadeInRight" data-wow-delay="0.4s">
+            <p style="margin:0;" class="italic bold">ATENCIÓN AL CLIENTE</p>
+            <p style="margin:0;">3 líneas telefónicas rotativas y atención personalizada en mostrador</p>
+          </div>
+        </div>
+        <br/>
+        <div class="row">
+          <div class="col-sm-5 text-center wow fadeInLeft" data-wow-delay="0.5s">
+            <i class="fa fa-whatsapp fa-3x" style=""></i>
+          </div>
+          <div class="col-sm-7 wow fadeInRight" data-wow-delay="0.5s">
+            <p style="margin:0;" class="italic bold">ATENCIÓN VIRTUAL</p>
+            <p style="margin:0;">Vía whatsApp y vía E-mail</p>
+          </div>
+        </div>
+        <br/>
+        <div class="row">
+          <div class="col-sm-5 text-center wow fadeInLeft" data-wow-delay="0.6s">
+            <i class="fa fa-mobile fa-3x" style="margin-right:12px;"></i>
+          </div>
+          <div class="col-sm-7 wow fadeInRight" data-wow-delay="0.6s">
+            <p style="margin:0;" class="italic bold">APP MOBILE</p>
+            <p style="margin:0;">Aplicación para hacer tus pedidos desde tu Smartphone</p>
+          </div>
+        </div>
+        <br/>
+        <div class="row">
+          <div class="col-sm-5 text-center wow fadeInLeft" data-wow-delay="0.7s">
+            <i class="fa fa-certificate fa-3x" style=""></i>
+          </div>
+          <div class="col-sm-7 wow fadeInRight" data-wow-delay="0.7s">
+            <p style="margin:0;" class="italic bold">GARANTÍA</p>
+            <p style="margin:0;">Servicio de post-venta. Productos 100% garantizados</p>
+          </div>
+        </div>
+        <br/>
+        <div class="row">
+          <div class="col-sm-5 text-center wow fadeInLeft" data-wow-delay="0.8s">
+            <i class="fa fa-wrench fa-3x" style=""></i>
+          </div>
+          <div class="col-sm-7 wow fadeInRight" data-wow-delay="0.8s">
+            <p style="margin:0;" class="italic bold">SERVICIO TÉCNICO</p>
+            <p style="margin:0;">Servicio técnico oficial de <b>Einhell</b> y <b>Karcher</b> en Mendoza</p>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- #services -->
+
+    <section id="catalog">
+      <div class="container wow fadeIn">
+        <div class="section-header">
+          <h3 class="section-title">catálogos</h3>
+          <p class="section-description" style="padding-bottom:0">Disponemos de un amplio portfolio de productos y las principales marcas de cada rubro destacándose entre éstas, las distribuciones oficiales de EINHELL, BAHCO y KARCHER.</p>
+        </div>
+        <br>
+        <div class="row ">
+          {{ render(controller('InamikaFrontendBundle:Default:catalog')) }}
+  			</div>
+
+      </div>
+    </section><!-- #facts -->
+    <!--==========================
+    Call To Action Section
+    ============================-->
+    <section id="call-to-action">
+      <div class="container wow fadeIn">
+        <div class="row">
+          <div class="col-lg-6 text-center text-lg-left">
+            <h3 class="cta-title">Hacé tu pedido online!</h3>
+            <p class="cta-text"> Podés realizar tu pedido desde nuestra plataforma web o desde nuestra App Mobile</p>
+          </div>
+          <div class="col-lg-3 cta-btn-container text-center">
+            <a class="cta-btn align-middle" href="{{ path('inamika_frontend_shop') }}">App mobile</a>
+          </div>
+          <div class="col-lg-3 cta-btn-container text-center">
+            <a class="cta-btn align-middle" href="{{ path('inamika_frontend_shop') }}">Shop</a>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- #call-to-action -->
+
+    <!--==========================
+      Portfolio Section
+    ============================-->
+    <section id="providers">
+      <div class="container wow fadeInUp">
+        <div class="section-header">
+          <h3 class="section-title">NUESTRAS MARCAS</h3>
+          <p class="section-description"></p>
+        </div> 
+        <div class="row" id="portfolio-wrapper">
+          {{ render(controller('InamikaFrontendBundle:Default:brands')) }}
+        </div>
+      </div>
+    </section><!-- #portfolio -->
+
+   
+    <div class="box-inmundo" >
+      <div class="container" >
+        <div class="row" style="background:transparent;">
+          <div class="col-sm-8">
+          <ul>
+            <li>
+              Servicios especiales a ferreterías
+            </li>
+            <li>
+              Seguridad, respaldo y stock permanente de productos
+            </li>
+            <li>
+              Otorgamos las mejores posibilidades de pago
+            </li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+    <div class="box-blue emails" style="margin-top:0">
+      <div class="container">
+        <ul>
+          <li>
+            <h4>Solicite asesoramiento a nuestros e-mail: </h4>
+            <h4><a style="color:#FFF;" href="mailto:mkt@ntsamayoristas.com.ar">mkt@ntsamayoristas.com.ar</a> / <a style="color:#FFF;" href="mailto:mkt1@ntsamayoristas.com.ar">mkt1@ntsamayoristas.com.ar</a></h4>
+          </li>
+          <li>
+            <h4>Para realizar su pedido, escríbanos a: </h4>
+            <h4><a style="color:#FFF;" href="mailto:ventas@ntsamayoristas.com.ar">ventas@ntsamayoristas.com.ar</a> / <a style="color:#FFF;" href="mailto:administracion@ntsamayoristas.com.ar">administracion@ntsamayoristas.com.ar</a></h4>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <!--==========================
+      Contact Section
+    ============================-->
+    <section id="contact">
+      <div class="container wow fadeInUp">
+        <div class="section-header">
+          <h3 class="section-title">Contáctenos</h3>
+          <br/>
+          {# <p class="section-description">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque</p> #}
+        </div>
+      </div>
+      {# <div id="map-canvas" style="width:100%; height: 600px; color: #000;"></div> #}
+      <div id="google-map" data-latitude="-32.8879794" data-longitude="-68.8273959"></div>
+
+      <div class="container wow fadeInUp">
+        <div class="row justify-content-center">
+
+          <div class="col-lg-4 col-md-4">
+
+            <div class="info">
+              <div>
+                <i class="fa fa-map-marker text-blue"></i>
+                <p>O'Brien 187 San José - Guaymallén (5519)<br>Mendoza, Argentina</p>
+              </div>
+
+              <div>
+                <i class="fa fa-clock-o text-blue"></i>
+                <p>Lunes a Viernes de 8:00 a 17:00hs</p>
+              </div>
+
+              <div>
+                <i class="fa fa-phone text-blue"></i>
+                <p>(0261) 4455630 / 4456110</p>
+              </div>
+              <div>
+                <i class="fa fa-envelope text-blue"></i>
+                <ul style="margin-left: 26px; font-size: 14px;">
+                  <li><a class="text-blue" href="mailto:ventas@ntsamayoristas.com.ar">ventas@ntsamayoristas.com.ar</a></li>
+                  <li><a class="text-blue" href="mailto:administracion@ntsamayoristas.com.ar">administracion@ntsamayoristas.com.ar</a></li>
+                  <li><a class="text-blue" href="mailto:mkt@ntsamayoristas.com.ar">mkt@ntsamayoristas.com.ar</a></li>
+                  <li><a class="text-blue" href="mailto:mkt1@ntsamayoristas.com.ar">mkt1@ntsamayoristas.com.ar</a></li>
+                  <li><a class="text-blue" href="mailto:compras@ntsamayoristas.com.ar">compras@ntsamayoristas.com.ar</a></li>
+                  <li><a class="text-blue" href="mailto:marketing@ntsamayoristas.com.ar">marketing@ntsamayoristas.com.ar</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="social-links text-center">
+              <a href="#" class="instagram"><i class="fa fa-instagram"></i></a>
+              <a href="https://www.facebook.com/nortcuyo.tools"  target="_blank"class="facebook"><i class="fa fa-facebook"></i></a>
+              {# <a href="mailto:atencionalcliente@ntsamayoristas.com.ar" target="_blank" class="instagram"><i class="fa fa-envelope"></i></a> #}
+              <a href="https://web.whatsapp.com/" class="instagram" target="_blank"><i class="fa fa-whatsapp"></i></a>
+              {# <a href="#" class="google-plus"><i class="fa fa-google-plus"></i></a>
+              <a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a> #}
+            </div>
+
+          </div>
+
+          <div class="col-lg-5 col-md-8">
+            <div class="form">
+              <div id="errormessage"></div>
+              {{ form_start(form, {'attr': {'class': 'form-material sendToApi','novalidate':'novalidate'} }) }}
+                <div class="form-group">
+                  {{form_widget(form.name)}}
+                  {# <input type="text" name="name" class="form-control" id="name" placeholder="Nombre completo" data-rule="minlen:4" data-msg="Por favor ingrese su nombre" /> #}
+                </div>
+                <div class="form-group">
+                  {{form_widget(form.email)}}
+                </div>
+                <div class="form-group">
+                  {{form_widget(form.subject)}}
+                </div>
+                <div class="form-group">
+                  {{form_widget(form.message)}}
+                </div>
+                <div class="text-center"><button type="submit">Enviar mensaje</button></div>
+              {{ form_end(form) }}
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- #contact -->
+  </main>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+
+<script>
+  function beforeSuccess(){
+        $("form")[0].reset();
+        loading.hide();
+        $.toast({
+            heading: '{{ 'SUCCESS' | trans }}',
+            text: 'El mensaje se envió correctamente, a la brevedad nuestro equipo te responderá por el mismo medio.<br/><br/>Muchas Gracias',
+            position: 'top-right',
+            icon: 'success',
+            hideAfter: 6000, 
+            stack: 6
+        });
+    }
+</script>
+{% endblock javascripts %}

@@ -1,0 +1,295 @@
+{% set pathBase='inamika_backoffice_orders' %}
+{% set pathBaseApi='api_orders' %}
+{% extends "InamikaBackOfficeBundle::layout.html.twig" %}
+{% block body %}
+	{{ parent()}}
+	<h3 class="card-title">
+		Pedido: #{{ data.id }}
+		<div class="btn-group pull-right">
+			<button class="btn btn-warning btn-sm" type="button" data-toggle="modal" data-target="#modalChangeStatus">
+				<i class="mdi mdi-font-awesome"></i>
+				Cambiar estado</button>
+			<button class="btn btn-success btn-sm" type="button" onclick="openSWAL()">
+				<i class="mdi mdi-tooltip-edit"></i>
+				Agregar nota</button>
+		</div>
+		<hr>
+	</h3>
+	<div class="row">
+		<div class="col-md-4">
+			<div class="card bg-light">
+				<h4 class="card-header bg-info text-white">Cliente</h4>
+				<div class="card-body">
+					<h5 class="card-title">{{ data.customerId.name }}</h5>
+					<p class="card-text">
+						CUIT/CUIL:
+						{{ data.customerId.document }}<br/>
+						Email:
+						<a href="mailto:{{ data.customerId.email }}">{{ data.customerId.email }}</a><br/>
+						Teléfono:
+						{{ data.customerId.phone }}<br/>
+						Dirección:
+						{{ data.customerId.address }}<br/>
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="card bg-light">
+				<h4 class="card-header bg-success text-white">Pedido</h4>
+				<div class="card-body">
+					<h5 class="card-title">
+						Total: ${{ data.totalVat | number_format(2, ',', '.') }}</h5>
+					<p id="statusLabel"><span class="badge badge-pill badge-{{ data.status.color }}">{{ data.status.name  }}</span></p>
+					<p class="card-text">
+						Fecha:
+						{{ data.createdAt | date('d/m/Y H:i') }}<br/>
+						Total de items:
+						{{ data.items | length }}<br/>
+						<br/>
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="card bg-light">
+				<h4 class="card-header bg-primary text-white">Canal de venta</h4>
+				<div class="card-body" style="min-height:166px;">
+					<h5 class="card-title">
+					{% if data.channel == 'APP' %}
+						<span class="badge badge-pill badge-primary">{{ data.channel | upper }}</span>
+					{% else %}
+						<span class="badge badge-pill badge-success">{{ data.channel | upper }}</span>
+					{% endif %}</h5>
+					<p class="card-text">
+					{% if data.customerName %}
+						Cliente:
+						{{ data.customerName }}
+						<br/>
+					{% endif %}
+					{% if data.transport %}
+						Transporte:
+						{{ data.transport }}
+						<br/>
+					{% endif %}
+						Observaciones:
+						{{ data.observations | nl2br }}
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<div class="table-responsive m-t-40" style="clear: both;">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th class="text-center">#</th>
+							<th>Código</th>
+							<th>Nombre</th>
+							<th class="text-right">Cantidad</th>
+							<th class="text-right">P/U</th>
+							<th class="text-right">Subtotal</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for item in data.items %}
+							<tr>
+								<td class="text-center">{{ (loop.index + 1) }}</td>
+								<td>{{ item.code }}</td>
+								<td>{{ item.description }}</td>
+								<td class="text-right">{{ item.amount }}</td>
+								<td class="text-right">$
+									{{ (item.subtotal / item.amount) | number_format(2, ',', '.')}}</td>
+								<td class="text-right">$
+									{{ item.subtotal | number_format(2, ',', '.')}}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<div class="pull-right m-t-30 text-right">
+				<h4>
+					<b>Total S/I:
+					</b>$
+					{{ data.total | number_format(2, ',', '.')}}</h4>
+				<h4>
+					<b>IVA :</b>$
+					{{ (data.totalVat - data.total) | number_format(2, ',', '.')}}</h4>
+				<h2>
+					<b>Total :</b>$
+					{{ data.totalVat | number_format(2, ',', '.')}}</h2>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<!-- Modal -->
+	</div>
+	<div class="modal fade" id="modalChangeStatus" tabindex="-1" role="dialog" aria-labelledby="modalChangeStatusLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="modalChangeStatusLabel">Cambiar estado</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body form-material">
+					<div class="form-body">
+						<div class="form-group">
+							<label class="control-label required" for="optionsOrdersStatus">Nuevo estado</label>
+							<select id="optionsOrdersStatus" name="optionsOrdersStatus" required="required" class="form-control">
+							</select>
+						</div>
+						<div class="form-group">
+							<label class="control-label required" for="comment">Observaciones</label>
+							<textarea class="form-control" id="comment" placeholder=""></textarea>
+						</div>
+						<div class="form-check">
+							<input type="checkbox" class="form-check-input" id="notify">
+							<label class="form-check-label" for="notify">Notificar al cliente</label>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success" id="saveChangeStatus">
+					<i class="fa fa-check"></i>
+					{{ 'SAVE' | trans }}</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% include 'InamikaBackOfficeBundle:_partials:timeline.html.twig' %}
+{% endblock body %}
+{% block javascripts %}
+	{{ parent() }}
+	{% include 'InamikaBackOfficeBundle:_partials:timelineScripts.html.twig' with { endpoint: path('api_orders_logs',{ id: data.id }) } %}
+	<script>
+		$(function (){
+			$("#saveChangeStatus").on("click",function (){
+				loading.show();
+				$.ajax({
+					url: "{{ path('api_orders_changeOrder',{ id:data.id }) }}",
+					type: 'PUT',
+					data: JSON.stringify(
+						{
+							status: $('#optionsOrdersStatus').val(),
+							comment: $('#comment').val(),
+							user:"{{ app.user.id }}",
+							notify: $("#notify").prop('checked')
+						}
+					),
+					crossDomain: true,
+					success: function (data) {
+						loadTimeline();
+						$.toast({
+							heading: 'Correcto',
+							text: 'Se cambió el estado al pedido',
+							position: 'top-right',
+							icon: 'success',
+							hideAfter: 3000,
+							stack: 6
+						});
+						$("#modalChangeStatus").modal('hide');
+						$("#statusLabel").html(`<span class="badge badge-pill badge-${data.color}">${data.name}</span>`);
+					},
+					complete: function () {
+						loading.hide();
+					},
+					error: function (data, status, error) {
+						console.log(data);
+						$.toast({
+						heading: 'Error',
+						text: data.responseJSON.message,
+						position: 'top-right',
+						icon: 'error',
+						hideAfter: 3000,
+						stack: 6
+						});
+					}
+				});
+			});
+
+			$.ajax({
+				url: '{{ path('api_ordersStatus') }}',
+				type: 'GET',
+				crossDomain: true,
+				success: function(data) {
+					$.each(data, function (i, item) {
+						$('#optionsOrdersStatus').append($('<option>', { 
+							value: item.id,
+							text : item.name 
+						}));
+					});
+					$('#optionsOrdersStatus option[value="{{ data.status.id}}"]').prop('selected', true);
+				},  
+				complete:function(){
+					
+				},
+				error: function(data, status, error) {
+					
+				}
+			});
+		});
+
+
+		function openSWAL() {
+		swal({
+		title: 'Agregar nota',
+		text: "<textarea id='text' class='form-control' placeholder='Ingrese una nota'></textarea>",
+		html: true,
+		showCancelButton: true,
+		closeOnConfirm: false,
+		showLoaderOnConfirm: true,
+		inputPlaceholder: "Ingrese una nota",
+		confirmButtonText: "{{ 'SAVE' | trans }}",
+		cancelButtonText: "{{ 'CANCEL' | trans }}"
+		}, function (inputValue) {
+		if (inputValue) {
+
+		var val = document.getElementById('text').value;
+		if (val == '') {
+		$.toast({
+		heading: 'Error',
+		text: 'Debe ingresar un texto',
+		position: 'top-right',
+		icon: 'error',
+		hideAfter: 3000,
+		stack: 6
+		});
+		}
+		$.ajax({
+		url: "{{ path('api_logs_post') }}",
+		type: 'POST',
+		data: JSON.stringify(
+		{
+		title: "Nota",
+		description: val,
+		resource: "order_number_{{ data.id }}",
+		icon: 'mdi mdi-note',
+		status: 'warning',
+		user: "{{ app.user.id }}"
+		}
+		),
+		crossDomain: true,
+		success: function (data) {
+		loadTimeline();
+		$.toast({
+		heading: 'Correcto',
+		text: 'Se agregó la nota correctamente',
+		position: 'top-right',
+		icon: 'success',
+		hideAfter: 3000,
+		stack: 6
+		});
+
+		},
+		complete: function () {},
+		error: function (data, status, error) {}
+		});
+		swal.close();
+		}
+		});
+	}
+	</script>
+{% endblock javascripts %}

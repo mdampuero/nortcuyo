@@ -1,0 +1,62 @@
+{% extends "InamikaBackOfficeBundle::Emails/layout.html.twig" %}
+{% block body %}
+<h4>Datos del pedido</h4>
+<hr>
+<div>
+    <p>
+    {% if entity.customerId.isSeller %}
+        <b>Cliente:</b> {{ entity.customerName }}<br/>
+    {% else %}
+        <b>Cliente:</b> {{ entity.customerId.name }}<br/>
+    {% endif %}
+    <b>CUIT/CUIL:</b> {{ entity.customerId.document }}<br/>
+    <b>Email:</b> <a href="mailto:{{ entity.customerId.email }}">{{ entity.customerId.email }}</a><br/>
+    <b>Teléfono:</b> {{ entity.customerId.phone }}<br/>
+    <b>Canal de venta:</b> {{ entity.channel }}<br/>
+    <b>Observaciones:</b> {{ entity.observations }}<br/>
+    <b>Transporte:</b> {{ entity.transport }}<br/>
+    <b>Fecha:</b> {{ entity.createdAt | date('d/m/Y H:i') }}<br/>
+    <b>Total:</b> $ {{ entity.totalVat | number_format(2, ',', '.')}}
+    </p>
+</div>
+<h4>{{ 'PRODUCTS' | trans }}</h4>
+<hr>
+<div>
+    <table width="100%">
+        <thead>
+            <tr>
+                <th align="center">{{ 'ITEM' | trans }}</th>
+                <th align="center">Código</th>
+                <th align="left">Nombre</th>
+                <th align="center">Cantidad</th>
+                <th align="right">P/U</th>
+                <th align="right">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in entity.items %}
+            <tr>
+                <td align="center">{{ loop.index }}</td>
+                <td align="center">{{ item.code}}</td>
+                <td align="left">{{ item.description }}</td>
+                <td align="center">{{ item.amount }}</td>
+                <td align="right">$ {{ item.price | number_format(2,',','.') }}</td>
+                <td align="right">$ {{ item.subtotal | number_format(2,',','.') }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="5" align="right"><b>Total S/I:</b></td>
+                <td colspan="1" align="right"><b>$ {{ entity.total | number_format(2,',','.') }}</b></td>
+            </tr>
+            <tr>
+                <td colspan="5" align="right"><b>IVA:</b></td>
+                <td colspan="1" align="right"><b>$ {{ (entity.totalVat - entity.total) | number_format(2,',','.') }}</b></td>
+            </tr>
+            <tr>
+                <td colspan="5" align="right"><b>Total:</b></td>
+                <td colspan="1" align="right"><b>$ {{ entity.totalVat | number_format(2,',','.') }}</b></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

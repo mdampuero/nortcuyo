@@ -1,0 +1,32 @@
+inamika_backoffice_prices:
+    path:     /
+    defaults: 
+        _controller: InamikaBackOfficeBundle:Prices:index
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Listas de precios
+            parent_route: inamika_backoffice_homepage
+            
+inamika_backoffice_prices_add:
+    path:     /new
+    defaults: { _controller: InamikaBackOfficeBundle:Prices:add }
+    options:
+        breadcrumb:
+            label: Subir lista
+            parent_route: inamika_backoffice_prices
+    methods: [GET,POST]
+
+inamika_backoffice_prices_edit:
+    path:     /edit/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Prices:edit }
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Editar pedido
+            parent_route: inamika_backoffice_prices
+
+inamika_backoffice_prices_delete:
+    path:     /delete/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Prices:delete }
+    methods: [POST,DELETE]

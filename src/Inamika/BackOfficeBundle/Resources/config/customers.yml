@@ -1,0 +1,32 @@
+inamika_backoffice_customers:
+    path:     /
+    defaults: 
+        _controller: InamikaBackOfficeBundle:Customers:index
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Clientes
+            parent_route: inamika_backoffice_homepage
+            
+inamika_backoffice_customers_add:
+    path:     /new
+    defaults: { _controller: InamikaBackOfficeBundle:Customers:add }
+    options:
+        breadcrumb:
+            label: Agregar cliente
+            parent_route: inamika_backoffice_customers
+    methods: [GET]
+
+inamika_backoffice_customers_edit:
+    path:     /edit/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Customers:edit }
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Editar cliente
+            parent_route: inamika_backoffice_customers
+
+inamika_backoffice_customers_delete:
+    path:     /delete/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Customers:delete }
+    methods: [POST,DELETE]

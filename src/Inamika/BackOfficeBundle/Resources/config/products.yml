@@ -1,0 +1,41 @@
+inamika_backoffice_products:
+    path:     /
+    defaults: 
+        _controller: InamikaBackOfficeBundle:Products:index
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Productos
+            parent_route: inamika_backoffice_homepage
+            
+inamika_backoffice_products_add:
+    path:     /new
+    defaults: { _controller: InamikaBackOfficeBundle:Products:add }
+    options:
+        breadcrumb:
+            label: Agregar producto
+            parent_route: inamika_backoffice_products
+    methods: [GET]
+
+inamika_backoffice_products_upload:
+    path:     /upload
+    defaults: { _controller: InamikaBackOfficeBundle:Products:upload }
+    options:
+        breadcrumb:
+            label: Subir lista
+            parent_route: inamika_backoffice_products
+    methods: [GET]
+
+inamika_backoffice_products_edit:
+    path:     /edit/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Products:edit }
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Editar producto
+            parent_route: inamika_backoffice_products
+
+inamika_backoffice_products_delete:
+    path:     /delete/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Products:delete }
+    methods: [POST,DELETE]

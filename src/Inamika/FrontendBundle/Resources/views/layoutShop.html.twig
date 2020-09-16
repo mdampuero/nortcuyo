@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>
+			{% block title %}
+				{{ setting.getData.title }}
+				{% if app.request.attributes.get('_route_params')._breadcrumbs is defined %}
+					-
+					{{ (app.request.attributes.get('_route_params')['_breadcrumbs']|last)['label'] | trans }}
+				{% endif %}
+			{% endblock %}
+		</title>
+		<meta content="width=device-width, initial-scale=1.0" name="viewport">
+		<meta content="" name="keywords">
+		<meta
+		content="" name="description">
+
+		<!-- Favicons -->
+		<link href="{{ asset('bundles/inamikafrontend/') }}img/favicon.png" rel="icon">
+		<link
+		href="{{ asset('bundles/inamikafrontend/') }}img/apple-touch-icon.png" rel="apple-touch-icon">
+
+		<!-- Google Fonts -->
+		<link
+		href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Poppins:300,400,500,700" rel="stylesheet">
+
+		<!-- Bootstrap CSS File -->
+		<link
+		href="{{ asset('bundles/inamikafrontend/') }}lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- Libraries CSS Files -->
+		<link href="{{ asset('bundles/inamikafrontend/') }}lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+		<link
+		href="{{ asset('bundles/inamikafrontend/') }}lib/animate/animate.min.css" rel="stylesheet">
+
+		<!-- Main Stylesheet File -->
+		<link href="{{ asset('bundles/inamikafrontend/') }}css/style.css" rel="stylesheet">
+
+		<link
+		href="{{ asset('bundles/inamikabackoffice/assets/plugins/toast-master/css/jquery.toast.css') }}" rel="stylesheet">
+
+<link
+		href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+        <link href="{{ asset('bundles/inamikabackoffice/assets/plugins/sweetalert/sweetalert.css') }}" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+	<!-- =======================================================
+				    Theme Name: Regna
+				    Theme URL: https://bootstrapmade.com/regna-bootstrap-onepage-template/
+				    Author: BootstrapMade.com
+				    License: https://bootstrapmade.com/license/
+				  ======================================================= -->
+	</head>
+	<body>
+       
+		<div class="preloader">
+        <div class="loader">
+            <div class="loader__figure"></div>
+            <p class="loader__label">Por favor espere...</p>
+        </div>
+    </div>
+		<header id="header">
+			<div class="container">
+				<div id="logo" class="pull-left">
+				<a href="{{ path('inamika_frontend_homepage') }}"><img src="{{ asset('bundles/inamikafrontend/') }}img/logo.png" alt="" title="" /></img></a>
+				</div>
+				<nav id="nav-menu-container">
+					<ul class="nav-menu">
+						<li class="{% if 'inamika_frontend_homepage' in app.request.get('_route') %}menu-active{% endif %}"><a href="{{ path('inamika_frontend_homepage') }}#hero">Inicio</a></li>
+						<li><a href="{{ path('inamika_frontend_homepage') }}#about">Quienes Somos</a></li>
+						<li><a href="{{ path('inamika_frontend_homepage') }}#services">Servicios</a></li>
+						<li class="{% if 'inamika_frontend_shop' in app.request.get('_route') %}menu-active{% endif %}"><a href="{{ path('inamika_frontend_shop') }}">Shop</a></li>
+						<li><a href="{{ path('inamika_frontend_homepage') }}#contact">Contacto</a></li>
+                        {{ include('InamikaFrontendBundle::menuUser.html.twig') }}
+                    </ul>
+				</nav><!-- #nav-menu-container -->
+			</div>
+		</header><!-- #header -->
+		{% block body %}{% endblock %}
+        <!-- Modal -->
+		<div class="modal fade" id="quickViewProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="quickViewProductModalTitle">Modal title</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body" id="quickViewProductModalBody"></div>
+				</div>
+			</div>
+		</div>
+        <div class="modal fade" id="confirmSendOrder" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmSendOrderTitle">Enviar pedido</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="confirmSendOrderBody">
+                        {% if app.session.get('_security_main') and app.session.get('_security_main').isSeller == 1%}
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="customer" id="order_customer" placeholder="Cliente">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="customer" id="order_transport" placeholder="Transporte">
+                        </div>
+                        {% endif %}
+                        <div class="form-group">
+                            <label>¿Desea agregar algún comentario al pedido?</label>
+                            <textarea name="observations" id="order_observations" class="form-control" rows="5" placeholder="Sin comentarios"></textarea>
+                        </div>
+                        <br/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" onclick="confirmOrderSend(this)">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="categoryModal" tabindex="-1" role="dialog" aria-labelledby="categoryModalTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="categoryModalTitle">Categorías</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="categoryTree"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		{{ include('InamikaFrontendBundle::footer.html.twig') }}
+		{% block javascripts %}
+			<!-- JavaScript Libraries -->
+			<script src="{{ asset('bundles/inamikafrontend/') }}lib/jquery/jquery.min.js"></script>
+			<script src="{{ asset('bundles/inamikafrontend/') }}lib/jquery/jquery-migrate.min.js"></script>
+			<script src="{{ asset('bundles/inamikafrontend/') }}lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+			<script src="{{ asset('bundles/inamikafrontend/') }}lib/easing/easing.min.js"></script>
+			<script src="{{ asset('bundles/inamikafrontend/') }}lib/wow/wow.min.js"></script>
+			<script src="{{ asset('bundles/inamikabackoffice/assets/plugins/toast-master/js/jquery.toast.js') }}"></script>
+			<script src="{{ asset('bundles/inamikafrontend/') }}lib/waypoints/waypoints.min.js"></script>
+			<script src="{{ asset('bundles/inamikafrontend/') }}lib/counterup/counterup.min.js"></script>
+			<script src="{{ asset('bundles/inamikafrontend/') }}lib/superfish/hoverIntent.js"></script>
+			<script src="{{ asset('bundles/inamikafrontend/') }}lib/superfish/superfish.min.js"></script>
+			<script src="{{ asset('bundles/inamikafrontend/') }}js/custom.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js"></script> 
+            <script src="{{ asset('bundles/inamikafrontend/') }}js/main.js"></script>
+			<script>
+				function quickViewProduct(productId) {
+					$("#quickViewProductModalBody").html(`
+								<div class="modal-body" id="quickViewProductModalBody">
+								<div class="text-center">
+									<div class="fa-3x">
+									<i class="fa fa-spinner fa-pulse"></i>
+									</div>
+								</div>
+								</div>
+							`);
+
+					$("#quickViewProductModal").modal('show');
+					$("#quickViewProductModalTitle").html('Producto #' + productId);
+					
+					var url="{{ path('inamika_frontend_shop_product_view',{'code':'__PRODUCT_ID__'}) }}?isModal=1";
+					$.ajax({
+						url: url.replace('__PRODUCT_ID__',productId),
+						type: 'GET',
+						crossDomain: true,
+						success: function(data) {
+							$("#quickViewProductModalBody").html(data);
+						},  
+						complete:function(){
+							
+						},
+						error: function(data, status, error) {
+							
+						}
+					});
+				}
+			</script>
+		<script>
+  var loading={
+        show: function (text){
+            if(typeof text !== "undefined") $('#loading').attr('data-text',text);
+            {# $('#loading').show(); #}
+            $(".preloader").fadeIn();
+            return true;
+        },
+        hide: function (){
+            {# $('#loading').removeAttr('data-text');
+            $('#loading').hide(); #}
+            $(".preloader").fadeOut();
+            return true;
+        }
+    }
+    function encodeImageFileAsURL(element) {
+        var file = element.files[0];
+        file.base64="";
+        var reader = new FileReader();
+        reader.onloadend = function() {
+            file.base64=reader.result;
+            $("input[name='"+$(element).attr("name")+"Base64']").val(reader.result);
+        }
+        reader.readAsDataURL(file);
+    }
+
+    function preRequest(){
+        return {};
+    }
+    function showRequest(formData, form, options) { 
+        loading.show('{{ 'loading' | trans }}');
+        var inputs=form.closest('form').find(':input:not(.dropify)');
+        inputs.removeClass('error');
+        inputs.next('small').html('');
+        form.closest('form').find(':submit').attr('disabled',true);
+
+        var data=preRequest();
+        data['plainPassword']={ 
+                    first:'',
+                    second:''
+                }
+        for (var i = formData.length - 1; i >= 0; i--) {
+            
+            if(formData[i].name=='plainPassword[first]'){
+                data['plainPassword'].first=formData[i].value;
+            }else if(formData[i].name=='plainPassword[second]'){
+                data['plainPassword'].second=formData[i].value;
+            }else{
+                data[formData[i].name]=formData[i].value;
+            }
+        }
+        
+        {# console.log(formData);
+        console.log(data);
+        return false; #}
+        // console.log($(".dropify-preview span.dropify-render img").attr("src"));
+        // console.log(data);
+        // return false;
+        var method=($('input[name="_method"]').length>0)?$('input[name="_method"]').val():form.attr("method");
+        $.ajax({
+            url: form.attr("action"),
+            type: method.toUpperCase(),
+            data:JSON.stringify(data),
+            crossDomain: true,
+            success: function(data) {
+                beforeSuccess(data);
+            },  
+            complete:function(){
+                form.closest('form').find(':submit').attr('disabled',false);
+            },
+            error: function(data, status, error) {
+                {# console.log(data.responseJSON.form); #}
+                //console.log(data.responseJSON.form);
+                form.closest('form').find(':submit').attr('disabled',false);
+                loading.hide();
+                $.toast({
+                    heading: '{{ 'ERROR' | trans }}',
+                    text: '{{ 'ERROR_GENERAL' | trans }}',
+                    position: 'top-right',
+                    icon: 'error',
+                    hideAfter: 3000, 
+                    stack: 6
+                });
+                $.each( data.responseJSON.form.children, function( index, item ){
+                    //console.log(item);
+                    if(typeof item.children != "undefined"){
+                        //console.log("children",item);
+                        $.each( item.children, function( index2, children_ ){
+                            if(typeof children_.errors != "undefined" && children_.errors.length>0){
+                                data.responseJSON.form.children[index+'_'+index2]=children_;
+                            }
+                        });
+                        
+                    }
+                });
+                $.each( data.responseJSON.form.children, function( index, item ){
+                    
+                    if(typeof item.errors != "undefined" && item.errors.length>0){
+                        if($('#error_'+form.attr("name")+'_'+index).length > 0){
+                            if(form.attr("name")!=undefined){
+                                $('#error_'+form.attr("name")+'_'+index).html(item.errors[0]);
+                            }else{
+                                $('#error_'+index).html(item.errors[0]);
+                            }
+                            $('#error_'+index).html(item.errors[0]);
+                             {# console.log("if",item); #}
+                        }else{
+                            if(form.attr("name")!=undefined){
+                                var input=$('#'+form.attr("name")+'_'+index);
+                            }else{
+                                var input=form.closest('form').find(':input[name='+index+']');
+                            }
+                            var input=$('#'+index);
+                            input.addClass('error');
+                            input.after('<small class="text-danger">'+item.errors[0]+'</small>');
+                            {# console.log("else",item,index); #}
+                        }
+                    }
+                    
+                });
+                    console.log(data.responseJSON.form);
+            }
+        });
+        return false;
+    }
+    $(function (){
+        $(".preloader").fadeOut();
+        var options = {
+            dataType:'json',
+            beforeSubmit: showRequest
+        };
+        $( "form.sendToApi" ).ajaxForm(options);
+        {% for message in app.session.flashBag.get('success') %}
+        $.toast({
+            heading: '{{ 'SUCCESS' | trans }}',
+            text: '{{ message }}',
+            position: 'top-right',
+            icon: 'success',
+            hideAfter: 3000, 
+            stack: 6
+        });
+        {% endfor %}
+        {% for message in app.session.flashBag.get('warning') %}
+        $.toast({
+            heading: '{{ 'WARNING' | trans }}',
+            text: '{{ message }}',
+            position: 'top-right',
+            icon: 'warning',
+            hideAfter: 3000, 
+            stack: 6
+        });
+        {% endfor %}
+        {% for message in app.session.flashBag.get('danger') %}
+        $.toast({
+            heading: '{{ 'ERROR' | trans }}',
+            text: '{{ message }}',
+            position: 'top-right',
+            icon: 'error',
+            hideAfter: 3000, 
+            stack: 6
+        });
+        {% endfor %}
+    });
+
+    function addCart(btn,code,quantity){
+        $(btn).attr('disabled',true);
+        $.ajax({
+            url: "{{ path('api_cart_post') }}",
+            type: 'POST',
+            data: JSON.stringify({ product: code, quantity: quantity }),
+            crossDomain: true,
+            success: function(data) {
+                $('#quickViewProductModal').modal('hide');
+                $.toast({
+                    heading: 'Producto agregado',
+                    text: 'Se agregaron '+quantity+' unidades de #'+code+' al carrito',
+                    position: 'top-right',
+                    icon: 'success',
+                    hideAfter: 5000, 
+                    stack: 6
+                });
+                beforeSuccessUpdateCart(data);
+            },  
+            complete:function(){
+                $(btn).attr('disabled',false);
+                $('#quickViewProductModal').modal('hide');
+            },
+            error: function(data, status, error) {
+                $(btn).attr('disabled',false);
+                $('#quickViewProductModal').modal('hide');
+                $.toast({
+                    heading: '{{ 'ERROR' | trans }}',
+                    text: 'Error al intentar agregar el producto al carrito',
+                    position: 'top-right',
+                    icon: 'error',
+                    hideAfter: 3000, 
+                    stack: 6
+                });
+            }
+        });
+    }
+    function beforeSuccessUpdateCart(data){
+        var quantity=Object.keys(data.cart).length;
+        if ($("#menu-icon-cart #badge-cart").length>0){
+            $("#badge-cart").html(quantity);
+        }else{
+            $("#menu-icon-cart a").html(`<i class="fa fa-shopping-cart"></i><div class="badge-cart" id="badge-cart">${quantity}</div>`);
+        }
+        return;
+    }
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+	<script>
+		var $treeview = $("#categoryTree");
+		$(function () { 
+			$treeview.jstree(
+				{ 
+					"plugins" : [  ],
+					'core' : {
+						'data' : {
+							"url" : "{{ path('api_productCategories') }}",
+							"dataType" : "json"
+						}
+					}
+				}
+			)
+			.bind("refresh.jstree", function (e, data) { 
+				$(this).jstree("open_all");
+			})
+			.on('loaded.jstree', function() {
+				$treeview.jstree('open_all');
+				{% if entity is defined and entity.category %}
+				$treeview.jstree('select_node', '{{ entity.category.id }}');
+				{% endif %}
+			})
+			.on(
+				"select_node.jstree", function(evt, data){
+                    $("#category").val(data.node.id);
+                    $("#categoryModal").modal('hide');
+                    $("form").submit();
+				}
+			);
+		});
+	</script>
+		{% endblock %}
+		
+	</body>
+</html>

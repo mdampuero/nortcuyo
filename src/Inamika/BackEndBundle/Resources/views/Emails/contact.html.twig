@@ -1,0 +1,8 @@
+{% extends "InamikaBackOfficeBundle::Emails/layout.html.twig" %}
+{% block body %}
+<h4>Consulta enviada</h4>
+<p><b>Nombre completo:</b> {{ content.name }}</p>
+<p><b>Email:</b> {{ content.email }}</p>
+<p><b>Asunto:</b> {{ content.subject }}</p>
+<p><b>Mensaje:</b> {{ content.message | nl2br }}</p>
+{% endblock %}

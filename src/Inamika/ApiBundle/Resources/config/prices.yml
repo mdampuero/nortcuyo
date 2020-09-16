@@ -1,0 +1,24 @@
+api_prices:
+    path:     /prices
+    defaults: { _controller: InamikaApiBundle:Prices:index }
+    methods: [GET]
+
+api_prices_search:
+    path:     /prices/search
+    defaults: { _controller: InamikaApiBundle:Prices:search }
+    methods: [GET]
+
+api_prices_get:
+    path:     /prices/{code}
+    defaults: { _controller: InamikaApiBundle:Prices:get }
+    methods: [GET]
+
+api_prices_delete:
+    path:     /prices/{id}
+    defaults: { _controller: InamikaApiBundle:Prices:delete }
+    methods: [DELETE]
+
+api_prices_upload:
+    path:     /upload
+    defaults: { _controller: InamikaApiBundle:Prices:upload }
+    methods: [POST]

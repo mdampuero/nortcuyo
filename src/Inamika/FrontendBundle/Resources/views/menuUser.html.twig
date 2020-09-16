@@ -1,0 +1,26 @@
+{% if app.session.get('_security_main') %}
+	<li id="menu-icon-cart">
+		<a href="{{ path('inamika_frontend_shop_cart') }}">
+			<i class="fa fa-shopping-cart"></i>
+			{% if app.session.get('_security_main').cart | length %}
+			<div class="badge-cart" id="badge-cart">{{ app.session.get('_security_main').cart | length}}</div>
+			{% endif %}
+		</a>
+	</li>
+{% endif %}
+<li class="menu-has-children">
+	<a href="#">
+		<i class="fa fa-user {% if app.session.get('_security_main') %} text-orange {% endif %}"></i>
+	</a>
+	{% if app.session.get('_security_main') %}
+	<ul>
+		<li><a href="{{ path('inamika_frontend_shop_account') }}">Mi cuenta</a></li>
+		<li><a href="{{ path('inamika_frontend_shop_logout') }}">Salir</a></li>
+	</ul>
+	{% else %}
+	<ul>
+		<li><a href="{{ path('inamika_frontend_shop_login') }}">Iniciar sesión</a></li>
+		<li><a href="{{ path('inamika_frontend_shop_register') }}">Registrarse</a></li>
+	</ul>
+	{% endif %}
+</li>

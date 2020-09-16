@@ -1,0 +1,97 @@
+{% extends "InamikaFrontendBundle::layoutShop.html.twig" %}
+{% block body %}
+	{{ parent()}}
+	<main id="main" class="offset-header background-gray">
+		{% block headerPage %}
+			{% include 'InamikaFrontendBundle:_partials:headerPage.html.twig' %}
+		{% endblock headerPage %}
+		<section>
+			<div class="container wow fadeIn">
+				<div class="row justify-content-md-center">
+					<div class="col-lg-6 col-md-8">
+						<div class="card">
+                            <div class="card-header text-center">
+                                <b>Registrarse</b>
+                            </div>
+							<div class="card-body">
+								{{ form_start(form, {'attr': {'class': 'form-material sendToApi','novalidate':'novalidate'} }) }}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            {{form_label(form.name)}}
+                                            {{form_widget(form.name)}}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            {{form_label(form.email)}}
+                                            {{form_widget(form.email)}}
+                                        </div>
+                                    </div>
+                                    {% if form.password is defined %}
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            {{form_label(form.password)}}
+                                            {{form_widget(form.password)}}
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            {{form_label(form.phone)}}
+                                            {{form_widget(form.phone)}}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            {{form_label(form.document)}}
+                                            {{form_widget(form.document)}}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            {{form_label(form.address)}}
+                                            {{form_widget(form.address)}}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            {{form_label(form.city)}}
+                                            {{form_widget(form.city)}}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            {{form_label(form.provence)}}
+                                            {{form_widget(form.provence)}}
+                                        </div>
+                                    </div>
+                                </div>
+								<button type="submit" class="btn btn-primary">Guardar</button>
+                                <div class="d-none">
+                                    {{form_label(form.customerCategory)}}
+                                    {{form_widget(form.customerCategory)}}
+                                    {{form_label(form.observations)}}
+                                    {{form_widget(form.observations)}}
+                                </div>
+								{{ form_end(form) }}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</sction>
+	</main>
+{% endblock body %}
+{% block javascripts %}
+	{{ parent()}}
+	<script>
+    $(function (){
+        $("#customerCategory option[value='8692ee2f-a6b7-11ea-9c2a-e0cb4ec12ed3']").prop('selected', true);
+    });
+    function beforeSuccess(data){
+        login(data);
+        location.href="{{ path('inamika_frontend_shop_login') }}"
+    }
+    </script>
+{% endblock javascripts %}

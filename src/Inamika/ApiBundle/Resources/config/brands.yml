@@ -1,0 +1,29 @@
+api_brands:
+    path:     /brands
+    defaults: { _controller: InamikaApiBundle:Brands:index }
+    methods: [GET]
+
+api_brands_catalog:
+    path:     /brands/catalog
+    defaults: { _controller: InamikaApiBundle:Brands:catalog }
+    methods: [GET]
+
+api_brands_get:
+    path:     /brands/{id}
+    defaults: { _controller: InamikaApiBundle:Brands:get }
+    methods: [GET]
+
+api_brands_post:
+    path:     /brands
+    defaults: { _controller: InamikaApiBundle:Brands:post }
+    methods: [POST]
+
+api_brands_put:
+    path:     /brands/{id}
+    defaults: { _controller: InamikaApiBundle:Brands:put }
+    methods: [PUT]
+
+api_brands_delete:
+    path:     /brands/{id}
+    defaults: { _controller: InamikaApiBundle:Brands:delete }
+    methods: [DELETE]

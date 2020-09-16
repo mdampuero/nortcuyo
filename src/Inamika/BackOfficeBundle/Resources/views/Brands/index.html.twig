@@ -1,0 +1,58 @@
+{% set pathBase='inamika_backoffice_brands' %}
+{% set pathBaseApi='api_brands' %}
+{% extends "InamikaBackOfficeBundle::layout.html.twig" %}
+{% block body %} 
+{{ parent()}}
+<h3 class="card-title">
+    {% if app.request.attributes.get('_route_params')._breadcrumbs is defined %}
+        {{ (app.request.attributes.get('_route_params')['_breadcrumbs']|last)['label'] | trans }}
+    {% endif %}
+    <button type="button" class="btn btn-success btn-rounded pull-right" onclick="location.href='{{ path(pathBase~'_add')}}'"><i class="fa fa-plus"></i> {{ 'ADD' | trans }}</button>
+</h3>
+<div class="table-responsive">
+    <table id="{{ pathBase }}_dataTable" class="display nowrap table table-striped table-bordered" cellspacing="0" width="100%">
+    </table>
+</div>
+
+{{ form_start(formDelete, {'attr': {'id':id|default('formDelete')}}) }}
+{{ form_widget(formDelete) }}
+{{ form_end(formDelete) }}
+
+{% endblock body %} 
+{% block javascripts %} 
+{{ parent() }}
+{% include 'InamikaBackOfficeBundle:_partials:dataTableScripts.html.twig' with { pathBase:pathBase,loadData:pathBaseApi } %}
+<script type="text/javascript">
+    $(function () {
+        $('#{{ pathBase }}_dataTable').DataTable({
+            order: [[ 0, 'asc' ]],
+            "processing": false,
+            "serverSide": true,
+            columns: [
+                { title:"Orden",data: "order" },
+                {
+                    title: '',
+                    orderable: false,
+                    render: function (data, type, JsonResultRow, meta) {
+                        if(JsonResultRow.picture){
+                            return '<img width="80" src="{{ asset('uploads') }}/or/'+JsonResultRow.picture+'">';
+                        }else{
+                            return '<img width="80" src="{{ asset("bundles/inamikabackoffice/assets/images/image_not_found.jpg") }}">';
+                        }
+                    }
+                },
+                { title:"{{ 'NAME' | trans }}",data: "name" },
+                {
+                    data: null,
+                    orderable: false,
+                    className: "text-center",
+                    defaultContent: `
+                    <button type="button" class="btn-edit btn btn-outline-info btn-circle"><i class="fa fa-pencil"></i></button>
+                    <button type="button" class="btn-remove btn btn-outline-danger btn-circle"><i class="fa fa-trash"></i></button>
+                    `
+                }
+            ]
+        });
+    });
+</script>
+{% endblock %}

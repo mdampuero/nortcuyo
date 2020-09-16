@@ -1,0 +1,32 @@
+inamika_backoffice_salients:
+    path:     /
+    defaults: 
+        _controller: InamikaBackOfficeBundle:Salients:index
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Destacados
+            parent_route: inamika_backoffice_homepage
+            
+inamika_backoffice_salients_add:
+    path:     /new
+    defaults: { _controller: InamikaBackOfficeBundle:Salients:add }
+    options:
+        breadcrumb:
+            label: Agregar grupo
+            parent_route: inamika_backoffice_salients
+    methods: [GET]
+
+inamika_backoffice_salients_edit:
+    path:     /edit/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Salients:edit }
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Editar grupo
+            parent_route: inamika_backoffice_salients
+
+inamika_backoffice_salients_delete:
+    path:     /delete/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Salients:delete }
+    methods: [POST,DELETE]

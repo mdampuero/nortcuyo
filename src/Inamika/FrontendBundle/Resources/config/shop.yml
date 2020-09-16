@@ -1,0 +1,98 @@
+inamika_frontend_shop:
+    path:     /
+    defaults: 
+        _controller: InamikaFrontendBundle:Shop:index
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Shop
+            parent_route: inamika_frontend_homepage
+
+inamika_frontend_shop_product:
+    path:     /productos
+    defaults: 
+        _controller: InamikaFrontendBundle:Shop:products
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Productos
+            parent_route: inamika_frontend_shop
+
+inamika_frontend_shop_login:
+    path:     /login
+    defaults: 
+        _controller: InamikaFrontendBundle:Shop:login
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Inicio de sesión
+            parent_route: inamika_frontend_shop
+
+inamika_frontend_shop_account:
+    path:     /micuenta
+    defaults: 
+        _controller: InamikaFrontendBundle:Shop:account
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Mi cuenta
+            parent_route: inamika_frontend_shop
+
+inamika_frontend_shop_logout:
+    path:     /logout
+    defaults: 
+        _controller: InamikaFrontendBundle:Shop:logout
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Inicio de sesión
+            parent_route: inamika_frontend_shop
+
+inamika_frontend_shop_register:
+    path:     /register
+    defaults: 
+        _controller: InamikaFrontendBundle:Shop:register
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Registrarse
+            parent_route: inamika_frontend_shop
+
+inamika_frontend_shop_product_view:
+    path:     /productos/{code}
+    defaults: 
+        _controller: InamikaFrontendBundle:Shop:view
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Producto
+            parent_route: inamika_frontend_shop_product
+
+inamika_frontend_shop_cart:
+    path:     /micarrito
+    defaults: 
+        _controller: InamikaFrontendBundle:Shop:cart
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Mi carrito
+            parent_route: inamika_frontend_shop_account
+
+inamika_frontend_shop_orders:
+    path:     /mispedidos
+    defaults: 
+        _controller: InamikaFrontendBundle:Shop:orders
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Mis pedidos
+            parent_route: inamika_frontend_shop_account
+
+# inamika_frontend_shop_add:
+#     path:     /new
+#     defaults: { _controller: InamikaFrontendBundle:Customers:add }
+#     options:
+#         breadcrumb:
+#             label: Agregar cliente
+#             parent_route: inamika_frontend_homepage
+#     methods: [GET]

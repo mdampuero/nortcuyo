@@ -1,0 +1,113 @@
+inamika_backoffice_homepage:
+    path:     /
+    defaults:  
+        _controller: InamikaBackOfficeBundle:Dashboard:index
+    options:
+        breadcrumb:
+            label: Admin
+inamika_backoffice_change_lang:
+    path:     /changeLocale
+    defaults: { _controller: InamikaBackOfficeBundle:Dashboard:changeLocale }
+
+security_login:
+    path:     /login
+    defaults:  
+        _controller: InamikaBackOfficeBundle:Login:index
+        
+security_logout:
+    path:     /login/logout
+    defaults:  
+        _controller: InamikaBackOfficeBundle:Login:logout
+
+security_forgot:
+    path:     /login/forgot
+    defaults:  
+        _controller: InamikaBackOfficeBundle:Login:forgot
+        
+security_reset_password:
+    path:     /login/restablecer/{id}/{code}
+    defaults: 
+        _controller: InamikaBackOfficeBundle:Login:reset
+    methods: [GET,POST]
+
+inamika_backoffice_account:
+    path:     /mi_profile
+    defaults: 
+        _controller: InamikaBackOfficeBundle:Account:index
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: MY_PROFILE
+            parent_route: inamika_backoffice_homepage
+            
+inamika_backoffice_account_update:
+    path:     /MiCuenta/actualizar/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Account:update }
+    methods: [PUT]
+    options:
+        breadcrumb:
+            label: MY_PROFILE
+            parent_route: inamika_backoffice_homepage    
+
+inamika_backoffice_setting:
+    path:     /setting
+    defaults: { _controller: InamikaBackOfficeBundle:Settings:index }
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: SETTING
+            parent_route: inamika_backoffice_homepage    
+
+inamika_backoffice_categories:
+    path:     /categories
+    defaults: { _controller: InamikaBackOfficeBundle:Categories:index }
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Categorías
+            parent_route: inamika_backoffice_homepage    
+
+inamika_backoffice_users:
+    resource: "@InamikaBackOfficeBundle/Resources/config/users.yml"
+    prefix:   /usuarios
+
+inamika_backoffice_products:
+    resource: "@InamikaBackOfficeBundle/Resources/config/products.yml"
+    prefix:   /products
+
+inamika_backoffice_productCategories:
+    resource: "@InamikaBackOfficeBundle/Resources/config/productCategories.yml"
+    prefix:   /productCategories
+
+inamika_backoffice_brands:
+    resource: "@InamikaBackOfficeBundle/Resources/config/brands.yml"
+    prefix:   /brands
+
+inamika_backoffice_customers:
+    resource: "@InamikaBackOfficeBundle/Resources/config/customers.yml"
+    prefix:   /customers
+
+inamika_backoffice_customerCategories:
+    resource: "@InamikaBackOfficeBundle/Resources/config/customerCategories.yml"
+    prefix:   /customerCategories
+
+inamika_backoffice_orders:
+    resource: "@InamikaBackOfficeBundle/Resources/config/orders.yml"
+    prefix:   /orders
+
+inamika_backoffice_offers:
+    resource: "@InamikaBackOfficeBundle/Resources/config/offers.yml"
+    prefix:   /offers
+
+inamika_backoffice_prices:
+    resource: "@InamikaBackOfficeBundle/Resources/config/prices.yml"
+    prefix:   /prices
+
+inamika_backoffice_salients:
+    resource: "@InamikaBackOfficeBundle/Resources/config/salients.yml"
+    prefix:   /salients
+
+inamika_backoffice_sliders:
+    resource: "@InamikaBackOfficeBundle/Resources/config/sliders.yml"
+    prefix:   /sliders
+

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}{{ setting.getData.title }} {% if app.request.attributes.get('_route_params')._breadcrumbs is defined %} - {{ (app.request.attributes.get('_route_params')['_breadcrumbs']|last)['label'] | trans }}{% endif %}
+    {% endblock %}</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="" name="keywords">
+  <meta content="" name="description">
+
+  <!-- Favicons -->
+  <link href="{{ asset('bundles/inamikafrontend/') }}img/favicon.png" rel="icon">
+  <link href="{{ asset('bundles/inamikafrontend/') }}img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Poppins:300,400,500,700" rel="stylesheet">
+
+  <!-- Bootstrap CSS File -->
+  <link href="{{ asset('bundles/inamikafrontend/') }}lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Libraries CSS Files -->
+  <link href="{{ asset('bundles/inamikafrontend/') }}lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="{{ asset('bundles/inamikafrontend/') }}lib/animate/animate.min.css" rel="stylesheet">
+
+  <!-- Main Stylesheet File -->
+  <link href="{{ asset('bundles/inamikafrontend/') }}css/style.css" rel="stylesheet">
+
+  <link href="{{ asset('bundles/inamikabackoffice/assets/plugins/toast-master/css/jquery.toast.css') }}" rel="stylesheet">
+
+  <!-- =======================================================
+    Theme Name: Regna
+    Theme URL: https://bootstrapmade.com/regna-bootstrap-onepage-template/
+    Author: BootstrapMade.com
+    License: https://bootstrapmade.com/license/
+  ======================================================= -->
+</head>
+<body>
+    <div class="preloader">
+        <div class="loader">
+            <div class="loader__figure"></div>
+            <p class="loader__label">Por favor espere...</p>
+        </div>
+    </div>
+    <header id="header">
+      <div class="container">
+        <div id="logo" class="pull-left">
+          <a href="#hero"><img src="{{ asset('bundles/inamikafrontend/') }}img/logo.png" alt="" title="" /></img></a>
+        </div>
+        <nav id="nav-menu-container">
+          <ul class="nav-menu">
+            <li class="{% if 'inamika_frontend_homepage' in app.request.get('_route') %}menu-active{% endif %}"><a href="#hero">Inicio</a></li>
+            <li><a href="#about">Quienes Somos</a></li>
+            <li><a href="#services">Servicios</a></li>
+            <li class="{% if 'inamika_frontend_shop' in app.request.get('_route') %}menu-active{% endif %}"><a href="{{ path('inamika_frontend_shop') }}">Shop</a></li>
+            {# <li><a href="#providers">Proveedores</a></li> #}
+            {# <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#team">Team</a></li> #}
+            <li><a href="#contact">Contacto</a></li>
+            {{ include('InamikaFrontendBundle::menuUser.html.twig') }}
+          </ul>
+        </nav><!-- #nav-menu-container -->
+      </div>
+    </header><!-- #header -->
+    {% block body %}
+    {% endblock %}
+    {{ include('InamikaFrontendBundle::footer.html.twig') }}
+    {% block javascripts %}
+	<!-- JavaScript Libraries -->
+	<script src="{{ asset('bundles/inamikafrontend/') }}lib/jquery/jquery.min.js"></script>
+	<script src="{{ asset('bundles/inamikafrontend/') }}lib/jquery/jquery-migrate.min.js"></script>
+	<script src="{{ asset('bundles/inamikafrontend/') }}lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="{{ asset('bundles/inamikafrontend/') }}lib/easing/easing.min.js"></script>
+	<script src="{{ asset('bundles/inamikafrontend/') }}lib/wow/wow.min.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNj3-soT2HznW8fzcFx8G1IqYh6XiA5qE"></script>
+    <script src="{{ asset('bundles/inamikabackoffice/assets/plugins/toast-master/js/jquery.toast.js') }}"></script>
+	<script src="{{ asset('bundles/inamikafrontend/') }}lib/waypoints/waypoints.min.js"></script>
+	<script src="{{ asset('bundles/inamikafrontend/') }}lib/counterup/counterup.min.js"></script>
+	<script src="{{ asset('bundles/inamikafrontend/') }}lib/superfish/hoverIntent.js"></script>
+	<script src="{{ asset('bundles/inamikafrontend/') }}lib/superfish/superfish.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js"></script> 
+	<!-- Contact Form JavaScript File -->
+	<script src="{{ asset('bundles/inamikafrontend/') }}contactform/contactform.js"></script>
+    <script src="{{ asset('bundles/inamikafrontend/') }}js/main.js"></script>
+  <script>
+  var loading={
+        show: function (text){
+            if(typeof text !== "undefined") $('#loading').attr('data-text',text);
+            {# $('#loading').show(); #}
+            $(".preloader").fadeIn();
+            return true;
+        },
+        hide: function (){
+            {# $('#loading').removeAttr('data-text');
+            $('#loading').hide(); #}
+            $(".preloader").fadeOut();
+            return true;
+        }
+    }
+    function encodeImageFileAsURL(element) {
+        var file = element.files[0];
+        file.base64="";
+        var reader = new FileReader();
+        reader.onloadend = function() {
+            file.base64=reader.result;
+            $("input[name='"+$(element).attr("name")+"Base64']").val(reader.result);
+        }
+        reader.readAsDataURL(file);
+    }
+
+    function preRequest(){
+        return {};
+    }
+    function showRequest(formData, form, options) { 
+        loading.show('{{ 'loading' | trans }}');
+        var inputs=form.closest('form').find(':input:not(.dropify)');
+        inputs.removeClass('error');
+        inputs.next('small').html('');
+        form.closest('form').find(':submit').attr('disabled',true);
+
+        var data=preRequest();
+        data['plainPassword']={ 
+                    first:'',
+                    second:''
+                }
+        for (var i = formData.length - 1; i >= 0; i--) {
+            
+            if(formData[i].name=='plainPassword[first]'){
+                data['plainPassword'].first=formData[i].value;
+            }else if(formData[i].name=='plainPassword[second]'){
+                data['plainPassword'].second=formData[i].value;
+            }else{
+                data[formData[i].name]=formData[i].value;
+            }
+        }
+        
+        {# console.log(formData);
+        console.log(data);
+        return false; #}
+        // console.log($(".dropify-preview span.dropify-render img").attr("src"));
+        // console.log(data);
+        // return false;
+        var method=($('input[name="_method"]').length>0)?$('input[name="_method"]').val():form.attr("method");
+        $.ajax({
+            url: form.attr("action"),
+            type: method.toUpperCase(),
+            data:JSON.stringify(data),
+            crossDomain: true,
+            success: function(data) {
+                beforeSuccess(data);
+            },  
+            complete:function(){
+                form.closest('form').find(':submit').attr('disabled',false);
+            },
+            error: function(data, status, error) {
+                {# console.log(data.responseJSON.form); #}
+                //console.log(data.responseJSON.form);
+                form.closest('form').find(':submit').attr('disabled',false);
+                loading.hide();
+                $.toast({
+                    heading: '{{ 'ERROR' | trans }}',
+                    text: '{{ 'ERROR_GENERAL' | trans }}',
+                    position: 'top-right',
+                    icon: 'error',
+                    hideAfter: 3000, 
+                    stack: 6
+                });
+                $.each( data.responseJSON.form.children, function( index, item ){
+                    //console.log(item);
+                    if(typeof item.children != "undefined"){
+                        //console.log("children",item);
+                        $.each( item.children, function( index2, children_ ){
+                            if(typeof children_.errors != "undefined" && children_.errors.length>0){
+                                data.responseJSON.form.children[index+'_'+index2]=children_;
+                            }
+                        });
+                        
+                    }
+                });
+                $.each( data.responseJSON.form.children, function( index, item ){
+                    
+                    if(typeof item.errors != "undefined" && item.errors.length>0){
+                        if($('#error_'+form.attr("name")+'_'+index).length > 0){
+                            if(form.attr("name")!=undefined){
+                                $('#error_'+form.attr("name")+'_'+index).html(item.errors[0]);
+                            }else{
+                                $('#error_'+index).html(item.errors[0]);
+                            }
+                            $('#error_'+index).html(item.errors[0]);
+                             {# console.log("if",item); #}
+                        }else{
+                            if(form.attr("name")!=undefined){
+                                var input=$('#'+form.attr("name")+'_'+index);
+                            }else{
+                                var input=form.closest('form').find(':input[name='+index+']');
+                            }
+                            var input=$('#'+index);
+                            input.addClass('error');
+                            input.after('<small class="text-danger">'+item.errors[0]+'</small>');
+                            {# console.log("else",item,index); #}
+                        }
+                    }
+                    
+                });
+                    console.log(data.responseJSON.form);
+            }
+        });
+        return false;
+    }
+    //Google Map
+    var get_latitude = $('#google-map').data('latitude');
+    var get_longitude = $('#google-map').data('longitude');
+
+    function initialize_google_map() {
+        var myLatlng = new google.maps.LatLng(get_latitude, get_longitude);
+        var mapOptions = {
+            zoom: 14,
+            scrollwheel: false,
+            center: myLatlng
+        };
+        var map = new google.maps.Map(document.getElementById('google-map'), mapOptions);
+        var marker = new google.maps.Marker({
+            position: myLatlng,
+            map: map
+        });
+    }
+    google.maps.event.addDomListener(window, 'load', initialize_google_map);
+
+    $('a[href*="#"]:not([href="#"])').on('click', function() {
+        if($(this).attr('link')=='true') return true;
+        if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+
+            var target = $(this.hash);
+            if (target.length) {
+                var top_space = 0;
+
+                if ($('#header').length) {
+                    top_space = $('#header').outerHeight();
+
+                    if (!$('#header').hasClass('header-fixed')) {
+                        top_space = top_space - 20;
+                    }
+                }
+
+                $('html, body').animate({
+                    scrollTop: target.offset().top - top_space
+                }, 1500, 'easeInOutExpo');
+
+                if ($(this).parents('.nav-menu').length) {
+                    $('.nav-menu .menu-active').removeClass('menu-active');
+                    $(this).closest('li').addClass('menu-active');
+                }
+
+                if ($('body').hasClass('mobile-nav-active')) {
+                    $('body').removeClass('mobile-nav-active');
+                    $('#mobile-nav-toggle i').toggleClass('fa-times fa-bars');
+                    $('#mobile-body-overly').fadeOut();
+                }
+                return false;
+            }
+        }
+    });
+    
+    $(function (){
+        $(".preloader").fadeOut();
+        var options = {
+            dataType:'json',
+            beforeSubmit: showRequest
+        };
+        $( "form.sendToApi" ).ajaxForm(options);
+        {% for message in app.session.flashBag.get('success') %}
+        $.toast({
+            heading: '{{ 'SUCCESS' | trans }}',
+            text: '{{ message }}',
+            position: 'top-right',
+            icon: 'success',
+            hideAfter: 3000, 
+            stack: 6
+        });
+        {% endfor %}
+        {% for message in app.session.flashBag.get('warning') %}
+        $.toast({
+            heading: '{{ 'WARNING' | trans }}',
+            text: '{{ message }}',
+            position: 'top-right',
+            icon: 'warning',
+            hideAfter: 3000, 
+            stack: 6
+        });
+        {% endfor %}
+        {% for message in app.session.flashBag.get('danger') %}
+        $.toast({
+            heading: '{{ 'ERROR' | trans }}',
+            text: '{{ message }}',
+            position: 'top-right',
+            icon: 'error',
+            hideAfter: 3000, 
+            stack: 6
+        });
+        {% endfor %}
+    });
+  </script>
+    {% endblock %}
+    </body>
+</html>

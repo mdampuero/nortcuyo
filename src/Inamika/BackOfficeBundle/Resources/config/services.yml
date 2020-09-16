@@ -1,0 +1,16 @@
+services:
+      Inamika\BackOfficeBundle\Controller\UsersController:
+            class: Inamika\BackOfficeBundle\Controller\UsersController
+            autowire: true # or define your controller constructor and configure its arguments explicitly
+            tags: ['controller.service_arguments']
+      Inamika\BackOfficeBundle\Controller\AccountController:
+            class: Inamika\BackOfficeBundle\Controller\AccountController
+            autowire: true # or define your controller constructor and configure its arguments explicitly
+            tags: ['controller.service_arguments']
+      Inamika\BackOfficeBundle\Controller\LoginController:
+            class: Inamika\BackOfficeBundle\Controller\LoginController
+            autowire: true # or define your controller constructor and configure its arguments explicitly
+            tags: ['controller.service_arguments']
+      # Inamika\BackOfficeBundle\DataFixtures\ORM\UsersFixture:
+      #       tags: ['doctrine.fixture.orm']
+

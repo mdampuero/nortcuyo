@@ -1,0 +1,29 @@
+api_salients:
+    path:     /salients
+    defaults: { _controller: InamikaApiBundle:Salients:index }
+    methods: [GET]
+
+api_salients_search:
+    path:     /salients/search
+    defaults: { _controller: InamikaApiBundle:Salients:search }
+    methods: [GET]
+
+api_salients_get:
+    path:     /salients/{code}
+    defaults: { _controller: InamikaApiBundle:Salients:get }
+    methods: [GET]
+
+api_salients_post:
+    path:     /salients
+    defaults: { _controller: InamikaApiBundle:Salients:post }
+    methods: [POST]
+
+api_salients_put:
+    path:     /salients/{id}
+    defaults: { _controller: InamikaApiBundle:Salients:put }
+    methods: [PUT]
+
+api_salients_delete:
+    path:     /salients/{id}
+    defaults: { _controller: InamikaApiBundle:Salients:delete }
+    methods: [DELETE]

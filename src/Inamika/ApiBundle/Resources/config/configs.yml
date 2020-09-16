@@ -1,0 +1,4 @@
+api_configs:
+    path:     /configs
+    defaults: { _controller: InamikaApiBundle:Configs:get }
+    methods: [GET]

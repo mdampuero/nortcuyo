@@ -1,0 +1,29 @@
+api_lenders:
+    path:     /lenders
+    defaults: { _controller: InamikaApiBundle:Lenders:index }
+    methods: [GET]
+
+api_lenders_search:
+    path:     /lenders/search
+    defaults: { _controller: InamikaApiBundle:Lenders:search }
+    methods: [GET]
+
+api_lenders_get:
+    path:     /lenders/{id}
+    defaults: { _controller: InamikaApiBundle:Lenders:get }
+    methods: [GET]
+
+api_lenders_post:
+    path:     /lenders
+    defaults: { _controller: InamikaApiBundle:Lenders:post }
+    methods: [POST]
+
+api_lenders_put:
+    path:     /lenders/{id}
+    defaults: { _controller: InamikaApiBundle:Lenders:put }
+    methods: [PUT]
+
+api_lenders_delete:
+    path:     /lenders/{id}
+    defaults: { _controller: InamikaApiBundle:Lenders:delete }
+    methods: [DELETE]

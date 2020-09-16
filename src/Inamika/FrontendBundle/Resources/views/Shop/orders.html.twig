@@ -1,0 +1,136 @@
+{% extends "InamikaFrontendBundle::layoutShop.html.twig" %}
+{% block body %}
+	{{ parent()}}
+	<main id="main" class="offset-header background-gray">
+		{% block headerPage %}
+			{% include 'InamikaFrontendBundle:_partials:headerPage.html.twig' %}
+		{% endblock headerPage %}
+		<section>
+            <div class="container wow fadeIn">
+                <div class="row">
+                    <div class="col-lg-3">
+                        {% include 'InamikaFrontendBundle:_partials:accountMenu.html.twig' %}
+                    </div>
+                    <div class="col-lg-9">
+                        {% if data.result.data | length %}
+                        <table id="example" class="table table-hover table-condensed">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-center">Pedido</th>
+                                    <th scope="col" class="text-center">Canal</th>
+                                    <th scope="col" class="text-center">Fecha</th>
+                                    <th scope="col" class="text-right">Total</th>
+                                    <th scope="col" class="text-center">Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in data.result.data %}                         
+                                    <tr>
+                                        <td class="text-center" onclick="quickViewOrder('{{ order.id }}','{{ order.total }}','{{ order.totalVat }}')"><b>#{{ order.id }}</b></td>
+                                        <td class="text-center" onclick="quickViewOrder('{{ order.id }}','{{ order.total }}','{{ order.totalVat }}')">
+											{% if order.channel == 'APP' %}
+												<span class="badge badge-pill badge-primary">{{ order.channel }}</span>
+											{% else %}
+												<span class="badge badge-pill badge-success">{{ order.channel }}</span>
+											{% endif %}
+										</td>
+                                        <td class="text-center" onclick="quickViewOrder('{{ order.id }}','{{ order.total }}','{{ order.totalVat }}')">{{ order.createdAt | date('d/m/Y H:i') }}</td>
+                                        <td class="text-right" onclick="quickViewOrder('{{ order.id }}','{{ order.total }}','{{ order.totalVat }}')"><b>${{ order.totalVat | number_format(2, ',', '.') }}</b></td>
+                                        <td class="text-center" onclick="quickViewOrder('{{ order.id }}','{{ order.total }}','{{ order.totalVat }}')">
+											{% if order.status %}
+												<span class="badge badge-pill badge-{{ order.status.color }}">{{ order.status.name }}</span>
+											{% else %}
+												<span class="badge badge-pill badge-light">{{ 'N/E' | trans }}</span>
+											{% endif %}
+										</td>
+										<input type="hidden" id="{{ order.id }}_items" value='{{ order.items | json_encode | raw }}'>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                        <div class="card">
+                            <div class="card-body text-muted">No tiene ninguna orden</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+		</sction>
+	</main>
+	<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="orderModalTitle"></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" id="orderModalBody">
+					
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock body %}
+{% block javascripts %}
+	{{ parent()}}
+    {% if data.result.data | length %}
+    <script src="{{ asset('bundles/inamikabackoffice/assets/plugins/sweetalert/sweetalert.min.js') }}"></script>
+	<script src="{{ asset('bundles/inamikabackoffice/assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+	<script>
+		function quickViewOrder(orderID,total,totalVat){
+			total=Math.round(total*100)/100;
+			totalVat=Math.round(totalVat*100)/100;
+			vat=totalVat-total;
+			vat=Math.round(vat*100)/100;
+			$("#orderModalTitle").html('Pedido #'+orderID);
+			var items = jQuery.parseJSON($('#'+orderID+'_items').val());
+			var table=`<table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Código</th>
+                                    <th scope="col">Descripción</th>
+                                    <th scope="col">Cantidad</th>
+                                    <th scope="col">Subtotal</th>
+                                </tr>
+                            </thead>
+                    <tbody>`;
+			for(var i=0; i<items.length; i++){
+				table+=`<tr>
+							<td>${items[i].code}</td>
+							<td>${items[i].description}</td>
+							<td class="text-center">${items[i].amount}</td>
+							<td class="text-right">${items[i].price}</td>
+						</tr>`;
+			}            
+            table+=`</tbody>
+			</table>
+			<hr>
+			<h5 class="text-right text-muted">Total sin IVA: ${total}</h5>
+			<h5 class="text-right text-muted">IVA: $ ${vat}</h5>
+			<h2 class="text-right">Total: $ ${totalVat}</h2>`;
+			$("#orderModalBody").html(table);
+			$('#orderModal').modal('show');
+			console.log(items);
+		}
+		$(document).ready(function () {
+            $('#example').DataTable({
+				"order": [[ 0, 'DESC' ]],
+                "paging": false,
+                "columnDefs": [ {
+                    "targets": 4,
+                    "orderable": false
+                } ],
+                "bInfo": false,
+                "filter": false,
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json',
+                    dataSrc: ''
+                },
+            });
+        });  
+        {% endif %}
+	</script>
+{% endblock javascripts %}

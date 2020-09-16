@@ -1,0 +1,90 @@
+{% set pathBase='inamika_backoffice_orders' %}
+{% set pathBaseApi='api_orders' %}
+{% extends "InamikaBackOfficeBundle::layout.html.twig" %}
+{% block body %} 
+{{ parent()}}
+<h3 class="card-title">
+    {% if app.request.attributes.get('_route_params')._breadcrumbs is defined %}
+        {{ (app.request.attributes.get('_route_params')['_breadcrumbs']|last)['label'] | trans }}
+    {% endif %}
+</h3>
+<div class="table-responsive">
+    <table id="{{ pathBase }}_dataTable" class="display nowrap table table-striped table-bordered" cellspacing="0" width="100%">
+    </table>
+</div>
+
+{{ form_start(formDelete, {'attr': {'id':id|default('formDelete')}}) }}
+{{ form_widget(formDelete) }}
+{{ form_end(formDelete) }}
+
+{% endblock body %} 
+{% block javascripts %} 
+{{ parent() }}
+{% include 'InamikaBackOfficeBundle:_partials:dataTableScripts.html.twig' with { pathBase:pathBase,loadData:pathBaseApi } %}
+<script type="text/javascript">
+    $(function () {
+        $('#{{ pathBase }}_dataTable').DataTable({
+            order: [[ 0, 'desc' ]],
+            "processing": false,
+            "serverSide": true,
+            columns: [
+                { title:"#",data: "id" },
+                { title:"Cliente",data: "customerId.name" },
+                { 
+                    title:"Canal",
+                    data: 'channel', 
+                    className: "text-center",
+                    render: function (data, type, JsonResultRow, meta) {
+                        if(data=='APP'){
+                            return `<span class="badge badge-pill badge-primary">${data}</span>`;
+                        }else{
+                            return `<span class="badge badge-pill badge-success">${data}</span>`;
+                        }                        
+                    } 
+                },
+                { 
+                    title:"Fecha",
+                    data: "createdAt",
+                    render: function (data, type, JsonResultRow, meta) {
+                        var d = new Date(JsonResultRow.createdAt);
+                        return `${(d.getDate()<10?'0':'') + d.getDate()}/${(d.getMonth()+1)}/${d.getFullYear()} ${(d.getHours()<10?'0':'') + d.getHours()}:${(d.getMinutes()<10?'0':'') + d.getMinutes()}`;
+                    }
+                },
+                { 
+                    title:"Total",
+                    className: "text-right",
+                    render: function (data, type, JsonResultRow, meta) {
+                        return `<b>$ ${new Intl.NumberFormat("de-DE").format(parseFloat(JsonResultRow.totalVat).toFixed(2))}</b>`;
+                    }
+                },
+                { 
+                    title:"Estado",
+                    data: 'status', 
+                    className: "text-center",
+                    render: function (data, type, JsonResultRow, meta) {
+                        if(data){
+                            return `<span class="badge badge-pill badge-${data.color}">${data.name}</span>`;
+                        }else{
+                            return `<span class="badge badge-pill badge-light">{{ 'N/E' | trans }}</span>`;
+                        }                        
+                    }
+                },
+                {
+                    data: null,
+                    orderable: false,
+                    className: "text-center",
+                    defaultContent: `
+                    <button type="button" title="Ver" class="btn-view btn btn-outline-success btn-circle"><i class="fa fa-eye"></i></button>
+                    <button type="button" class="btn-remove btn btn-outline-danger btn-circle"><i class="fa fa-trash"></i></button>
+                    `
+                }
+            ]
+        });
+    });
+    $('#{{ pathBase }}_dataTable').on('click', 'button.btn-view', function () {
+        var data = $('#{{ pathBase }}_dataTable').DataTable().row( $(this).parents('tr') ).data();
+        var url="{{ path(pathBase~'_view',{ id: 'ENTITY_ID' })}}";
+        location.href=url.replace('ENTITY_ID',data.id);
+    });
+</script>
+{% endblock %}

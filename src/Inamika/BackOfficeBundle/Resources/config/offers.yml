@@ -1,0 +1,32 @@
+inamika_backoffice_offers:
+    path:     /
+    defaults: 
+        _controller: InamikaBackOfficeBundle:Offers:index
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Ofertas
+            parent_route: inamika_backoffice_homepage
+            
+inamika_backoffice_offers_add:
+    path:     /new
+    defaults: { _controller: InamikaBackOfficeBundle:Offers:add }
+    options:
+        breadcrumb:
+            label: Agregar oferta
+            parent_route: inamika_backoffice_offers
+    methods: [GET]
+
+inamika_backoffice_offers_edit:
+    path:     /edit/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Offers:edit }
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Editar oferta
+            parent_route: inamika_backoffice_offers
+
+inamika_backoffice_offers_delete:
+    path:     /delete/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Offers:delete }
+    methods: [POST,DELETE]

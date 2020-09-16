@@ -1,0 +1,32 @@
+inamika_backoffice_users:
+    path:     /
+    defaults: 
+        _controller: InamikaBackOfficeBundle:Users:index
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: USERS
+            parent_route: inamika_backoffice_homepage
+            
+inamika_backoffice_users_add:
+    path:     /new
+    defaults: { _controller: InamikaBackOfficeBundle:Users:add }
+    options:
+        breadcrumb:
+            label: ADD_USER
+            parent_route: inamika_backoffice_users
+    methods: [GET]
+
+inamika_backoffice_users_edit:
+    path:     /edit/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Users:edit }
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: EDIT_USER
+            parent_route: inamika_backoffice_users
+
+inamika_backoffice_users_delete:
+    path:     /delete/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Users:delete }
+    methods: [POST,DELETE]

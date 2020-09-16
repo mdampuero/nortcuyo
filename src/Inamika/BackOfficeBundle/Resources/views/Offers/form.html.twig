@@ -1,0 +1,280 @@
+{% set pathBack='inamika_backoffice_offers' %}
+{% extends "InamikaBackOfficeBundle::layout.html.twig" %}
+{% set pathBaseProduct='inamika_backoffice_products' %}
+{% set pathBaseCategory='inamika_backoffice_productCategories' %}
+{% set baseApiProduct='api_products' %}
+{% set baseApiCategory='api_productCategories' %}
+{% block stylesheet %} 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+{% endblock stylesheet %}
+{% block body %}
+	{{ parent()}}
+	{{ form_start(form, {'attr': {'class': 'form-material sendToApi','novalidate':'novalidate'} }) }}
+	<div class="form-body">
+		<h3 class="card-title">{{ 'GENERAL_DATA' | trans }}</h3>
+		<hr>
+		<div class="row p-t-20">
+			<div class="col-md-6">
+				<div class="form-group">
+					{{form_label(form.title)}}
+					{{form_widget(form.title)}}
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					{{form_label(form.dateFrom)}}
+					{{form_widget(form.dateFrom)}}
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					{{form_label(form.dateTo)}}
+					{{form_widget(form.dateTo)}}
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					{{form_label(form.type)}}
+					{{form_widget(form.type)}}
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					{{form_label(form.color)}}
+					{{form_widget(form.color)}}
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					{{form_label(form.ribbon)}}
+					{{form_widget(form.ribbon)}}
+				</div>
+			</div>
+		</div>
+		<div class="row BY_PRODUCT">
+			<div class="col-md-6">
+				<div class="card" id="product-selected" style="border: 2px solid #E5E5E5;">
+					<img class="card-img-top img-fluid" src="" >
+					<div class="card-body form-horizontal">
+						<h4 class="card-title"></h4>
+						<p class="card-text" id="name"></p>
+						<p class="card-text" id="description"></p>
+						<p class="card-text" id="price"></p>
+					</div>
+					<div class="card-footer text-center">
+						<h6>
+							<button type="button" data-toggle="modal" data-target="#modalProduct" class="btn btn-secondary btn-rounded"><i class="fa fa-check"></i> Seleccionar producto</button>
+						</h6>
+						{{form_widget(form.product)}}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row BY_CATEGORY" style="display:none">
+			<div class="col-md-6">
+				<div class="form-group" id="container-{{ form.picture.vars.id }}">
+					{% if entity is defined and entity.picture %}
+						{{form_widget(form.picture,{ attr: { 'data-default-file': web_image('uploads/or/' ~ entity.picture).resize('600','300') }})}}
+					{% else %}
+						{{form_widget(form.picture)}}
+					{% endif %}
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="card" id="category-selected" style="border: 2px solid #E5E5E5;">
+					<div class="card-body form-horizontal">
+						<h4 class="card-title"></h4>
+					</div>
+					<div class="card-footer text-center">
+						<h6>
+							<button type="button" data-toggle="modal" data-target="#modalCategory" class="btn btn-secondary btn-rounded"><i class="fa fa-check"></i> Seleccionar categoría</button>
+						</h6>
+						{{form_widget(form.category)}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<hr>
+	<div class="form-actions">
+		<button type="submit" class="btn btn-success">
+			<i class="fa fa-check"></i>
+			{{ 'SAVE' | trans }}</button>
+		<button type="button" class="btn btn-inverse" onclick="location.href='{{ path(pathBack) }}'">{{ 'CANCEL' | trans }}</button>
+	</div>
+	{{ form_end(form) }}
+	<div class="modal fade" id="modalProduct" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Seleccione un producto</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body table-responsive">
+					<table id="{{ pathBaseProduct }}_dataTable" class="display nowrap table table-sm table-hover" cellspacing="0" width="100%">
+    				</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="modalCategory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Seleccione una categoría</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body table-responsive">
+					<div id="categoryTree"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+{% endblock body %}
+{% block javascripts %}
+	{{ parent() }}
+	{% include 'InamikaBackOfficeBundle:_partials:dataTableScripts.html.twig' with { pathBase:pathBaseProduct,loadData:baseApiProduct } %}
+	{% include 'InamikaBackOfficeBundle:_partials:dropifyScripts.html.twig' %}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+	<script>
+		function beforeSuccess() {
+            location.href ="{{ path(pathBack) }}";
+        }
+        function changeType() {
+            if ($("#type").val() == "BY_CATEGORY") {
+                $(".BY_CATEGORY").slideDown('fast');
+                $(".BY_PRODUCT").slideUp('fast');
+            } else {
+                $(".BY_CATEGORY").slideUp('fast');
+                $(".BY_PRODUCT").slideDown('fast');
+            }
+        }
+		{% if entity is defined and entity.type == 'BY_PRODUCT' %}
+			$("#product").val('{{ entity.product.id }}');
+			{% if entity is defined and entity.product.picture is not null %}
+				$("#product-selected img").attr("src","{{ asset('uploads') }}/sm/{{ entity.product.picture }}");
+			{% else %}
+				$("#product-selected img").attr("src","{{ asset("bundles/inamikabackoffice/assets/images/image_not_found.jpg") }}");
+			{% endif %}
+			$("#product-selected h4").html('{{ entity.product.code }}');
+			$("#product-selected p#price").html("<b>$ {{ entity.product.price }}</b>");
+			$("#product-selected p#name").html('{{ entity.product.name }}');
+			$("#product-selected p#description").html('{{ entity.product.description }}');
+		{% endif %}
+		{% if entity is defined and entity.type == 'BY_CATEGORY' %}
+			$("#category").val('{{ entity.category.id }}');
+			$("#category-selected h4").html('{{ entity.category.name }}');
+		{% endif %}
+        $(function () {
+			changeType();
+            $("#type").on('change', function () {
+                changeType();
+            });
+			$('#{{ pathBaseProduct }}_dataTable').on( 'click', 'tr', function () {
+				var row=$('#{{ pathBaseProduct }}_dataTable').DataTable().row( $(this));
+				var data = row.data();
+				$("#modalProduct").modal('hide');
+				$("#product").val(data.id);
+				if(data.picture){
+					$("#product-selected img").attr("src","{{ asset('uploads') }}/sm/"+data.picture);
+				}else{
+					$("#product-selected img").attr("src","{{ asset("bundles/inamikabackoffice/assets/images/image_not_found.jpg") }}");
+				}
+				$("#product-selected h4").html(data.code);
+				$("#product-selected p#price").html("<b>$ "+data.price+"</b>");
+				$("#product-selected p#name").html(data.name);
+				$("#product-selected p#description").html(data.description);
+			});
+			$('#{{ pathBaseProduct }}_dataTable').DataTable({
+				order: [[ 2, 'desc' ]],
+				"processing": false,
+				"serverSide": true,
+				ajax: {
+					url: "{{ path(baseApiProduct)}}",
+					dataSrc: "data"
+				},
+				buttons: [],
+				columns: [
+					{
+						title: '',
+						orderable: false,
+						render: function (data, type, JsonResultRow, meta) {
+							if(JsonResultRow.picture){
+								return '<img width="80" src="{{ asset('uploads') }}/xs/'+JsonResultRow.picture+'">';
+							}else{
+								return '<img width="80" src="{{ asset("bundles/inamikabackoffice/assets/images/image_not_found.jpg") }}">';
+							}
+						}
+					},
+					{ title:"Código",data: "code" },
+					{ 
+						title:"Producto",
+						data: 'name',
+						render: function (data, type, JsonResultRow, meta) {
+							return `${capitalizeFirstLetter(data.substring(0,50))}`;
+						}
+					},
+					{ 
+						title:"Precio lista",
+						className: "text-right",
+						render: function (data, type, JsonResultRow, meta) {
+							return `<b>$ ${new Intl.NumberFormat("de-DE").format(parseFloat(JsonResultRow.price))}</b>`;
+						}
+					},
+				]
+			});
+			{# $('#{{ pathBaseCategory }}_dataTable').on( 'click', 'tr', function () {
+				var row=$('#{{ pathBaseCategory }}_dataTable').DataTable().row( $(this));
+				var data = row.data();
+				$("#modalCategory").modal('hide');
+				$("#category").val(data.id);
+				$("#category-selected h4").html(data.name);
+			});
+			$('#{{ pathBaseCategory }}_dataTable').DataTable({
+				order: [[ 0, 'desc' ]],
+				buttons: [],
+				ajax: {
+					url: "{{ path(baseApiCategory)}}",
+					dataSrc: "data"
+				},
+				"processing": false,
+				"serverSide": true,
+				columns: [
+					{ title:"Categoría",data: "name" }
+				]
+			}); #}
+			
+
+			var $treeview = $("#categoryTree");
+			$treeview.jstree(
+				{ 
+					"plugins" : [  ],
+					'core' : {
+						'data' : {
+							"url" : "{{ path('api_productCategories') }}",
+							"dataType" : "json"
+						}
+					}
+				}
+			)
+			.bind("refresh.jstree", function (e, data) { 
+				$(this).jstree("open_all");
+			})
+			.on('loaded.jstree', function() {
+				$treeview.jstree('open_all');
+			})
+			.on(
+				"select_node.jstree", function(evt, data){
+					$("#modalCategory").modal('hide');
+					$("#category").val(data.node.id);
+					$("#category-selected h4").html(data.node.text);
+				}
+			);
+        });
+	</script>
+{% endblock javascripts %}

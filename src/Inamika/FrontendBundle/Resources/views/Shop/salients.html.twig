@@ -1,0 +1,43 @@
+{% if data.code == 200 %}
+<section>
+    <div class="container wow fadeIn">
+        {{ render(controller('InamikaFrontendBundle:Shop:offers')) }}
+        
+        {% for item in data.result.data %}
+        <div class="row">
+            <div class="col-sm-9">
+                <h3>{{ item.title }}</h3>
+            </div>
+            <div class="col-sm-3">
+                <!-- Controls -->
+                <div class="controls pull-right hidden-xs">
+                    <a class="left fa fa-chevron-left btn btn-success" href="#{{ item.id }}"
+                        data-slide="prev"></a>
+                    <a class="right fa fa-chevron-right btn btn-success" href="#{{ item.id }}"
+                            data-slide="next"></a>
+                </div>
+            </div>
+        </div>
+        <div id="{{ item.id }}" class="carousel slide salients " data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="row">
+                    {% set index = 0 %}
+                    {% for productItem in item.products %}
+                        {% set index = index + 1 %}
+                        <div class="col-md-4">
+                            {% include 'InamikaFrontendBundle:_partials:cardProduct.html.twig' with { product:productItem.product } %}
+                        </div>
+                        {% if index > 2 and item.products | length  != index %}
+                        {% set index = 0 %}
+                        </div></div><div class="carousel-item"><div class="row">
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+     </section>
+</main>
+{% endif %}

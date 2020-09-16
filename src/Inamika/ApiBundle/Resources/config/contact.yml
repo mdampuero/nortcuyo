@@ -1,0 +1,4 @@
+api_contact_post:
+    path:     /contact
+    defaults: { _controller: InamikaApiBundle:Contact:post }
+    methods: [POST]

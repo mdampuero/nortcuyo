@@ -1,0 +1,5 @@
+{% extends "InamikaBackOfficeBundle::Emails/layout.html.twig" %}
+{% block body %}
+<h4>Hola {{ entity.customerId.name}}</h4>
+<p>Tu pedido <b>#{{ entity.id }}</b> cambió de estado '{{ status }}' a '{{entity.status.name }}'<p>
+{% endblock %}

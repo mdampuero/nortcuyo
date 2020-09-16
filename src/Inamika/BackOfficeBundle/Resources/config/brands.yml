@@ -1,0 +1,32 @@
+inamika_backoffice_brands:
+    path:     /
+    defaults: 
+        _controller: InamikaBackOfficeBundle:Brands:index
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Marcas
+            parent_route: inamika_backoffice_homepage
+            
+inamika_backoffice_brands_add:
+    path:     /new
+    defaults: { _controller: InamikaBackOfficeBundle:Brands:add }
+    options:
+        breadcrumb:
+            label: Agregar marca
+            parent_route: inamika_backoffice_brands
+    methods: [GET]
+
+inamika_backoffice_brands_edit:
+    path:     /edit/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Brands:edit }
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Editar marca
+            parent_route: inamika_backoffice_brands
+
+inamika_backoffice_brands_delete:
+    path:     /delete/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Brands:delete }
+    methods: [POST,DELETE]

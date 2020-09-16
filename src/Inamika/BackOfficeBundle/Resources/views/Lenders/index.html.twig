@@ -1,0 +1,46 @@
+{% set pathBase='inamika_backoffice_lenders' %}
+{% set pathBaseApi='api_lenders' %}
+{% extends "InamikaBackOfficeBundle::layout.html.twig" %}
+{% block body %} 
+{{ parent()}}
+<h3 class="card-title">
+    {% if app.request.attributes.get('_route_params')._breadcrumbs is defined %}
+        {{ (app.request.attributes.get('_route_params')['_breadcrumbs']|last)['label'] | trans }}
+    {% endif %}
+    <button type="button" class="btn btn-success btn-rounded pull-right" onclick="location.href='{{ path(pathBase~'_add')}}'"><i class="fa fa-plus"></i> {{ 'ADD' | trans }}</button>
+</h3>
+<div class="table-responsive">
+    <table id="{{ pathBase }}_dataTable" class="display nowrap table table-striped table-bordered" cellspacing="0" width="100%">
+    </table>
+</div>
+
+{{ form_start(formDelete, {'attr': {'id':id|default('formDelete')}}) }}
+{{ form_widget(formDelete) }}
+{{ form_end(formDelete) }}
+
+{% endblock body %} 
+{% block javascripts %} 
+{{ parent() }}
+{% include 'InamikaBackOfficeBundle:_partials:dataTableScripts.html.twig' with { pathBase:pathBase,loadData:pathBaseApi } %}
+<script type="text/javascript">
+    $(function () {
+        $('#{{ pathBase }}_dataTable').DataTable({
+            order: [[ 0, 'desc' ]],
+            columns: [
+                { title:"{{ 'NAME' | trans }}",data: "name" },
+                { title:"{{ 'PHONE' | trans }}",data: "phone" },
+                { title:"{{ 'EMAIL' | trans }}",data: "email" },
+                {
+                    data: null,
+                    orderable: false,
+                    className: "text-center",
+                    defaultContent: `
+                    <button type="button" class="btn-edit btn btn-outline-info btn-circle"><i class="fa fa-pencil"></i></button>
+                    <button type="button" class="btn-remove btn btn-outline-danger btn-circle"><i class="fa fa-trash"></i></button>
+                    `
+                }
+            ]
+        });
+    });
+</script>
+{% endblock %}

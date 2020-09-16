@@ -1,0 +1,32 @@
+inamika_backoffice_customerCategories:
+    path:     /
+    defaults: 
+        _controller: InamikaBackOfficeBundle:CustomerCategories:index
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Categoría de clientes
+            parent_route: inamika_backoffice_homepage
+            
+inamika_backoffice_customerCategories_add:
+    path:     /new
+    defaults: { _controller: InamikaBackOfficeBundle:CustomerCategories:add }
+    options:
+        breadcrumb:
+            label: Agregar categoría
+            parent_route: inamika_backoffice_customerCategories
+    methods: [GET]
+
+inamika_backoffice_customerCategories_edit:
+    path:     /edit/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:CustomerCategories:edit }
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Editar categoría
+            parent_route: inamika_backoffice_customerCategories
+
+inamika_backoffice_customerCategories_delete:
+    path:     /delete/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:CustomerCategories:delete }
+    methods: [POST,DELETE]

@@ -1,0 +1,19 @@
+<div class="card">
+	<div class="card-header">
+		Menu
+	</div>
+	<ul class="list-group list-group-flush">
+		<li class="list-group-item {% if 'inamika_frontend_shop_account' in app.request.get('_route') %}list-group-item-secondary{% endif %}">
+			<a href="{{ path('inamika_frontend_shop_account') }}">Mis datos</a>
+		</li>
+		<li class="list-group-item {% if 'inamika_frontend_shop_orders' in app.request.get('_route') %}list-group-item-secondary{% endif %}">
+			<a href="{{ path('inamika_frontend_shop_orders') }}">Mis pedidos</a>
+		</li>
+		<li class="list-group-item {% if 'inamika_frontend_shop_cart' in app.request.get('_route') %}list-group-item-secondary{% endif %}">
+			<a href="{{ path('inamika_frontend_shop_cart') }}">Mi carrito</a>
+		</li>
+		<li class="list-group-item">
+			<a href="{{ path('inamika_frontend_shop_logout') }}">Salir</a>
+		</li>
+	</ul>
+</div>

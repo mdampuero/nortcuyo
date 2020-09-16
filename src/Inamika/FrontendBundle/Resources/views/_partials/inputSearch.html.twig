@@ -1,0 +1,9 @@
+<div class="input-group mb-3">
+	<input type="text" class="form-control" name="query" {% if app.request.get('order') == ' app' %} checked="checked" {% endif %} value="{{ app.request.get('query') }}" placeholder="Buscar..." aria-label="Buscar..." aria-describedby="basic-addon2">
+	<input type="hidden" name="page" id="page" value="1">
+	<div class="input-group-append">
+		<button class="btn btn-outline-secondary" type="submit">
+			<i class="fa fa-search"></i>
+		</button>
+	</div>
+</div>

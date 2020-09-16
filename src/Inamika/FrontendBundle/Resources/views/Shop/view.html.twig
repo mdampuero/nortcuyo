@@ -1,0 +1,21 @@
+{% extends "InamikaFrontendBundle::layoutShop.html.twig" %}
+{% block body %}
+	{{ parent()}}
+	<main id="main" class="offset-header background-gray">
+		{% block headerPage %}
+			{% include 'InamikaFrontendBundle:_partials:headerPage.html.twig' with { 'title' : 'Producto #' ~ data.result.code} %}
+		{% endblock headerPage %}
+		<section>
+			<div class="container">
+				<form
+					method="GET" action="{{ path('inamika_frontend_shop_product')}}">
+					<!-- BEGIN INPUT SEARCH -->
+					{% include 'InamikaFrontendBundle:_partials:inputSearch.html.twig' %}
+					<!-- END INPUT SEARCH -->
+				</form>
+				{% include 'InamikaFrontendBundle:_partials:viewProduct.html.twig' with { product:data.result } %}
+				{{ render(controller('InamikaFrontendBundle:Shop:related',{ code:data.result.code  })) }}
+			</div>
+		</sction>
+	</main>
+{% endblock body %}

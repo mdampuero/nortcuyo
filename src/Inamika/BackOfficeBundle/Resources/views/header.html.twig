@@ -1,0 +1,68 @@
+<nav class="navbar top-navbar navbar-expand-md navbar-light">
+    <div class="navbar-header" style="background-color: #242b33;border-bottom: #383838 solid 1px;">
+        <a class="navbar-brand" href="{{ path('inamika_backoffice_homepage')}}">
+            <b>
+                <img src="{{ asset('bundles/inamikabackoffice/') }}assets/images/logo-light-icon.png" class="dark-logo" alt="homepage" />
+                <img src="{{ asset('bundles/inamikabackoffice/') }}assets/images/logo-icon.png" class="light-logo" alt="homepage" />
+            </b>
+            <span>
+                <img src="{{ asset('bundles/inamikabackoffice/') }}assets/images/logo-text.png" class="light-logo" alt="homepage" />
+                <img src="{{ asset('bundles/inamikabackoffice/') }}assets/images/logo-light-text.png" class="dark-logo" alt="homepage" />
+            </span>
+        </a>
+    </div>
+    <div class="navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link nav-toggler hidden-md-up waves-effect waves-dark" href="javascript:void(0)">
+                    <i class="ti-menu"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link sidebartoggler hidden-sm-down waves-effect waves-dark" href="javascript:void(0)">
+                    <i class="ti-menu"></i>
+                </a>
+            </li>
+            <li class="nav-item hidden-sm-down"></li>
+        </ul>
+        <ul class="navbar-nav my-lg-0">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {% if app.user.picture %}
+                    <img src="{{ asset('uploads/xs/'~ app.user.picture) }}" alt="user" class="profile-pic"/>
+                    {% else %}
+                    <img src="{{ asset("bundles/inamikabackoffice/assets/images/avatar_default.png") }}" alt="user" class="profile-pic"/>
+                    {% endif %}
+                </a>
+                <div class="dropdown-menu dropdown-menu-right animated flipInY">
+                    <ul class="dropdown-user">
+                        <li>
+                            <div class="dw-user-box">
+                                <div class="u-img">
+                                    {% if app.user.picture %}
+                                    <img src="{{ asset('uploads/sm/'~ app.user.picture) }}" alt="user">
+                                    {% else %}
+                                    <img src="{{ asset("bundles/inamikabackoffice/assets/images/avatar_default.png") }}" alt="user" />
+                                    {% endif %}
+                                </div>
+                                <div class="u-text">
+                                    <h4>{{ app.user.name }}</h4>
+                                    <p class="text-muted">{{ app.user.email }}</p>
+                                    <a href="{{ path('inamika_backoffice_account')}}" class="btn btn-rounded btn-danger btn-sm">{{ 'VIEW_PROFILE' | trans }}</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a href="{{ path('inamika_backoffice_account')}}"><i class="ti-user"></i> {{ 'MY_PROFILE' | trans }}</a>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a href="{{ path('security_logout')}}"><i class="fa fa-power-off"></i> {{ 'LOG_OUT' | trans }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>

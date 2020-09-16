@@ -1,0 +1,57 @@
+api_users:
+    resource: "@InamikaApiBundle/Resources/config/users.yml"
+
+api_settings:
+    resource: "@InamikaApiBundle/Resources/config/settings.yml"
+
+api_contact:
+    resource: "@InamikaApiBundle/Resources/config/contact.yml"
+
+api_products:
+    resource: "@InamikaApiBundle/Resources/config/products.yml"
+
+api_orders:
+    resource: "@InamikaApiBundle/Resources/config/orders.yml"
+
+api_customers:
+    resource: "@InamikaApiBundle/Resources/config/customers.yml"
+
+api_customerCategories:
+    resource: "@InamikaApiBundle/Resources/config/customerCategories.yml"
+
+api_ordersStatus:
+    resource: "@InamikaApiBundle/Resources/config/ordersStatus.yml"
+
+api_login:
+    resource: "@InamikaApiBundle/Resources/config/login.yml"
+
+api_cart:
+    resource: "@InamikaApiBundle/Resources/config/cart.yml"
+
+api_crons:
+    resource: "@InamikaApiBundle/Resources/config/crons.yml"
+
+api_configs:
+    resource: "@InamikaApiBundle/Resources/config/configs.yml"
+
+api_logs:
+    resource: "@InamikaApiBundle/Resources/config/logs.yml"
+
+api_offers:
+    resource: "@InamikaApiBundle/Resources/config/offers.yml"
+
+api_prices:
+    resource: "@InamikaApiBundle/Resources/config/prices.yml"
+
+api_productCategories:
+    resource: "@InamikaApiBundle/Resources/config/productCategories.yml"
+
+api_salients:
+    resource: "@InamikaApiBundle/Resources/config/salients.yml"
+
+api_brands:
+    resource: "@InamikaApiBundle/Resources/config/brands.yml"
+
+api_sliders:
+    resource: "@InamikaApiBundle/Resources/config/sliders.yml"
+

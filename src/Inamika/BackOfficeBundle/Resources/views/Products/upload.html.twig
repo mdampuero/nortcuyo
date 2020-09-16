@@ -1,0 +1,127 @@
+{% set pathBase='inamika_backoffice_products' %}
+{% set pathBaseApi='api_products' %}
+{% extends "InamikaBackOfficeBundle::layout.html.twig" %}
+{% block body %} 
+{{ parent()}}
+<div id="form-upload">
+    {{ form_start(form, {'attr': {'class': 'form-material','novalidate':'novalidate'} }) }}
+        <div class="form-body">
+            <div class="row p-t-20">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{form_label(form.file)}}
+                        {{form_widget(form.file)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-success"> <i class="fa fa-upload"></i> {{ 'Subir lista' | trans }}</button>
+            <button type="button" class="btn btn-inverse" onclick="location.href='{{ path(pathBase) }}'">{{ 'CANCEL' | trans }}</button>
+        </div>
+    {{ form_end(form) }}
+</div>
+<div id="pre-save" style="display:none;">
+    <div class="form-body">
+        <h3 class="card-title">{{ 'READ_DATA' | trans }}</h3>
+        <hr>
+        <div class="p-t-20">
+            <h4>{{ 'NEW_PRODUCTS' | trans }} <span class="label label-rouded label-themecolor" id="badge-new">0</span></h4>
+            <div class="table-responsive" style="height:300px;">
+                <table class="table table-stripped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">{{ 'CODE' | trans }}</th>
+                            <th>{{ 'NAME' | trans }}</th>
+                            <th>{{ 'DESCRIPTION' | trans }}</th>
+                            <th class="text-center">{{ 'STORE' | trans }}</th>
+                            <th class="text-center">{{ 'MIN_STOCK' | trans }}</th>
+                            <th class="text-center">{{ 'ACTIVE' | trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody id="new-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <hr>
+        <div class="p-t-20">
+            <h4>{{ 'EDIT_PRODUCTS' | trans }} <span class="label label-rouded label-themecolor" id="badge-edit">0</span></h4>
+            <div class="table-responsive" style="height:300px;">
+                <table class="table table-stripped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">{{ 'CODE' | trans }}</th>
+                            <th>{{ 'NAME' | trans }}</th>
+                            <th>{{ 'DESCRIPTION' | trans }}</th>
+                            <th class="text-center">{{ 'STORE' | trans }}</th>
+                            <th class="text-center">{{ 'MIN_STOCK' | trans }}</th>
+                            <th class="text-center">{{ 'ACTIVE' | trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody id="edit-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="form-actions p-t-20">
+        <button type="button" class="btn btn-success" onclick="confirm();"> <i class="fa fa-check"></i> {{ 'CONFIRM' | trans }}</button>
+        <button type="button" class="btn btn-inverse" onclick="location.href='{{ path('inamika_backoffice_products_upload') }}'">{{ 'CANCEL' | trans }}</button>
+    </div>
+</div>
+{% endblock body %}
+{% block javascripts %} 
+{{ parent() }}
+<script>
+    function confirm(){
+        loading.show();
+        {# $.post('{{ path('inamika_api_admin_products_upload_confirm') }}',{}, function (result) {
+            location.href='{{ path(pathBase) }}';
+        }); #}
+    }
+    function beforeSuccess(data){
+        $('#form-upload').hide();
+        $('#pre-save').show();
+        loading.hide();
+        let edits=data.data.edit;
+        let news=data.data.new;
+        $('#badge-new').html(news.length);
+        $('#badge-edit').html(edits.length);
+        for(let i=0; i<edits.length; i++){
+            if(edits[i][5]=='1'){
+                var isActive='<span class="badge badge-pill badge-success">{{ 'YES' | trans }}</span>';
+            }else{
+                var isActive='<span class="badge badge-pill badge-danger">{{ 'NO' | trans }}</span>';
+            }
+            $('#edit-body').append(`
+                <tr>
+                    <td nowrap="nowrap" class="text-center">${edits[i][0]}</td>
+                    <td nowrap="nowrap">${edits[i][1]}</td>
+                    <td nowrap="nowrap">${edits[i][2]}</td>
+                    <td nowrap="nowrap" class="text-center">${edits[i][3]}</td>
+                    <td nowrap="nowrap" class="text-center">${edits[i][4]}</td>
+                    <td nowrap="nowrap" class="text-center">${isActive}</td>
+                </tr>
+            `);
+        }
+        for(let i=0; i<news.length; i++){
+            if(news[i][5]=='1'){
+                var isActive='<span class="badge badge-pill badge-success">{{ 'YES' | trans }}</span>';
+            }else{
+                var isActive='<span class="badge badge-pill badge-danger">{{ 'NO' | trans }}</span>';
+            }
+            $('#new-body').append(`
+                <tr>
+                    <td nowrap="nowrap" class="text-center">${news[i][0]}</td>
+                    <td nowrap="nowrap">${news[i][1]}</td>
+                    <td nowrap="nowrap">${news[i][2]}</td>
+                    <td nowrap="nowrap" class="text-center">${news[i][3]}</td>
+                    <td nowrap="nowrap" class="text-center">${news[i][4]}</td>
+                    <td nowrap="nowrap" class="text-center">${isActive}</td>
+                </tr>
+            `);
+        }
+    }
+</script>
+{% endblock javascripts %}

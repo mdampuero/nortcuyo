@@ -1,0 +1,67 @@
+{% set pathBase='inamika_backoffice_prices' %}
+{% set pathBaseApi='api_prices' %}
+{% extends "InamikaBackOfficeBundle::layout.html.twig" %}
+{% block body %} 
+{{ parent()}}
+<h3 class="card-title">
+    {% if app.request.attributes.get('_route_params')._breadcrumbs is defined %}
+        {{ (app.request.attributes.get('_route_params')['_breadcrumbs']|last)['label'] | trans }}
+    {% endif %}
+    <button type="button" class="btn btn-success btn-rounded pull-right" onclick="location.href='{{ path(pathBase~'_add')}}'"><i class="fa fa-upload"></i> {{ 'Subir lista' | trans }}</button>
+</h3>
+<div class="table-responsive">
+    <table id="{{ pathBase }}_dataTable" class="display nowrap table table-striped table-bordered" cellspacing="0" width="100%">
+    </table>
+</div>
+
+{{ form_start(formDelete, {'attr': {'id':id|default('formDelete')}}) }}
+{{ form_widget(formDelete) }}
+{{ form_end(formDelete) }}
+
+{% endblock body %} 
+{% block javascripts %} 
+{{ parent() }}
+{% include 'InamikaBackOfficeBundle:_partials:dataTableScripts.html.twig' with { pathBase:pathBase,loadData:pathBaseApi } %}
+<script type="text/javascript">
+    $(function () {
+        $('#{{ pathBase }}_dataTable').DataTable({
+            order: [[ 1, 'desc' ]],
+            "processing": false,
+            "serverSide": true,
+            columns: [
+                { 
+                    title:"Fecha",
+                    data: "createdAt",
+                    render: function (data, type, JsonResultRow, meta) {
+                        var d = new Date(JsonResultRow.createdAt);
+                        return `${(d.getDate()<10?'0':'') + d.getDate()}/${((d.getMonth()+1)<10?'0':'') + (d.getMonth()+1)}/${d.getFullYear()} ${(d.getHours()<10?'0':'') + d.getHours()}:${(d.getMinutes()<10?'0':'') + d.getMinutes()}`;
+                    }
+                },
+                { 
+                    title:"Actualizados",
+                    data: "countUpdated",
+                    className: "text-center" 
+                },
+                { 
+                    title:"Nuevos",
+                    data: "countCreated",
+                    className: "text-center" 
+                },
+                {
+                    data: null,
+                    orderable: false,
+                    className: "text-center",
+                    defaultContent: `
+                    <button type="button" class="btn-download btn btn-outline-warning btn-circle"><i class="fa fa-download"></i></button>
+                    <button type="button" class="btn-remove btn btn-outline-danger btn-circle"><i class="fa fa-trash"></i></button>
+                    `
+                }
+            ]
+        });
+        $('#{{ pathBase }}_dataTable').on('click', 'button.btn-download', function () {
+            var data = $('#{{ pathBase }}_dataTable').DataTable().row( $(this).parents('tr') ).data();
+            location.href="{{ asset('uploads/') }}"+data.file;
+        });
+    });
+</script>
+{% endblock %}

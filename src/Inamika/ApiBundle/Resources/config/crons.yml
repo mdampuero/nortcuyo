@@ -1,0 +1,9 @@
+api_crons_pictures:
+    path:     /crons/pictures
+    defaults: { _controller: InamikaApiBundle:Crons:pictures }
+    methods: [GET]
+
+api_crons_offers:
+    path:     /crons/offers
+    defaults: { _controller: InamikaApiBundle:Crons:offers }
+    methods: [GET]

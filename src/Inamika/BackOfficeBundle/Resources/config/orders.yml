@@ -1,0 +1,42 @@
+inamika_backoffice_orders:
+    path:     /
+    defaults: 
+        _controller: InamikaBackOfficeBundle:Orders:index
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Pedidos
+            parent_route: inamika_backoffice_homepage
+
+inamika_backoffice_orders_view:
+    path:     /view/{id}
+    defaults: 
+        _controller: InamikaBackOfficeBundle:Orders:view
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Detalle de pedido
+            parent_route: inamika_backoffice_orders
+            
+inamika_backoffice_orders_add:
+    path:     /new
+    defaults: { _controller: InamikaBackOfficeBundle:Orders:add }
+    options:
+        breadcrumb:
+            label: Agregar pedido
+            parent_route: inamika_backoffice_orders
+    methods: [GET]
+
+inamika_backoffice_orders_edit:
+    path:     /edit/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Orders:edit }
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Editar pedido
+            parent_route: inamika_backoffice_orders
+
+inamika_backoffice_orders_delete:
+    path:     /delete/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Orders:delete }
+    methods: [POST,DELETE]

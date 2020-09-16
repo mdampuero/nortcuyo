@@ -1,0 +1,24 @@
+api_customerCategories:
+    path:     /customerCategories
+    defaults: { _controller: InamikaApiBundle:CustomerCategories:index }
+    methods: [GET]
+
+api_customerCategories_get:
+    path:     /customerCategories/{id}
+    defaults: { _controller: InamikaApiBundle:CustomerCategories:get }
+    methods: [GET]
+
+api_customerCategories_post:
+    path:     /customerCategories
+    defaults: { _controller: InamikaApiBundle:CustomerCategories:post }
+    methods: [POST]
+
+api_customerCategories_put:
+    path:     /customerCategories/{id}
+    defaults: { _controller: InamikaApiBundle:CustomerCategories:put }
+    methods: [PUT]
+
+api_customerCategories_delete:
+    path:     /customerCategories/{id}
+    defaults: { _controller: InamikaApiBundle:CustomerCategories:delete }
+    methods: [DELETE]

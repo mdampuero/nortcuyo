@@ -1,0 +1,32 @@
+{% set pathBase='inamika_backoffice_prices' %} 
+{% extends "InamikaBackOfficeBundle::layout.html.twig" %}
+{% block body %} 
+{{ parent()}}     
+{{ form_start(form, {'attr': {'class': 'form-material','novalidate':'novalidate'} }) }}
+    {{ form_start(form, {'attr': {'class': 'form-material','novalidate':'novalidate'} }) }}
+        <div class="form-body">
+            <div class="row p-t-20">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{form_label(form.file)}}
+                        {{form_widget(form.file)}}
+                        <div class="form-errors">{{ form_errors(form.file)}} </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-success" onclick="$('form').submit();$(this).attr('disabled',true)"> <i class="fa fa-upload"></i> {{ 'Subir lista' | trans }}</button>
+            <button type="button" class="btn btn-inverse" onclick="location.href='{{ path(pathBase) }}'">{{ 'CANCEL' | trans }}</button>
+        </div>
+    {{ form_end(form) }}
+{% endblock body %}
+{% block javascripts %}
+	{{ parent() }}
+	{% include 'InamikaBackOfficeBundle:_partials:dropifyScripts.html.twig' %}
+	<script>
+		function beforeSuccess() {
+            location.href ="{{ path(pathBase) }}";
+        }
+	</script>
+{% endblock javascripts %}

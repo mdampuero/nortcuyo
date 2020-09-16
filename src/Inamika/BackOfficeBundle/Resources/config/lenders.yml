@@ -1,0 +1,32 @@
+inamika_backoffice_lenders:
+    path:     /
+    defaults: 
+        _controller: InamikaBackOfficeBundle:Lenders:index
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: LENDERS
+            parent_route: inamika_backoffice_homepage
+            
+inamika_backoffice_lenders_add:
+    path:     /new
+    defaults: { _controller: InamikaBackOfficeBundle:Lenders:add }
+    options:
+        breadcrumb:
+            label: ADD_LENDER
+            parent_route: inamika_backoffice_lenders
+    methods: [GET]
+
+inamika_backoffice_lenders_edit:
+    path:     /edit/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Lenders:edit }
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: EDIT_LENDER
+            parent_route: inamika_backoffice_lenders
+
+inamika_backoffice_lenders_delete:
+    path:     /delete/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Lenders:delete }
+    methods: [POST,DELETE]

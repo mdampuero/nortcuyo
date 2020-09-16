@@ -1,0 +1,35 @@
+# This file is a "template" of what your parameters.yml file should look like
+# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
+# https://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
+parameters:
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: nortcuyo
+    database_user: root
+    database_password: root
+    mailer_transport: smtp
+    mailer_host: mail.apachecms.com.ar
+    mailer_port: 587
+    mailer_encryption: ssl
+    mailer_user: pedidos@apachecms.com.ar
+    mailer_password: '****'
+    secret: 99b2af404f070f6d849dea5705fd9375b130a628
+    uploads_directory:
+        path: '%kernel.project_dir%/web/uploads/or/'
+        resize:
+            xs:
+                width: 40
+                height: 40
+                path: '%kernel.project_dir%/web/uploads/xs/'
+            sm:
+                width: 240
+                height: null
+                path: '%kernel.project_dir%/web/uploads/sm/'
+            md:
+                width: 480
+                height: null
+                path: '%kernel.project_dir%/web/uploads/md/'
+            lg:
+                width: 800
+                height: null
+                path: '%kernel.project_dir%/web/uploads/lg/'

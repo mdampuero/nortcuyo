@@ -1,0 +1,27 @@
+{% if data.code == 200 %}
+	<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="paddin-top:150px;">
+		<ol class="carousel-indicators">
+            {% for key, slider in data.result.data %}
+			<li data-target="#carouselExampleIndicators" data-slide-to="{{ (slider.order) + 1 }}" class="{% if key == 0 %}active{% endif %}"></li>
+            {% endfor %}
+		</ol>
+		<div class="carousel-inner" role="listbox">
+			{% for key, slider in data.result.data  %}
+				<div class="carousel-item {% if key == 0 %}active{% endif %}" style="background-image: url('{{ asset('uploads') }}/lg/{{ slider.picture }}')">
+					<div class="carousel-caption d-none d-md-block">
+                        <a class="btn btn-primary" href="{{ slider.link | default('#hero') }}" role="button">{{ slider.name }}</a>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+		<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" link="true" data-slide="prev">
+			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			<span class="sr-only">Previous</span>
+		</a>
+		<a class="carousel-control-next" href="#carouselExampleIndicators" role="button" link="true" data-slide="next">
+			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+			<span class="sr-only">Next</span>
+		</a>
+	</div>
+
+{% endif %}

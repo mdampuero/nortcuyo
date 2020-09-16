@@ -1,0 +1,212 @@
+{% extends "InamikaFrontendBundle::layoutShop.html.twig" %}
+{% block body %}
+	{{ parent()}}
+	<main id="main" class="offset-header background-gray">
+		{% block headerPage %}
+			{% include 'InamikaFrontendBundle:_partials:headerPage.html.twig' %}
+		{% endblock headerPage %}
+		<section>
+            <div class="container wow fadeIn">
+                <div class="row">
+                    <div class="col-lg-3">
+                        {% include 'InamikaFrontendBundle:_partials:accountMenu.html.twig' %}
+                    </div>
+                    <div class="col-lg-9">
+                        {% if app.session.get('_security_main').cart | length %}
+                        <table id="example" class="table table-hover table-condensed">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Código</th>
+                                    <th scope="col">Descripción</th>
+                                    <th scope="col">Cantidad</th>
+                                    <th scope="col">Subtotal</th>
+                                    <th scope="col">Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% set total = 0 %}
+                                {% set totalVat = 0 %}
+                                {% for item in app.session.get('_security_main').cart %}
+                                    {% set price = (item.product.price * app.session.get('_security_main').category.discount) %}
+                                    {% set subtotal = price * item.quantity %}
+                                    {% set subtotalVat = subtotal * item.product.vat %}
+                                    {% set total = total + subtotal %}
+                                    {% set totalVat = totalVat + subtotalVat %}                           
+                                    <tr>
+                                        <td onclick="quickViewProduct('{{ item.product.code }}')">{{ item.product.code }}</td>
+                                        <td onclick="quickViewProduct('{{ item.product.code }}')">{{ item.product.name | capitalize }}</td>
+                                        <td onclick="quickViewProduct('{{ item.product.code }}')" class="text-center">{{ item.quantity }}</td>
+                                        <td onclick="quickViewProduct('{{ item.product.code }}')" class="text-right">${{ subtotal | number_format(2, ',', '.') }}</td>
+                                        <td class="text-center"><a href="javascript:removeCart('{{ item.product.code }}')"><i class="fa fa-close text-danger"></i></a></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <hr>
+                        <h5 class="text-right text-muted">Total sin IVA: $ {{ total | number_format(2, ',', '.') }}</h5>
+                        <h5 class="text-right text-muted">IVA: $ {{ (totalVat - total ) | number_format(2, ',', '.') }}</h5>
+                        <h2 class="text-right">Total: $ {{ totalVat | number_format(2, ',', '.') }}</h2>
+                        <div class="text-right">
+                            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#confirmSendOrder">Enviar pedido</button>
+                        </div>
+                        {% else %}
+                        <div class="card">
+                            <div class="card-body text-muted">No tiene productos en el carrito</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+		</sction>
+	</main>
+{% endblock body %}
+{% block javascripts %}
+	{{ parent()}}
+     {% if app.session.get('_security_main').cart | length %}
+    <script src="{{ asset('bundles/inamikabackoffice/assets/plugins/sweetalert/sweetalert.min.js') }}"></script>
+	<script src="{{ asset('bundles/inamikabackoffice/assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+	<script>
+        var items=[];
+        {% set total = 0 %}
+        {% set totalVat = 0 %}
+        {% for item in app.session.get('_security_main').cart %}
+            {% set price = (item.product.price * app.session.get('_security_main').category.discount) %}
+            {% set subtotal = price * item.quantity %}
+            {% set subtotalVat = subtotal * item.product.vat %}
+            {% set total = total + subtotal %}
+            {% set totalVat = totalVat + subtotalVat %} 
+            var item={
+                amount: {{ item.quantity }},
+                barcode: "{{ item.product.barcode }}",
+                brand: "{{ item.product.brand }}",
+                code: "{{ item.product.code }}",
+                description: "{{ item.product.description }}",
+                id: "{{ item.product.id }}",
+                name: "{{ item.product.name }}",
+                picture: "{{ item.product.picture }}",
+                price: {{ item.product.price }},
+                subtotal: {{ subtotal }},
+                subtotalVat: {{ subtotalVat }},
+                unit: {{ item.product.unit }},
+                vat: {{ item.product.vat }}
+            };
+            items.push(item);
+        {% endfor %}
+        function confirmOrderSend(btn){
+            $(btn).attr('disabled',true).html('Enviando...');
+            var payload={
+                channel:'WEB',
+                customerId:'{{ app.session.get('_security_main').customer.id }}',
+                items:items,
+                observations:$("#order_observations").val(),  
+                {% if app.session.get('_security_main').isSeller == 1 %}
+                customerName:$("#order_customer").val(),  
+                transport:$("#order_transport").val(),  
+                {% endif %}
+                total:{{ total }},  
+                totalVat:{{ totalVat }},  
+            }
+            $.ajax({
+                url: "{{ path('api_orders_post') }}",
+                type: 'POST',
+                data: JSON.stringify(payload),
+                crossDomain: true,
+                success: function(data) {
+                    swal({   
+                        title: "Pedido Nº 451",   
+                        text: 'El pedido fue enviado correctamente.',   
+                        type: "success",    
+                        confirmButtonColor: "#f36639",   
+                        confirmButtonText: "Aceptar",     
+                        closeOnConfirm: true 
+                    }, function(){
+                        location.href="{{ path('inamika_frontend_shop_cart') }}"
+                    });
+                    var urlEmail="{{ path('api_orders_email',{ id:'__ID__'}) }}";
+                    $.ajax({url: urlEmail.replace('__ID__',data.id)});
+                    $.ajax({url: "{{ path('api_cart_post_empty') }}",type: 'POST'});
+                },  
+                complete:function(){
+                    $(btn).attr('disabled',false).html('Enviar');
+                    $("#confirmSendOrder").modal('hide');
+                },
+                error: function(data, status, error) {
+                    console.log(data,status,error);
+                    $(btn).attr('disabled',false).html('Enviar');
+                    $.toast({
+                        heading: '{{ 'ERROR' | trans }}',
+                        text: 'Ocurrio un error al intentar enviar el pedido',
+                        position: 'top-right',
+                        icon: 'error',
+                        hideAfter: 3000, 
+                        stack: 6
+                    });
+                }
+            });
+        }
+
+		$(document).ready(function () {
+            $('#example').DataTable({
+                "paging": false,
+                "columnDefs": [ {
+                    "targets": 4,
+                    "orderable": false
+                } ],
+                "bInfo": false,
+                "filter": false,
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json',
+                    dataSrc: ''
+                },
+            });
+        });
+        function beforeSuccessUpdateCart(){
+            location.reload();
+        }
+        function removeCart(code){
+            swal({   
+                title: "{{ 'WARNING' | trans }}",   
+                text: '¿Está seguro que desea quitar el producto #'+code+' del carrito?',   
+                type: "warning",   
+                showCancelButton: true,   
+                confirmButtonColor: "#DD6B55",   
+                confirmButtonText: "Si, quitar",   
+                cancelButtonText: "{{ 'NO' | trans }}",   
+                closeOnConfirm: true 
+            }, function(){
+                var url="{{ path('api_cart_delete',{ 'code':'__CODE__' }) }}";
+                $.ajax({
+                    url: url.replace('__CODE__',code),
+                    type: 'DELETE',
+                    data: JSON.stringify({ product: code}),
+                    crossDomain: true,
+                    success: function(data) {
+                        $.toast({
+                            heading: 'Producto quitado',
+                            text: 'Se quitó el producto #'+code+' del carrito',
+                            position: 'top-right',
+                            icon: 'success',
+                            hideAfter: 5000, 
+                            stack: 6
+                        });
+                        beforeSuccessUpdateCart();
+                    },  
+                    complete:function(){
+                        
+                    },
+                    error: function(data, status, error) {
+                        $.toast({
+                            heading: '{{ 'ERROR' | trans }}',
+                            text: 'Error al intentar quitar el producto del carrito',
+                            position: 'top-right',
+                            icon: 'error',
+                            hideAfter: 3000, 
+                            stack: 6
+                        });
+                    }
+                });
+            });
+        }
+        {% endif %}
+	</script>
+{% endblock javascripts %}

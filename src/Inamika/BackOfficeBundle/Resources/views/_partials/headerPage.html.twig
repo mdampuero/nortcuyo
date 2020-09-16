@@ -1,0 +1,28 @@
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h3 class="text-themecolor">
+        {% if app.request.attributes.get('_route_params')._breadcrumbs is defined %}
+            {{ (app.request.attributes.get('_route_params')['_breadcrumbs']|last)['label'] | trans }}
+        {% endif %}
+        </h3>
+    </div>
+    {% if app.request.attributes.get('_route_params')._breadcrumbs is defined %}
+        {% if app.request.attributes.get('_route_params')['_breadcrumbs'] | length > 1 %}
+        <div class="col-md-7 align-self-center">
+            <ol class="breadcrumb">
+                {% for breadcrumb in app.request.attributes.get('_route_params')['_breadcrumbs'] %}
+                    {% if app.request.get('_route') == breadcrumb.route %}
+                    <li class="breadcrumb-item active">
+                        {{ (breadcrumb.label) | trans }}
+                    </li>
+                    {% else %}
+                    <li class="breadcrumb-item active">
+                        <a href="{{ path(breadcrumb.route) }}" >{{ (breadcrumb.label) | trans }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
+        </div>
+        {% endif %}
+    {% endif %}
+</div>

@@ -1,0 +1,75 @@
+{% extends "InamikaBackOfficeBundle::layout.html.twig" %}
+{% block body %} 
+{{ parent()}}             
+{{ form_start(form, {'attr': {'class': 'form-material sendToApi','novalidate':'novalidate'} }) }}
+    <div class="form-body">
+        <h3 class="card-title">{{ 'PERSONAL_DATA' | trans }}</h3>
+        <hr>
+        <div class="row p-t-20">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_label(form.name)}}
+                    {{form_widget(form.name)}}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_label(form.email)}}
+                    {{form_widget(form.email)}}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_label(form.plainPassword.first)}}
+                    {{form_widget(form.plainPassword.first)}}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_label(form.plainPassword.second)}}
+                    {{form_widget(form.plainPassword.second)}}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_label(form.picture)}}
+                    {% if app.user is defined and app.user.picture %}
+                        {{form_widget(form.picture,{ attr: { 'data-default-file': web_image('uploads/or/' ~ app.user.picture).resize('600','300') }})}}
+                    {% else %}
+                        {{form_widget(form.picture)}}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> {{ 'SAVE' | trans }}</button>
+        <button type="button" class="btn btn-inverse" onclick="location.href='{{ path('inamika_backoffice_homepage') }}'">{{ 'CANCEL' | trans }}</button>
+    </div>
+{{ form_end(form) }}
+{% endblock body %}
+{% block javascripts %} 
+{{ parent() }}
+{% include 'InamikaBackOfficeBundle:_partials:dropifyScripts.html.twig' %}
+<script>
+    $(function (){
+        $('.dropify-clear').on("click",function (){
+            $("#pictureRemove").val("true")
+        });
+    });
+    function beforeSuccess(){
+        loading.hide();
+        $.toast({
+            heading: '{{ 'RESULT_OK' | trans }}',
+            text: '{{'THE_DATA_WAS_UPDATED_CORRECTLY' | trans }}',
+            position: 'top-right',
+            icon: 'success',
+            hideAfter: 2000, 
+            stack: 6
+        });
+    }
+</script>
+
+{% endblock javascripts %}

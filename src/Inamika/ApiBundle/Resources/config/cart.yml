@@ -1,0 +1,14 @@
+api_cart_post:
+    path:     /cart
+    defaults: { _controller: InamikaApiBundle:Cart:post }
+    methods: [POST]
+
+api_cart_post_empty:
+    path:     /cartEmpty
+    defaults: { _controller: InamikaApiBundle:Cart:empty }
+    methods: [POST]
+
+api_cart_delete:
+    path:     /cart/{code}
+    defaults: { _controller: InamikaApiBundle:Cart:delete }
+    methods: [DELETE]

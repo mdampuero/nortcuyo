@@ -1,0 +1,49 @@
+api_orders:
+    path:     /orders
+    defaults: { _controller: InamikaApiBundle:Orders:index }
+    methods: [GET]
+
+api_orders_today:
+    path:     /orders/today
+    defaults: { _controller: InamikaApiBundle:Orders:today }
+    methods: [GET]
+
+api_orders_search:
+    path:     /orders/search
+    defaults: { _controller: InamikaApiBundle:Orders:search }
+    methods: [GET]
+
+api_orders_get:
+    path:     /orders/{id}
+    defaults: { _controller: InamikaApiBundle:Orders:get }
+    methods: [GET]
+
+api_orders_logs:
+    path:     /orders/{id}/logs
+    defaults: { _controller: InamikaApiBundle:Orders:logs }
+    methods: [GET]
+
+api_orders_email:
+    path:     /orders/email/{id}
+    defaults: { _controller: InamikaApiBundle:Orders:email }
+    methods: [GET]
+
+api_orders_post:
+    path:     /orders
+    defaults: { _controller: InamikaApiBundle:Orders:post }
+    methods: [POST]
+
+api_orders_put:
+    path:     /orders/{id}
+    defaults: { _controller: InamikaApiBundle:Orders:put }
+    methods: [PUT]
+
+api_orders_changeOrder:
+    path:     /orders/{id}/changeOrder
+    defaults: { _controller: InamikaApiBundle:Orders:changeOrder }
+    methods: [PUT]
+
+api_orders_delete:
+    path:     /orders/{id}
+    defaults: { _controller: InamikaApiBundle:Orders:delete }
+    methods: [DELETE]

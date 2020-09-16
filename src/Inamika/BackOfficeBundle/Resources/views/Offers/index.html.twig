@@ -1,0 +1,116 @@
+{% set pathBase='inamika_backoffice_offers' %}
+{% set pathBaseApi='api_offers' %}
+{% extends "InamikaBackOfficeBundle::layout.html.twig" %}
+{% block body %} 
+{{ parent()}}
+<h3 class="card-title">
+    {% if app.request.attributes.get('_route_params')._breadcrumbs is defined %}
+        {{ (app.request.attributes.get('_route_params')['_breadcrumbs']|last)['label'] | trans }}
+    {% endif %}
+    <button type="button" class="btn btn-success btn-rounded pull-right" onclick="location.href='{{ path(pathBase~'_add')}}'"><i class="fa fa-plus"></i> {{ 'ADD' | trans }}</button>
+</h3>
+<div class="table-responsive">
+    <table id="{{ pathBase }}_dataTable" class="display nowrap table table-striped table-bordered" cellspacing="0" width="100%">
+    </table>
+</div>
+
+{{ form_start(formDelete, {'attr': {'id':id|default('formDelete')}}) }}
+{{ form_widget(formDelete) }}
+{{ form_end(formDelete) }}
+
+{% endblock body %} 
+{% block javascripts %} 
+{{ parent() }}
+{% include 'InamikaBackOfficeBundle:_partials:dataTableScripts.html.twig' with { pathBase:pathBase,loadData:pathBaseApi } %}
+<script type="text/javascript">
+    $(function () {
+        $('#{{ pathBase }}_dataTable').DataTable({
+            order: [[ 1, 'desc' ]],
+            "processing": false,
+            "serverSide": true,
+            columns: [
+                { title:"Título",data: "title" },
+                { 
+                    data: 'type', 
+                    className: "text-center",
+                    title: 'Tipo',
+                    render: function (data, type, row) 
+                    {
+                        switch (data){
+                            case 'BY_CATEGORY':
+                                return 'Por categoría';
+                                break;
+                            case 'BY_PRODUCT':
+                                return 'Por producto';
+                                break;
+                        }
+                    }
+                },  
+                { 
+                    data: 'type', 
+                    className: "text-center",
+                    title: 'Pro/Cat',
+                    render: function (data, type, row) 
+                    {
+                        switch (data){
+                            case 'BY_CATEGORY':
+                                return row.category.name;
+                                break;
+                            case 'BY_PRODUCT':
+                                return row.product.code;
+                                break;
+                        }
+                    }
+                },             
+                { 
+                    title:"Val. desde",
+                    data: "dateFrom",
+                    render: function (data, type, JsonResultRow, meta) {
+                        var d = new Date(JsonResultRow.dateFrom);
+                        if(d.getTimezoneOffset() > 0){
+                            d.setTime( d.getTime() + d.getTimezoneOffset()*60*1000 );
+                        }
+                        return `${(d.getDate()<10?'0':'') + d.getDate()}/${(d.getMonth()+1)}/${d.getFullYear()}`;
+                    }
+                },
+                { 
+                    title:"Val. hasta",
+                    data: "dateTo",
+                    render: function (data, type, JsonResultRow, meta) {
+                        var d = new Date(JsonResultRow.dateTo);
+                        if(d.getTimezoneOffset() > 0){
+                            d.setTime( d.getTime() + d.getTimezoneOffset()*60*1000 );
+                        }
+                        return `${(d.getDate()<10?'0':'') + d.getDate()}/${(d.getMonth()+1)}/${d.getFullYear()}`;
+                    }
+                },
+                { 
+                    data: 'isActive', 
+                    className: "text-center",
+                    title: 'Activa',
+                    render: function (data, type, row) 
+                    {
+                        switch (data){
+                            case true:
+                                return '<span class="badge badge-pill badge-success">{{ 'YES' | trans }}</span>';
+                                break;
+                            default:
+                                return '<span class="badge badge-pill badge-danger">{{ 'NO' | trans }}</span>';
+                                break;
+                        }
+                    }
+                },
+                {
+                    data: null,
+                    orderable: false,
+                    className: "text-center",
+                    defaultContent: `
+                    <button type="button" class="btn-edit btn btn-outline-info btn-circle"><i class="fa fa-pencil"></i></button>
+                    <button type="button" class="btn-remove btn btn-outline-danger btn-circle"><i class="fa fa-trash"></i></button>
+                    `
+                }
+            ]
+        });
+    });
+</script>
+{% endblock %}

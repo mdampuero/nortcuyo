@@ -1,0 +1,4 @@
+api_demos_put:
+    path:     /settings/{id}
+    defaults: { _controller: InamikaApiBundle:Settings:put }
+    methods: [PUT]

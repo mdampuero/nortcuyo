@@ -1,0 +1,79 @@
+{% set pathBase='inamika_backoffice_users' %} 
+{% extends "InamikaBackOfficeBundle::layout.html.twig" %}
+{% block body %} 
+{{ parent()}}     
+{{ form_start(form, {'attr': {'class': 'form-material sendToApi','novalidate':'novalidate'} }) }}
+    <div class="form-body">
+        <h3 class="card-title">{{ 'PERSONAL_DATA' | trans }}</h3>
+        <hr>
+        <div class="row p-t-20">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_label(form.name)}}
+                    {{form_widget(form.name)}}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_label(form.email)}}
+                    {{form_widget(form.email)}}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_label(form.plainPassword.first)}}
+                    {{form_widget(form.plainPassword.first)}}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_label(form.plainPassword.second)}}
+                    {{form_widget(form.plainPassword.second)}}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_label(form.role)}}
+                    {{form_widget(form.role)}}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_label(form.isActive)}}
+                    {{form_widget(form.isActive)}}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_label(form.picture)}}
+                    {% if entity is defined and entity.picture %}
+                        {{form_widget(form.picture,{ attr: { 'data-default-file': web_image('uploads/or/' ~ entity.picture).resize('600','300') }})}}
+                    {% else %}
+                        {{form_widget(form.picture)}}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> {{ 'SAVE' | trans }}</button>
+        <button type="button" class="btn btn-inverse" onclick="location.href='{{ path(pathBase) }}'">{{ 'CANCEL' | trans }}</button>
+    </div>
+{{ form_end(form) }}
+{% endblock body %}
+{% block javascripts %} 
+{{ parent() }}
+{% include 'InamikaBackOfficeBundle:_partials:dropifyScripts.html.twig' %}
+<script>
+    $(function (){
+        $('.dropify-clear').on("click",function (){
+            $("#pictureRemove").val("true")
+        });
+    });
+    function beforeSuccess(){
+        location.href="{{ path(pathBase) }}";
+    }
+</script>
+{% endblock javascripts %}

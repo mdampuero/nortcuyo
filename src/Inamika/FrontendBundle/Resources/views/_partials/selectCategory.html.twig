@@ -1,0 +1,11 @@
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Categoría</h5>
+        <hr>
+        {% if categoryLabel is defined %}
+            <p>{{ categoryLabel }}</p>
+        {% endif %}
+        <input type="hidden" id="category" name="category" value="{{ app.request.get('category') }}">
+        <button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#categoryModal">Seleccionar</button>
+    </div>
+</div>

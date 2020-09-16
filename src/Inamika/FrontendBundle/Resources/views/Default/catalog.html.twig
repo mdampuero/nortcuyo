@@ -1,0 +1,12 @@
+{% if data.code == 200 %}
+	{% for key,brand in data.result %}
+        {% set delay = key * 0.1 %}
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="{{ delay }}s">
+            <div class="box">
+                <div class="icon"><a href="{{ asset('uploads')~'/or/'~ brand.catalog }}" target="_blank"><i class="fa fa-download"></i></a></div>
+                <h4 class="title"><a href="{{ asset('uploads')~'/or/'~ brand.catalog }}" target="_blank">{{ brand.name }}</a></h4>
+                <a href="{{ asset('uploads')~'/or/'~ brand.catalog }}" target="_blank">Descargar catálogo</a>
+            </div>
+        </div>
+	{% endfor %}
+{% endif %}

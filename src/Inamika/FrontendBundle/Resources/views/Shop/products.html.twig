@@ -1,0 +1,108 @@
+{% extends "InamikaFrontendBundle::layoutShop.html.twig" %}
+{% block body %}
+	{{ parent()}}
+	<main id="main" class="offset-header background-gray">
+		{% block headerPage %}
+			{% include 'InamikaFrontendBundle:_partials:headerPage.html.twig' %}
+		{% endblock headerPage %}
+		<section>
+			<form method="GET" action="" id="form_search">
+				<div class="container wow fadeIn">
+					<div class="row">
+						<div class="col-lg-3">
+							{% include 'InamikaFrontendBundle:_partials:selectCategory.html.twig' %}
+							<br/>
+							<div class="card">
+								<div class="card-body">
+									<h5 class="card-title">Ordenar por</h5>
+									<hr>
+									<div class="form-check">
+										<label class="form-check-label">
+											<input type="radio" class="form-check-input" name="order" {% if app.request.get('order') == 'name' %} checked="checked" {% endif %} value="name">Nombre
+										</label>
+									</div>
+									<div class="form-check">
+										<label class="form-check-label">
+											<input type="radio" class="form-check-input" name="order" {% if app.request.get('order') == 'price_minor' %} checked="checked" {% endif %} value="price_minor">Menor precio
+										</label>
+									</div>
+									<div class="form-check">
+										<label class="form-check-label">
+											<input type="radio" class="form-check-input" name="order" {% if app.request.get('order') == 'price_major' %} checked="checked" {% endif %} value="price_major">Mayor precio
+										</label>
+									</div>
+									<div class="form-check">
+										<label class="form-check-label">
+											<input type="radio" class="form-check-input" name="order" {% if app.request.get('order') == 'random' or app.request.get('order') == null %} checked="checked" {% endif %} value="random">Aleatorio
+										</label>
+									</div>
+								</div>
+							</div>
+							<br/>
+							<div class="card">
+								<div class="card-body">
+									<div class="form-group">
+										<label for="formControlRange">Resultados por página:
+											<span id="perPage">{{ limit }}</span>
+										</label>
+										<input type="range" style="width:100%;" class="form-control-range" name="limit" min="10" max="100" step="10" value="{{ limit }}" id="formControlRange">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-9">
+							<!-- BEGIN INPUT SEARCH -->
+                            {% include 'InamikaFrontendBundle:_partials:inputSearch.html.twig' %}
+							<!-- END INPUT SEARCH -->
+							{% if data.code == 200 %}
+								<div class="row">
+									{% if data.result.data | length %}
+										{% for item in data.result.data %}
+											<div class="col-md-6 col-lg-4 col-sm-12">
+												<!-- BEGIN CARD PRODUCT -->
+												{% include 'InamikaFrontendBundle:_partials:cardProduct.html.twig' with { product:item } %}
+												<!-- END CARD PRODUCT -->
+											</div>
+										{% endfor %}
+									{% else %}
+										<div class="col-sm-12">
+										<div class="alert alert-warning">No se encontraron resultados</div>
+										</div>
+									{% endif %}
+								</div>
+							{% endif %}
+                            <!-- BEGIN PAGINATION -->
+                            {% include 'InamikaFrontendBundle:_partials:pagination.html.twig' with { total:data.result.recordsFiltered, limit: data.result.limit } %}
+							<!-- END PAGINATION -->
+						</div>
+					</div>
+				</div>
+			</form>
+		</sction>
+	</main>
+{% endblock body %}
+{% block javascripts %}
+	{{ parent()}}
+	<script>
+
+		function goToPage(page) {
+            $("#page").val(page);
+            $('#form_search').submit();
+        }
+        $(function () {
+            $('#form_search').on('submit', function () {
+                $(".preloader").fadeIn();
+                return true;
+            });
+            $("input[name='order']").on('change', function () {
+                $('#form_search').submit();
+            });
+            $("#formControlRange").on('input', function () {
+                $("#perPage").html($(this).val());
+            });
+            $("#formControlRange").on('change', function () {
+                $('#form_search').submit();
+            });
+        });
+	</script>
+{% endblock javascripts %}

@@ -1,0 +1,9 @@
+inamika_frontend_homepage:
+    path:     /
+    defaults: { _controller: InamikaFrontendBundle:Default:index }
+    options:
+        breadcrumb:
+            label: Inicio
+inamika_frontend_shop:
+    resource: "@InamikaFrontendBundle/Resources/config/shop.yml"
+    prefix:   /shop

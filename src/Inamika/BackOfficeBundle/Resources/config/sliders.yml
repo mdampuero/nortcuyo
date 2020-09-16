@@ -1,0 +1,32 @@
+inamika_backoffice_sliders:
+    path:     /
+    defaults: 
+        _controller: InamikaBackOfficeBundle:Sliders:index
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Sliders
+            parent_route: inamika_backoffice_homepage
+            
+inamika_backoffice_sliders_add:
+    path:     /new
+    defaults: { _controller: InamikaBackOfficeBundle:Sliders:add }
+    options:
+        breadcrumb:
+            label: Agregar slider
+            parent_route: inamika_backoffice_sliders
+    methods: [GET]
+
+inamika_backoffice_sliders_edit:
+    path:     /edit/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Sliders:edit }
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Editar slider
+            parent_route: inamika_backoffice_sliders
+
+inamika_backoffice_sliders_delete:
+    path:     /delete/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Sliders:delete }
+    methods: [POST,DELETE]

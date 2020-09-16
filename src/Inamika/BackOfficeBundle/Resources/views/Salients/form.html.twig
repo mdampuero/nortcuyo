@@ -1,0 +1,168 @@
+{% set pathBack='inamika_backoffice_salients' %}
+{% extends "InamikaBackOfficeBundle::layout.html.twig" %}
+{% set pathBaseProduct='inamika_backoffice_products' %}
+{% set baseApiProduct='api_products' %}
+{% block body %}
+	{{ parent()}}
+	{{ form_start(form, {'attr': {'class': 'form-material sendToApi','novalidate':'novalidate'} }) }}
+	<div class="form-body">
+		<h3 class="card-title">{{ 'GENERAL_DATA' | trans }}</h3>
+		<hr>
+		<div class="row p-t-20">
+			<div class="col-md-6">
+				<div class="form-group">
+					{{form_label(form.title)}}
+					{{form_widget(form.title)}}
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					<lablel>&nbsp;</label><br>
+					<button type="button" data-toggle="modal" data-target="#modalProduct" class="btn btn-secondary btn-rounded"><i class="fa fa-check"></i> Seleccionar producto</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<table class="display nowrap table table-sm table-striped" cellspacing="0" width="100%">
+		<thead>
+			<th></th>
+			<th>Código</th>
+			<th>Producto</th>
+			<th>Precio</th>
+			<th></th>
+		</thead>
+		<tbody id="tableProducts"></tbody>
+	</table>
+	<div class="form-actions">
+		<button type="submit" class="btn btn-success">
+			<i class="fa fa-check"></i>
+			{{ 'SAVE' | trans }}</button>
+		<button type="button" class="btn btn-inverse" onclick="location.href='{{ path(pathBack) }}'">{{ 'CANCEL' | trans }}</button>
+	</div>
+	{{ form_end(form) }}
+	<div class="modal fade" id="modalProduct" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Seleccionar productos</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body table-responsive">
+					<table id="{{ pathBaseProduct }}_dataTable" class="display nowrap table table-sm table-hover" cellspacing="0" width="100%">
+    				</table>
+				</div>
+			</div>
+		</div>
+	</div>	
+{% endblock body %}
+{% block javascripts %}
+	{{ parent() }}
+	{% include 'InamikaBackOfficeBundle:_partials:dataTableScripts.html.twig' with { pathBase:pathBaseProduct,loadData:baseApiProduct } %}
+	{% include 'InamikaBackOfficeBundle:_partials:dropifyScripts.html.twig' %}
+	<script>
+		function beforeSuccess() {
+            location.href ="{{ path(pathBack) }}";
+        }
+		function preRequest(){
+			return {'products':products};
+		}
+		function removeProduct(id){
+			for(var i=0; i<products.length; i++){
+				if(products[i].id==id){
+					products.splice(i, 1);
+				}
+			}
+			renderTable();
+		}
+		function renderTable(){
+			$("#tableProducts").html('');
+			for(var i=0; i<products.length; i++){
+				var picture='<img width="80" src="{{ asset("bundles/inamikabackoffice/assets/images/image_not_found.jpg") }}">';
+				if(products[i].picture){
+					picture='<img width="80" src="{{ asset('uploads') }}/xs/'+products[i].picture+'">';
+				}
+				$("#tableProducts").append(`
+				<tr>
+					<td>${picture}</td>
+					<td class="align-middle">${products[i].code}</td>
+					<td class="align-middle">${products[i].name}</td>
+					<td class="align-middle"><b>$ ${new Intl.NumberFormat("de-DE").format(parseFloat(products[i].price))}</b></td>
+					<td class="align-middle"><button type="button" class="btn-remove btn btn-outline-danger btn-circle" onclick="removeProduct('${products[i].id}')"><i class="fa fa-remove"></i></button></td>
+				</tr>`);
+			}
+		}
+
+        var products=[];
+		{% if entity is defined %}
+			{% for item in entity.products %}
+				var product={
+					"id": '{{ item.product.id }}',
+					"code": '{{ item.product.code }}',
+					"name": '{{ item.product.name }}',
+					"picture": '{{ item.product.picture }}',
+					"price": '{{ item.product.price }}',
+				}
+				products.push(product);
+			{% endfor %}
+			renderTable();
+		{% endif %}
+        $(function () {
+			$('#{{ pathBaseProduct }}_dataTable').on( 'click', 'tr', function () {
+				var row=$('#{{ pathBaseProduct }}_dataTable').DataTable().row( $(this));
+				var data = row.data();
+				var newProduct=true;
+				for(var i=0; i<products.length; i++){
+					if(products[i].id==data.id){
+						newProduct=false;
+						break;
+					}
+				}
+				if(newProduct)
+					products.push(data);
+				renderTable();
+				$("#modalProduct").modal('hide');
+			});
+			$('#{{ pathBaseProduct }}_dataTable').DataTable({
+				order: [[ 1, 'desc' ]],
+				"processing": false,
+				"serverSide": true,
+				ajax: {
+					url: "{{ path(baseApiProduct)}}",
+					dataSrc: "data"
+				},
+				buttons: [],
+				columns: [
+					{
+						title: '',
+						orderable: false,
+						render: function (data, type, JsonResultRow, meta) {
+							if(JsonResultRow.picture){
+								return '<img width="80" src="{{ asset('uploads') }}/xs/'+JsonResultRow.picture+'">';
+							}else{
+								return '<img width="80" src="{{ asset("bundles/inamikabackoffice/assets/images/image_not_found.jpg") }}">';
+							}
+						}
+					},
+					{ title:"Código",data: "code" },
+					{ 
+						title:"Producto",
+						data: 'name',
+						render: function (data, type, JsonResultRow, meta) {
+							return `${capitalizeFirstLetter(data.substring(0,50))}`;
+						}
+					},
+					{ 
+						title:"Precio lista",
+						className: "text-right",
+						render: function (data, type, JsonResultRow, meta) {
+							return `<b>$ ${new Intl.NumberFormat("de-DE").format(parseFloat(JsonResultRow.price))}</b>`;
+						}
+					},
+				]
+			});
+			
+        });
+	</script>
+{% endblock javascripts %}

@@ -1,0 +1,146 @@
+{% set pathBase='inamika_backoffice_products' %}
+{% extends "InamikaBackOfficeBundle::layout.html.twig" %}
+{% block stylesheet %} 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+{% endblock stylesheet %}
+{% block body %}
+	{{ parent()}}
+	{{ form_start(form, {'attr': {'class': 'form-material sendToApi','novalidate':'novalidate'} }) }}
+	<div class="form-body">
+		<h3 class="card-title">{{ 'GENERAL_DATA' | trans }}</h3>
+		<hr>
+		<div class="row p-t-20">
+			<div class="col-md-2">
+				<div class="form-group">
+					{{form_label(form.code)}}
+					{{form_widget(form.code)}}
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group">
+					{{form_label(form.barcode)}}
+					{{form_widget(form.barcode)}}
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group">
+					{{form_label(form.price)}}
+					{{form_widget(form.price)}}
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					{{form_label(form.name)}}
+					{{form_widget(form.name)}}
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					{{form_label(form.description)}}
+					{{form_widget(form.description)}}
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					{{form_label(form.tags)}}
+					{{form_widget(form.tags)}}
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					{{form_label(form.unit)}}
+					{{form_widget(form.unit)}}
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					{{form_label(form.vat)}}
+					{{form_widget(form.vat)}}
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 container0">
+				<div class="form-group" id="container-{{ form.picture.vars.id }}">
+					{{form_label(form.picture)}}
+					{% if entity is defined and entity.picture %}
+						{{form_widget(form.picture,{ attr: { 'data-default-file': web_image('uploads/or/' ~ entity.picture).resize('600','300') }})}}
+					{% else %}
+						{{form_widget(form.picture)}}
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		<label class="control-label required" for="picture">Más fotos</label>
+		<div class="row">
+		{% for i in 1..4 %}
+			<input type="hidden" name="picture_{{ i }}Base64" id="picture_{{ i }}Base64">
+			<input type="hidden" name="picture_{{ i }}Remove" id="picture_{{ i }}Remove">
+			<div class="col-md-3 container{{ i }}">
+				<div class="form-group">
+					<input type="file" name="picture_{{ i }}" class="dropify" {% if entity.pictures[(i-1)] is defined %} data-default-file="{{ web_image('uploads/or/' ~ entity.pictures[(i-1)].name).resize('600','300') }}" {% endif %} onchange="encodeImageFileAsURL(this)" data-default-file="" />
+				</div>
+			</div>
+		{% endfor %}
+		</div>
+		<label class="control-label required" for="picture">Categorías</label>
+		<div id="categoryTree"></div>
+		<hr>
+	</div>
+	<div class="form-actions">
+		<button type="submit" class="btn btn-success">
+			<i class="fa fa-check"></i>
+			{{ 'SAVE' | trans }}</button>
+		<button type="button" class="btn btn-inverse" onclick="location.href='{{ path(pathBase) }}'">{{ 'CANCEL' | trans }}</button>
+	</div>
+	{{ form_end(form) }}
+{% endblock body %}
+{% block javascripts %}
+	{{ parent() }}
+	{% include 'InamikaBackOfficeBundle:_partials:dropifyScripts.html.twig' %}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+	<script>
+		var $treeview = $("#categoryTree");
+		$(function () { 
+			$treeview.jstree(
+				{ 
+					"plugins" : [  ],
+					'core' : {
+						'data' : {
+							"url" : "{{ path('api_productCategories') }}",
+							"dataType" : "json"
+						}
+					}
+				}
+			)
+			.bind("refresh.jstree", function (e, data) { 
+				$(this).jstree("open_all");
+			})
+			.on('loaded.jstree', function() {
+				$treeview.jstree('open_all');
+				{% if entity is defined and entity.category %}
+				$treeview.jstree('select_node', '{{ entity.category.id }}');
+				{% endif %}
+			})
+			.on(
+				"select_node.jstree", function(evt, data){
+					$('#category').val(data.node.id);
+				}
+			);
+		});
+
+		$(function (){
+			$('.container0 .dropify-clear').on("click",function (){
+				$("#pictureRemove").val("true")
+        	});
+			{% for i in 1..4 %}
+				$('.container{{ i }} .dropify-clear').on("click",function (){
+					$("#picture_{{ i }}Remove").val("true")
+				});
+			{% endfor %}
+		});
+		function beforeSuccess() {
+           location.href="{{ path(pathBase) }}";
+        }
+	</script>
+{% endblock javascripts %}

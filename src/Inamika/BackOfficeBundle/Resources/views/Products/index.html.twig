@@ -1,0 +1,68 @@
+{% set pathBase='inamika_backoffice_products' %}
+{% set pathBaseApi='api_products' %}
+{% extends "InamikaBackOfficeBundle::layout.html.twig" %}
+{% block body %} 
+{{ parent()}}
+<h3 class="card-title">
+    {% if app.request.attributes.get('_route_params')._breadcrumbs is defined %}
+        {{ (app.request.attributes.get('_route_params')['_breadcrumbs']|last)['label'] | trans }}
+    {% endif %}
+    <div class="btn-group pull-right">
+        <button type="button" class="btn btn-info btn-rounded " onclick="location.href='{{ path('inamika_backoffice_prices_add')}}'"><i class="fa fa-upload"></i> {{ 'Subir lista' | trans }}</button>
+        <button type="button" class="btn btn-success btn-rounded " onclick="location.href='{{ path(pathBase~'_add')}}'"><i class="fa fa-plus"></i> {{ 'ADD' | trans }}</button>
+        </div>
+    </h3>
+<div class="table-responsive">
+    <table id="{{ pathBase }}_dataTable" class="display nowrap table table-striped table-bordered" cellspacing="0" width="100%">
+    </table>
+</div>
+
+{{ form_start(formDelete, {'attr': {'id':id|default('formDelete')}}) }}
+{{ form_widget(formDelete) }}
+{{ form_end(formDelete) }}
+
+{% endblock body %} 
+{% block javascripts %} 
+{{ parent() }}
+{% include 'InamikaBackOfficeBundle:_partials:dataTableScripts.html.twig' with { pathBase:pathBase,loadData:pathBaseApi } %}
+<script type="text/javascript">
+    $(function () {
+        $('#{{ pathBase }}_dataTable').DataTable({
+            order: [[ 1, 'desc' ]],
+            "processing": false,
+            "serverSide": true,
+            columns: [
+                {
+                    title: '',
+                    orderable: false,
+                    render: function (data, type, JsonResultRow, meta) {
+                        if(JsonResultRow.picture){
+                            return '<img width="80" src="{{ asset('uploads') }}/xs/'+JsonResultRow.picture+'">';
+                        }else{
+                            return '<img width="80" src="{{ asset("bundles/inamikabackoffice/assets/images/image_not_found.jpg") }}">';
+                        }
+                    }
+                },
+                { title:"Código",data: "code" },
+                { title:"Producto",data: "name" },
+                { 
+                    title:"Precio lista",
+                    className: "text-right",
+                    render: function (data, type, JsonResultRow, meta) {
+                        return `<b>$ ${new Intl.NumberFormat("de-DE").format(parseFloat(JsonResultRow.price))}</b>`;
+                    }
+                },
+                {
+                    data: null,
+                    orderable: false,
+                    className: "text-center",
+                    defaultContent: `
+                    <button type="button" class="btn-edit btn btn-outline-info btn-circle"><i class="fa fa-pencil"></i></button>
+                    <button type="button" class="btn-remove btn btn-outline-danger btn-circle"><i class="fa fa-trash"></i></button>
+                    `
+                }
+            ]
+        });
+    });
+</script>
+{% endblock %}

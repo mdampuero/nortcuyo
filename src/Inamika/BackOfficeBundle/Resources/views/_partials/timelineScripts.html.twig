@@ -1,0 +1,54 @@
+<script>
+function loadTimeline(){
+        $.ajax({
+        url: '{{ endpoint }}?sort=title&direaction=ASC',
+        type: 'GET',
+        crossDomain: true,
+        success: function(data) {
+            console.log(data);
+            var html='';
+            $.each( data, function( index, item ){
+                var classDirection=((index%2)==0)?'':'class="timeline-inverted"';
+                var d = new Date(item.createdAt);
+                item.description=(item.description)?item.description:'';
+                if(item.user)
+                    var username=item.user.name;
+                else
+                    var username='Automático'
+                html+=`<li ${classDirection}>
+                    <div class="timeline-badge ${item.status}">
+                        <i class="${item.icon}"></i>
+                    </div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                            <h4 class="timeline-title">${item.title} <span class="pull-right"><i><b><small>${username}</small></b></i></span></h4>
+                            <p>
+                                <small class="text-muted">
+                                    <i class="mdi mdi-timer"></i>
+                                    ${(d.getDate()<10?'0':'') + d.getDate()}/${(d.getMonth()+1)}/${d.getFullYear()} ${(d.getHours()<10?'0':'') + d.getHours()}:${(d.getMinutes()<10?'0':'') + d.getMinutes()}</small>
+                            </p>
+                        </div>
+                        <div class="timeline-body">
+                            <p>${item.description}</p>
+                        </div>
+                    </div>
+                </li>`;
+            });
+            if(data.length>0) 
+            $("#timeline").html(html);
+            else
+            $("#timeline").html('<p>Aún no tiene ningún elemento en el historial</p>');
+
+        },  
+        complete:function(){
+            
+        },
+        error: function(data, status, error) {
+            
+        }
+    });
+    }
+$(function (){
+    loadTimeline();
+});
+</script>

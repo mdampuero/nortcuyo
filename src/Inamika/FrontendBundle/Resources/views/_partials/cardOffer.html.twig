@@ -1,0 +1,36 @@
+{% if offer.type == 'BY_PRODUCT' %}
+    <div class="col-item">
+        <div class="photo" style="height: 250px;" onclick="location.href='{{ path('inamika_frontend_shop_product_view',{ code : offer.product.code }) }}'">
+            <div class="ribbon" >{{ offer.ribbon }}</div>
+            {% if offer.product.picture %}
+            <img src="{{ asset('uploads/sm/') }}{{ offer.product.picture }}" class="img-responsive center"  />
+            {% else %}
+            <img src="{{ asset("bundles/inamikabackoffice/assets/images/image_not_found.jpg") }}" class="img-responsive center"  />
+            {% endif %}
+        </div>
+        <div class="info">
+            <div class="price" onclick="location.href='{{ path('inamika_frontend_shop_product_view',{ code : offer.product.code }) }}'">
+                <h6 style="height: 40px;">{{ offer.product.name | capitalize }}</h6>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+{% endif %}
+{% if offer.type == 'BY_CATEGORY' %}
+    <div class="col-item">
+        <div class="photo" style="height: 250px;" onclick="location.href='{{ path('inamika_frontend_shop_product') }}?category={{ offer.category.id }}'">
+            <div class="ribbon" >{{ offer.ribbon }}</div>
+            {% if offer.picture %}
+            <img src="{{ asset('uploads/sm/') }}{{ offer.picture }}" class="img-responsive center"  />
+            {% else %}
+            <img src="{{ asset("bundles/inamikabackoffice/assets/images/image_not_found.jpg") }}" class="img-responsive center"  />
+            {% endif %}
+        </div>
+        <div class="info">
+            <div class="price" onclick="location.href='{{ path('inamika_frontend_shop_product') }}?category={{ offer.category.id }}'">
+                <h6 style="height: 40px;">{{ offer.title | capitalize }}</h6>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+{% endif %}

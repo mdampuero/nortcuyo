@@ -1,0 +1,4 @@
+api_ordersStatus:
+    path:     /ordersStatus
+    defaults: { _controller: InamikaApiBundle:OrdersStatus:index }
+    methods: [GET]

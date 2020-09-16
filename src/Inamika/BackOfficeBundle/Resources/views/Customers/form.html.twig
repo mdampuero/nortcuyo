@@ -1,0 +1,96 @@
+{% set pathBase='inamika_backoffice_customers' %} 
+{% extends "InamikaBackOfficeBundle::layout.html.twig" %}
+{% block body %} 
+{{ parent()}}     
+{{ form_start(form, {'attr': {'class': 'form-material sendToApi','novalidate':'novalidate'} }) }}
+    <div class="form-body">
+        <h3 class="card-title">{{ 'GENERAL_DATA' | trans }}</h3>
+        <hr>
+        <div class="row p-t-20">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_label(form.customerCategory)}}
+                    {{form_widget(form.customerCategory)}}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_label(form.name)}}
+                    {{form_widget(form.name)}}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_label(form.email)}}
+                    {{form_widget(form.email)}}
+                </div>
+            </div>
+            {% if form.password is defined %}
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_label(form.password)}}
+                    {{form_widget(form.password)}}
+                </div>
+            </div>
+            {% endif %}
+            {% if form.isSeller is defined %}
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_label(form.isSeller)}}
+                    {{form_widget(form.isSeller)}}
+                </div>
+            </div>
+            {% endif %}
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_label(form.phone)}}
+                    {{form_widget(form.phone)}}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_label(form.document)}}
+                    {{form_widget(form.document)}}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_label(form.address)}}
+                    {{form_widget(form.address)}}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_label(form.city)}}
+                    {{form_widget(form.city)}}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_label(form.provence)}}
+                    {{form_widget(form.provence)}}
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    {{form_label(form.observations)}}
+                    {{form_widget(form.observations)}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> {{ 'SAVE' | trans }}</button>
+        <button type="button" class="btn btn-inverse" onclick="location.href='{{ path(pathBase) }}'">{{ 'CANCEL' | trans }}</button>
+    </div>
+{{ form_end(form) }}
+{% endblock body %}
+{% block javascripts %} 
+{{ parent() }}
+{% include 'InamikaBackOfficeBundle:_partials:dropifyScripts.html.twig' %}
+<script>
+    function beforeSuccess(){
+        location.href="{{ path(pathBase) }}";
+    }
+</script>
+{% endblock javascripts %}

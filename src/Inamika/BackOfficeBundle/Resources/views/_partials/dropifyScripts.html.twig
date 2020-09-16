@@ -1,0 +1,18 @@
+<script src="{{ asset('bundles/inamikabackoffice/assets/plugins/dropify/dist/js/dropify.min.js') }}"></script>
+<script>
+    $(function (){
+        $('.dropify').dropify({
+            messages: {
+                'default': '{{ 'DRAG_AND_DROP_FILE' | trans }}',
+                'replace': '{{ 'DRAG_AND_DROP_OR_REPLACE' | trans }}',
+                'remove':  '{{ 'DELETE' | trans }}',
+                'error':   '{{ 'ERROR' | trans }}'
+            },
+            error: {
+                'fileSize': '{{ 'FILE_VERY_LONG' | trans }}',
+                'imageFormat': '{{ 'FILE_format' | trans }}'
+            }
+        });
+        
+    });
+</script>
