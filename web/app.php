@@ -1,5 +1,7 @@
 <?php
 ini_set("pcre.jit", "0");
+date_default_timezone_set('America/Argentina/Mendoza');
+
 use Symfony\Component\HttpFoundation\Request;
 
 require __DIR__.'/../vendor/autoload.php';
