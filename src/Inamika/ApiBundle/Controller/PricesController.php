@@ -68,7 +68,7 @@ class PricesController extends DefaultController
                 ->setCellValue('B'.$row, $d->getName())
                 ->setCellValue('C'.$row, (String)round($d->getPrice(),2))
                 ->setCellValue('D'.$row, (String)round(($d->getPrice()*$d->getVat()),2))
-                ->setCellValue('E'.$row, (String)round($d->getVat(),2));
+                ->setCellValue('E'.$row, (String)$d->getVat());
             $row++;
         }
         foreach(range('A','E') as $columnID) {
