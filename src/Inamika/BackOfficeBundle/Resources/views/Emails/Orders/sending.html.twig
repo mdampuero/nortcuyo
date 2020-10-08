@@ -4,6 +4,7 @@
 <hr>
 <div>
     <p>
+    <b>Pedido Nº: #{{ entity.id }}</b><br/>
     {% if entity.customerId.isSeller %}
         <b>Cliente:</b> {{ entity.customerName }}<br/>
     {% else %}
