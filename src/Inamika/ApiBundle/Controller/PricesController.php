@@ -9,13 +9,14 @@ namespace Inamika\ApiBundle\Controller;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use Inamika\BackEndBundle\Entity\Price;
+use Inamika\BackEndBundle\Entity\Product;
 use Inamika\BackOfficeBundle\Form\Price\PriceType;
 use Inamika\BackOfficeBundle\Form\Price\UploadType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Config\Definition\Exception\Exception;
-
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class PricesController extends DefaultController
 {
@@ -41,6 +42,58 @@ class PricesController extends DefaultController
             return $this->handleView($this->view(null, Response::HTTP_NOT_FOUND));
 
         return $this->handleView($this->view($entity));
+    }
+
+    public function downloadAction(){
+        $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+        $phpExcelObject->getProperties()->setCreator("Nortcuyo")
+            ->setLastModifiedBy("Nortcuyo")
+            ->setTitle("Lista de precios Nortcuyo")
+            ->setSubject("Lista de precios Nortcuyo")
+            ->setDescription("Este documento contiene la lista de precios de nortcuyo");
+        $data=$this->getDoctrine()->getRepository(Product::class)->getAll()
+        ->orderBy('e.code','DESC')
+        ->getQuery()->getResult();
+        
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->setCellValue('A1','Código')
+            ->setCellValue('B1','Descripción')
+            ->setCellValue('C1','P.Lista S/I')
+            ->setCellValue('D1','P.Lista C/I')
+            ->setCellValue('E1','IVA');
+        $row=2;
+        foreach ($data as $key => $d) {
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->setCellValue('A'.$row, $d->getCode())
+                ->setCellValue('B'.$row, $d->getName())
+                ->setCellValue('C'.$row, (String)round($d->getPrice(),2))
+                ->setCellValue('D'.$row, (String)round(($d->getPrice()*$d->getVat()),2))
+                ->setCellValue('E'.$row, (String)round($d->getVat(),2));
+            $row++;
+        }
+        foreach(range('A','E') as $columnID) {
+            $phpExcelObject->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+        }
+        $phpExcelObject->getActiveSheet()->setTitle('Lista de precios');
+        // Define el indice de página al número 1, para abrir esa página al abrir el archivo
+        $phpExcelObject->setActiveSheetIndex(0);
+
+        // Crea el writer
+        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel2007');
+        // Envia la respuesta del controlador
+        $response = $this->get('phpexcel')->createStreamedResponse($writer);
+        // Agrega los headers requeridos
+        $dispositionHeader = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            'NortcuyoListaDePrecio'.date('d_m_Y_H_i').'.xlsx'
+        );
+
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+
+        return $response;
     }
 
     public function deleteAction(Request $request, $id)

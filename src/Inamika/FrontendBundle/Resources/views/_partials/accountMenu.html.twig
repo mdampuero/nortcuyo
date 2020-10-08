@@ -9,6 +9,9 @@
 		<li class="list-group-item {% if 'inamika_frontend_shop_orders' in app.request.get('_route') %}list-group-item-secondary{% endif %}">
 			<a href="{{ path('inamika_frontend_shop_orders') }}">Mis pedidos</a>
 		</li>
+		<li class="list-group-item">
+			<a href="{{ path('api_prices_download') }}">Descargar lista</a>
+		</li>
 		<li class="list-group-item {% if 'inamika_frontend_shop_cart' in app.request.get('_route') %}list-group-item-secondary{% endif %}">
 			<a href="{{ path('inamika_frontend_shop_cart') }}">Mi carrito</a>
 		</li>

@@ -15,6 +15,7 @@
 	{% if app.session.get('_security_main') %}
 	<ul>
 		<li><a href="{{ path('inamika_frontend_shop_account') }}">Mi cuenta</a></li>
+		<li><a href="{{ path('api_prices_download') }}">Descargar lista</a></li>
 		<li><a href="{{ path('inamika_frontend_shop_logout') }}">Salir</a></li>
 	</ul>
 	{% else %}

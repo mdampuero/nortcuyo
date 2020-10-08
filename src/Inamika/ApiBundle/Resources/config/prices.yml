@@ -22,3 +22,8 @@ api_prices_upload:
     path:     /upload
     defaults: { _controller: InamikaApiBundle:Prices:upload }
     methods: [POST]
+
+api_prices_download:
+    path:     /download
+    defaults: { _controller: InamikaApiBundle:Prices:download }
+    methods: [GET]

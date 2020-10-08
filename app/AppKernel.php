@@ -26,6 +26,7 @@ class AppKernel extends Kernel
             new Inamika\BackOfficeBundle\InamikaBackOfficeBundle(),
             new Inamika\FrontendBundle\InamikaFrontendBundle(),
             new Inamika\ApiBundle\InamikaApiBundle(),
+            new Liuggio\ExcelBundle\LiuggioExcelBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
