@@ -8,6 +8,7 @@
 namespace Inamika\BackOfficeBundle\Controller;
 
 use Inamika\BackEndBundle\Entity\Price;
+use Inamika\BackEndBundle\Entity\Currency;
 use Inamika\BackEndBundle\Entity\Product;
 use Inamika\BackEndBundle\Entity\ProductCategory;
 use Inamika\BackOfficeBundle\Form\Price\PriceType;
@@ -19,7 +20,6 @@ use Symfony\Component\Form\FormError;
 
 class PricesController extends Controller{
 
-    //protected = array();
 	public function indexAction(){
 		return $this->render('InamikaBackOfficeBundle:Prices:index.html.twig',array(
             'formDelete'=>$this->createFormBuilder()
@@ -48,6 +48,8 @@ class PricesController extends Controller{
                     $i = 0;
                     $countUpdated=0;
                     $countCreated=0;
+                    $defaultCurrency=$em->getRepository(Currency::class)->findOneByIsDefault(true);
+                    $dolarCurrency=$em->getRepository(Currency::class)->findOneBySymbol('U$D');
                     while (($data = fgetcsv($handle, null, ';')) !== FALSE) {
                         $data = array_map("utf8_encode", $data);
                         $i++;
@@ -73,6 +75,7 @@ class PricesController extends Controller{
                                 $product->setDescription($data[1]);
                                 $product->setBrand($data[11]);
                         }
+                        $product->setCurrency((strpos(strtoupper($data[8]), 'U$S') === false)?$defaultCurrency:$dolarCurrency);
                         $product->setPrice((float)str_replace(",",".",$data[6]));
                         $product->setVat((float)str_replace(",",".",$data[3]));
                         $product->setIsUpdate(true);

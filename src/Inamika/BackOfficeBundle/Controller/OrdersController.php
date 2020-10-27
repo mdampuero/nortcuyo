@@ -19,6 +19,7 @@ class OrdersController extends Controller{
 
 	public function indexAction(){
 		return $this->render('InamikaBackOfficeBundle:Orders:index.html.twig',array(
+            'currencies'=>$this->getDoctrine()->getRepository('InamikaBackEndBundle:Currency')->getAll()->getQuery()->getResult(),
             'formDelete'=>$this->createFormBuilder()
             ->setAction($this->generateUrl('api_orders_delete', array('id' => ':ENTITY_ID')))
             ->setMethod('DELETE')
@@ -27,10 +28,6 @@ class OrdersController extends Controller{
     }
     
     public function viewAction($id){
-        // $client = HttpClient::create();
-        // $response = $client->request('GET', $this->generateUrl('api_orders_get',array('id' => $id),UrlGeneratorInterface::ABSOLUTE_URL));
-        // if($response->getStatusCode()!=200)
-        //     throw $this->createNotFoundException('La orde no fue encontrada');
 		return $this->render('InamikaBackOfficeBundle:Orders:view.html.twig',array('data'=>$this->getDoctrine()->getRepository('InamikaBackEndBundle:Orders')->find($id)));
     }
 }

@@ -387,7 +387,7 @@
         });
     }
     function beforeSuccessUpdateCart(data){
-        var quantity=Object.keys(data.cart).length;
+        var quantity=Object.keys(data.cart.items).length;
         if ($("#menu-icon-cart #badge-cart").length>0){
             $("#badge-cart").html(quantity);
         }else{

@@ -50,7 +50,7 @@
                     title:"Precio lista",
                     className: "text-right",
                     render: function (data, type, JsonResultRow, meta) {
-                        return `<b>$ ${new Intl.NumberFormat("de-DE").format(parseFloat(JsonResultRow.price))}</b>`;
+                        return `<b>${JsonResultRow.currency.symbol} ${new Intl.NumberFormat("de-DE").format(parseFloat(JsonResultRow.price))}</b>`;
                     }
                 },
                 {

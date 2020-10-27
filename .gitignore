@@ -22,3 +22,4 @@ vendor/
 web/uploads/
 web/bundles/*
 .vscode
+*.swp

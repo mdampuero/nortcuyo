@@ -16,6 +16,8 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class ProductType extends AbstractType
 {
@@ -34,6 +36,20 @@ class ProductType extends AbstractType
         ->add('description',TextareaType::class,array('label'=>'Descripción','label_attr'=>array('class'=>'control-label'),'attr'=>array('class'=>'form-control','rows'=>5,'placeholder'=>'Describa en detalle el producto')))
         ->add('tags',TextareaType::class,array('label'=>'Tags','label_attr'=>array('class'=>'control-label'),'attr'=>array('class'=>'form-control','rows'=>5,'placeholder'=>'Escriba palabras claves que ayudan a la búsqueda')))
         ->add('category',HiddenType::class,array("mapped" => false))
+        ->add('currency', EntityType::class, array(
+            'label'=>'Moneda',
+            'label_attr'=>array('class'=>'control-label'),
+            'class' => 'InamikaBackEndBundle:Currency',
+            'choice_label' => 'name',
+            'attr'=>array('class'=>'form-control'),
+            'placeholder' => '--Seleccione una opción--',
+            'query_builder' => function (EntityRepository $er) {
+                $qb = $er->createQueryBuilder('e');
+                $choices=$qb->where("e.isDelete=:isDelete")->setParameter('isDelete',false)
+                    ->orderBy('e.name', 'ASC');
+                return $choices;
+            }
+        ))
         /* File picture */
         ->add('pictureBase64',HiddenType::class,array("mapped" => false))
         ->add('pictureRemove',HiddenType::class,array("mapped" => false))

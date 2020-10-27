@@ -10,22 +10,16 @@
 		<h3 class="card-title">{{ 'GENERAL_DATA' | trans }}</h3>
 		<hr>
 		<div class="row p-t-20">
-			<div class="col-md-2">
+			<div class="col-md-3">
 				<div class="form-group">
 					{{form_label(form.code)}}
 					{{form_widget(form.code)}}
 				</div>
 			</div>
-			<div class="col-md-2">
+			<div class="col-md-3">
 				<div class="form-group">
 					{{form_label(form.barcode)}}
 					{{form_widget(form.barcode)}}
-				</div>
-			</div>
-			<div class="col-md-2">
-				<div class="form-group">
-					{{form_label(form.price)}}
-					{{form_widget(form.price)}}
 				</div>
 			</div>
 			<div class="col-md-6">
@@ -44,6 +38,18 @@
 				<div class="form-group">
 					{{form_label(form.tags)}}
 					{{form_widget(form.tags)}}
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					{{form_label(form.currency)}}
+					{{form_widget(form.currency)}}
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					{{form_label(form.price)}}
+					{{form_widget(form.price)}}
 				</div>
 			</div>
 			<div class="col-md-3">

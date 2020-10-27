@@ -17,6 +17,7 @@
 {{ form_widget(formDelete) }}
 {{ form_end(formDelete) }}
 
+{{ dump(currencies) }}
 {% endblock body %} 
 {% block javascripts %} 
 {{ parent() }}
@@ -50,13 +51,21 @@
                         return `${(d.getDate()<10?'0':'') + d.getDate()}/${(d.getMonth()+1)}/${d.getFullYear()} ${(d.getHours()<10?'0':'') + d.getHours()}:${(d.getMinutes()<10?'0':'') + d.getMinutes()}`;
                     }
                 },
+                {% for currency in currencies %}
                 { 
-                    title:"Total",
+                    title:"Total {{ currency.symbol }}",
                     className: "text-right",
+                    orderable: false,
                     render: function (data, type, JsonResultRow, meta) {
-                        return `<b>$ ${new Intl.NumberFormat("de-DE").format(parseFloat(JsonResultRow.totalVat).toFixed(2))}</b>`;
+                        for(var i=0; i<=JsonResultRow.totals.length; i++){
+                            if(JsonResultRow.totals[i].currency.symbol=='{{ currency.symbol }}')
+                                return `<b>{{ currency.symbol }} ${new Intl.NumberFormat("de-DE").format(parseFloat(JsonResultRow.totals[i].total).toFixed(2))}</b>`;  
+                        }
+                        {# console.log(JsonResultRow);
+                        return `<b>{{ currency.symbol }} ${new Intl.NumberFormat("de-DE").format(parseFloat(JsonResultRow.total).toFixed(2))}</b>`; #}
                     }
                 },
+                {% endfor %}
                 { 
                     title:"Estado",
                     data: 'status', 

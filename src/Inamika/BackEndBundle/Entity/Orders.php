@@ -115,10 +115,17 @@ class Orders
      * @Assert\NotBlank()
      */
     private $items;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="OrdersTotal", mappedBy="order")
+     * @Assert\NotBlank()
+     */
+    private $totals;
 
     public function __construct()
     {
         $this->items = new ArrayCollection();
+        $this->totals = new ArrayCollection();
     }
 
 
@@ -430,6 +437,26 @@ class Orders
     public function setItems($items)
     {
         return $this->items=$items;
+    }
+    
+    /**
+     * Get totals.
+     *
+     * @return int
+     */
+    public function getTotals()
+    {
+        return $this->totals;
+    }
+    
+    /**
+     * Set totals.
+     *
+     * @return Orders
+     */
+    public function setTotals($totals)
+    {
+        return $this->totals=$totals;
     }
 
 }

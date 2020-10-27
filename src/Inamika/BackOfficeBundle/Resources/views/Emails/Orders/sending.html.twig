@@ -17,7 +17,9 @@
     <b>Observaciones:</b> {{ entity.observations }}<br/>
     <b>Transporte:</b> {{ entity.transport }}<br/>
     <b>Fecha:</b> {{ entity.createdAt | date('d/m/Y H:i') }}<br/>
-    <b>Total:</b> $ {{ entity.totalVat | number_format(2, ',', '.')}}
+    {% for total in entity.totals %}
+        <b>Total:</b> {{ total.currency.symbol}} {{ total.total | number_format(2, ',', '.')}}<br/>
+    {% endfor %}
     </p>
 </div>
 <h4>{{ 'PRODUCTS' | trans }}</h4>
@@ -41,22 +43,25 @@
                 <td align="center">{{ item.code}}</td>
                 <td align="left">{{ item.description }}</td>
                 <td align="center">{{ item.amount }}</td>
-                <td align="right">$ {{ item.price | number_format(2,',','.') }}</td>
-                <td align="right">$ {{ item.subtotal | number_format(2,',','.') }}</td>
+                <td align="right">{{ item.productId.currency.symbol }} {{ (item.subtotal / item.amount) | number_format(2, ',', '.')}}</td>
+                <td align="right">{{ item.productId.currency.symbol }} {{ item.subtotal | number_format(2,',','.') }}</td>
             </tr>
             {% endfor %}
-            <tr>
-                <td colspan="5" align="right"><b>Total S/I:</b></td>
-                <td colspan="1" align="right"><b>$ {{ entity.total | number_format(2,',','.') }}</b></td>
-            </tr>
-            <tr>
-                <td colspan="5" align="right"><b>IVA:</b></td>
-                <td colspan="1" align="right"><b>$ {{ (entity.totalVat - entity.total) | number_format(2,',','.') }}</b></td>
-            </tr>
-            <tr>
-                <td colspan="5" align="right"><b>Total:</b></td>
-                <td colspan="1" align="right"><b>$ {{ entity.totalVat | number_format(2,',','.') }}</b></td>
-            </tr>
+            {% for total in entity.totals %}		
+                <tr><td colspan="6">&nbsp;</td></tr>
+                <tr>
+                    <td colspan="5" align="right"><b>Total S/I:</b></td>
+                    <td colspan="1" align="right"><b>{{ total.currency.symbol}} {{ total.gross | number_format(2, ',', '.')}}</b></td>
+                </tr>
+                <tr>
+                    <td colspan="5" align="right"><b>IVA:</b></td>
+                    <td colspan="1" align="right"><b>{{ total.currency.symbol}} {{ total.vat | number_format(2, ',', '.')}}</b></td>
+                </tr>
+                <tr>
+                    <td colspan="5" align="right"><b>Total:</b></td>
+                    <td colspan="1" align="right"><b>{{ total.currency.symbol}} {{ total.total | number_format(2, ',', '.')}}</b></td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>

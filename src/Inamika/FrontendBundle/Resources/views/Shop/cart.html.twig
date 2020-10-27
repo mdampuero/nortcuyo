@@ -26,26 +26,26 @@
                             <tbody>
                                 {% set total = 0 %}
                                 {% set totalVat = 0 %}
-                                {% for item in app.session.get('_security_main').cart %}
+                                {% for item in app.session.get('_security_main').cart.items %}
                                     {% set price = (item.product.price * app.session.get('_security_main').category.discount) %}
                                     {% set subtotal = price * item.quantity %}
-                                    {% set subtotalVat = subtotal * item.product.vat %}
-                                    {% set total = total + subtotal %}
-                                    {% set totalVat = totalVat + subtotalVat %}                           
+                                    {% set subtotalVat = subtotal * item.product.vat %}                       
                                     <tr>
                                         <td onclick="quickViewProduct('{{ item.product.code }}')">{{ item.product.code }}</td>
                                         <td onclick="quickViewProduct('{{ item.product.code }}')">{{ item.product.name | capitalize }}</td>
                                         <td onclick="quickViewProduct('{{ item.product.code }}')" class="text-center">{{ item.quantity }}</td>
-                                        <td onclick="quickViewProduct('{{ item.product.code }}')" class="text-right">${{ subtotal | number_format(2, ',', '.') }}</td>
+                                        <td onclick="quickViewProduct('{{ item.product.code }}')" class="text-right">{{ item.product.currency.symbol }} {{ subtotal | number_format(2, ',', '.') }}</td>
                                         <td class="text-center"><a href="javascript:removeCart('{{ item.product.code }}')"><i class="fa fa-close text-danger"></i></a></td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                         <hr>
-                        <h5 class="text-right text-muted">Total sin IVA: $ {{ total | number_format(2, ',', '.') }}</h5>
-                        <h5 class="text-right text-muted">IVA: $ {{ (totalVat - total ) | number_format(2, ',', '.') }}</h5>
-                        <h2 class="text-right">Total: $ {{ totalVat | number_format(2, ',', '.') }}</h2>
+                        {% for key, total in app.session.get('_security_main').cart.totals %}
+                            <h5 class="text-right text-muted">Total sin IVA: {{ key }} {{ total.total | number_format(2, ',', '.') }}</h5>
+                            <h5 class="text-right text-muted">IVA: {{ key }} {{ (total.totalVat - total.total ) | number_format(2, ',', '.') }}</h5>
+                            <h2 class="text-right">Total: {{ key }} {{ total.totalVat | number_format(2, ',', '.') }}</h2>
+                        {% endfor %}
                         <div class="text-right">
                             <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#confirmSendOrder">Enviar pedido</button>
                         </div>
@@ -69,7 +69,7 @@
         var items=[];
         {% set total = 0 %}
         {% set totalVat = 0 %}
-        {% for item in app.session.get('_security_main').cart %}
+        {% for item in app.session.get('_security_main').cart.items %}
             {% set price = (item.product.price * app.session.get('_security_main').category.discount) %}
             {% set subtotal = price * item.quantity %}
             {% set subtotalVat = subtotal * item.product.vat %}

@@ -38,8 +38,9 @@
 			<div class="card bg-light">
 				<h4 class="card-header bg-success text-white">Pedido</h4>
 				<div class="card-body">
-					<h5 class="card-title">
-						Total: ${{ data.totalVat | number_format(2, ',', '.') }}</h5>
+					{% for total in data.totals %}
+					<h5 class="card-title">Total: {{ total.currency.symbol}} {{ total.total | number_format(2, ',', '.')}}</h5>
+					{% endfor %}
 					<p id="statusLabel"><span class="badge badge-pill badge-{{ data.status.color }}">{{ data.status.name  }}</span></p>
 					<p class="card-text">
 						Fecha:
@@ -98,9 +99,9 @@
 								<td>{{ item.code }}</td>
 								<td>{{ item.description }}</td>
 								<td class="text-right">{{ item.amount }}</td>
-								<td class="text-right">$
+								<td class="text-right">{{ item.productId.currency.symbol }}
 									{{ (item.subtotal / item.amount) | number_format(2, ',', '.')}}</td>
-								<td class="text-right">$
+								<td class="text-right">{{ item.productId.currency.symbol }}
 									{{ item.subtotal | number_format(2, ',', '.')}}</td>
 							</tr>
 						{% endfor %}
@@ -108,21 +109,23 @@
 				</table>
 			</div>
 		</div>
+		{% for total in data.totals %}			
 		<div class="col-md-12">
 			<div class="pull-right m-t-30 text-right">
 				<h4>
 					<b>Total S/I:
-					</b>$
-					{{ data.total | number_format(2, ',', '.')}}</h4>
+					</b>{{ total.currency.symbol}}
+					{{ total.gross | number_format(2, ',', '.')}}</h4>
 				<h4>
-					<b>IVA :</b>$
-					{{ (data.totalVat - data.total) | number_format(2, ',', '.')}}</h4>
+					<b>IVA :</b>{{ total.currency.symbol}}
+					{{ total.vat | number_format(2, ',', '.')}}</h4>
 				<h2>
-					<b>Total :</b>$
-					{{ data.totalVat | number_format(2, ',', '.')}}</h2>
+					<b>Total :</b>{{ total.currency.symbol}}
+					{{ total.total | number_format(2, ',', '.')}}</h2>
 			</div>
 			<div class="clearfix"></div>
 		</div>
+		{% endfor %}
 		<!-- Modal -->
 	</div>
 	<div class="modal fade" id="modalChangeStatus" tabindex="-1" role="dialog" aria-labelledby="modalChangeStatusLabel" aria-hidden="true">

@@ -3,7 +3,7 @@
 		<a href="{{ path('inamika_frontend_shop_cart') }}">
 			<i class="fa fa-shopping-cart"></i>
 			{% if app.session.get('_security_main').cart | length %}
-			<div class="badge-cart" id="badge-cart">{{ app.session.get('_security_main').cart | length}}</div>
+			<div class="badge-cart" id="badge-cart">{{ app.session.get('_security_main').cart.items | length}}</div>
 			{% endif %}
 		</a>
 	</li>

@@ -12,7 +12,9 @@ use Inamika\BackEndBundle\Entity\Orders;
 use Inamika\BackEndBundle\Entity\OrdersStatus;
 use Inamika\BackEndBundle\Entity\Log;
 use Inamika\BackEndBundle\Entity\OrdersItem;
+use Inamika\BackEndBundle\Entity\OrdersTotal;
 use Inamika\BackEndBundle\Entity\Product;
+use Inamika\BackEndBundle\Entity\Currency;
 use Inamika\BackOfficeBundle\Form\Order\OrderType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -92,6 +94,7 @@ class OrdersController extends FOSRestController
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $items=$content['items'];
+            $itemsArray=[];
             foreach ($items as $key => $item) {
                 $ordersItem=new OrdersItem();
                 $ordersItem->setProductId($em->getRepository(Product::class)->find($item["id"]));
@@ -103,7 +106,9 @@ class OrdersController extends FOSRestController
                 $ordersItem->setSubtotal($item["subtotal"]);
                 $ordersItem->setSubtotalVat($item["subtotalVat"]);
                 $em->persist($ordersItem);
+                $itemsArray[]=$ordersItem;
             }
+            $entity->setItems($itemsArray);
             $em->flush();
             $this->get('ApiCall')->post($this->generateUrl('api_logs_post',[],UrlGenerator::ABSOLUTE_URL),
                 [
@@ -115,9 +120,37 @@ class OrdersController extends FOSRestController
                     "user"=>null
                 ]
             );
+            $this->calcTotal($entity);
+            $currencies=$this->getDoctrine()->getRepository(Currency::class)->getAll()->getQuery()->getResult();
+
             return $this->handleView($this->view($entity, Response::HTTP_OK));
         }
         return $this->handleView($this->view($form->getErrors(), Response::HTTP_BAD_REQUEST));
+    }
+
+    private function calcTotal($order){
+        $em = $this->getDoctrine()->getManager();
+        $currencies=$em->getRepository(Currency::class)->getAll()->getQuery()->getResult();
+        $totals=[];
+        foreach ($currencies as $key => $currency) {
+            $totals[$currency->getSymbol()]=array('total'=>0,'totalVat'=>0,'currency'=>$currency);
+            foreach ($order->getItems() as $key => $item) {
+                if($item->getProductId()->getCurrency()->getId()==$currency->getId()){
+                    $totals[$currency->getSymbol()]["total"]+=$item->getSubtotal();
+                    $totals[$currency->getSymbol()]["totalVat"]+=$item->getSubtotalVat();
+                }
+            }
+        }
+        foreach ($totals as $key => $total) {
+            $ordersTotal=new OrdersTotal();
+            $ordersTotal->setCurrency($total["currency"]);
+            $ordersTotal->setOrder($order);
+            $ordersTotal->setGross($total["total"]);
+            $ordersTotal->setTotal($total["totalVat"]);
+            $ordersTotal->setVat($total["totalVat"]-$total["total"]);
+            $em->persist($ordersTotal);
+        }
+        $em->flush();
     }
 
     public function getAction($id){

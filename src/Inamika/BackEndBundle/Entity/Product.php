@@ -31,6 +31,15 @@ class Product
     private $id;
 
     /**
+     * Many features have one Currency. This is the owning side.
+     * @Assert\NotBlank()
+     * @ORM\ManyToOne(targetEntity="Currency")
+     * @Expose
+     * @ORM\JoinColumn(name="currency_id", referencedColumnName="id")
+     */
+    private $currency;
+
+    /**
      * Many features have one ProductCategory. This is the owning side.
      * @ORM\ManyToOne(targetEntity="ProductCategory")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=true)
@@ -228,6 +237,30 @@ class Product
         return $this->name;
     }
     
+    /**
+     * Set currency.
+     *
+     * @param string $currency
+     *
+     * @return Product
+     */
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
+
+        return $this;
+    }
+
+    /**
+     * Get currency.
+     *
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
     /**
      * Get pictures.
      *
