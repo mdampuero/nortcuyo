@@ -58,20 +58,22 @@ class PricesController extends DefaultController
         $phpExcelObject->setActiveSheetIndex(0)
             ->setCellValue('A1','Código')
             ->setCellValue('B1','Descripción')
-            ->setCellValue('C1','P.Lista S/I')
-            ->setCellValue('D1','P.Lista C/I')
-            ->setCellValue('E1','IVA');
+            ->setCellValue('C1','Moneda')
+            ->setCellValue('D1','P.Lista S/I')
+            ->setCellValue('E1','P.Lista C/I')
+            ->setCellValue('F1','IVA');
         $row=2;
         foreach ($data as $key => $d) {
             $phpExcelObject->setActiveSheetIndex(0)
                 ->setCellValue('A'.$row, $d->getCode())
                 ->setCellValue('B'.$row, $d->getName())
-                ->setCellValue('C'.$row, (String)round($d->getPrice(),2))
-                ->setCellValue('D'.$row, (String)round(($d->getPrice()*$d->getVat()),2))
-                ->setCellValue('E'.$row, (String)$d->getVat());
+                ->setCellValue('C'.$row, $d->getCurrency()->getSymbol())
+                ->setCellValue('D'.$row, (String)round($d->getPrice(),2))
+                ->setCellValue('E'.$row, (String)round(($d->getPrice()*$d->getVat()),2))
+                ->setCellValue('F'.$row, (String)$d->getVat());
             $row++;
         }
-        foreach(range('A','E') as $columnID) {
+        foreach(range('A','F') as $columnID) {
             $phpExcelObject->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
         }
         $phpExcelObject->getActiveSheet()->setTitle('Lista de precios');
