@@ -80,7 +80,7 @@
 					{% endif %}
 				</div>
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-6 NOT_BY_FLYER">
 				<div class="card" id="category-selected" style="border: 2px solid #E5E5E5;">
 					<div class="card-body form-horizontal">
 						<h4 class="card-title"></h4>
@@ -149,10 +149,15 @@
             if ($("#type").val() == "BY_CATEGORY") {
                 $(".BY_CATEGORY").slideDown('fast');
                 $(".BY_PRODUCT").slideUp('fast');
-            } else {
-                $(".BY_CATEGORY").slideUp('fast');
+                $(".NOT_BY_FLYER").slideDown('fast');
+            } else if($("#type").val() == "BY_PRODUCT"){
                 $(".BY_PRODUCT").slideDown('fast');
-            }
+                $(".BY_CATEGORY").slideUp('fast');
+            } else {
+				$(".BY_CATEGORY").slideDown('fast');
+                $(".BY_PRODUCT").slideUp('fast');
+                $(".NOT_BY_FLYER").slideUp('fast');
+			}
         }
 		{% if entity is defined and entity.type == 'BY_PRODUCT' %}
 			$("#product").val('{{ entity.product.id }}');
@@ -162,7 +167,7 @@
 				$("#product-selected img").attr("src","{{ asset("bundles/inamikabackoffice/assets/images/image_not_found.jpg") }}");
 			{% endif %}
 			$("#product-selected h4").html('{{ entity.product.code }}');
-			$("#product-selected p#price").html("<b>$ {{ entity.product.price }}</b>");
+			$("#product-selected p#price").html("<b>{{ entity.product.currency.symbol }} {{ entity.product.price }}</b>");
 			$("#product-selected p#name").html('{{ entity.product.name }}');
 			$("#product-selected p#description").html('{{ entity.product.description }}');
 		{% endif %}
@@ -186,7 +191,7 @@
 					$("#product-selected img").attr("src","{{ asset("bundles/inamikabackoffice/assets/images/image_not_found.jpg") }}");
 				}
 				$("#product-selected h4").html(data.code);
-				$("#product-selected p#price").html("<b>$ "+data.price+"</b>");
+				$("#product-selected p#price").html("<b>"+data.currency.symbol+" "+data.price+"</b>");
 				$("#product-selected p#name").html(data.name);
 				$("#product-selected p#description").html(data.description);
 			});
@@ -223,7 +228,7 @@
 						title:"Precio lista",
 						className: "text-right",
 						render: function (data, type, JsonResultRow, meta) {
-							return `<b>$ ${new Intl.NumberFormat("de-DE").format(parseFloat(JsonResultRow.price))}</b>`;
+							return `<b>${JsonResultRow.currency.symbol} ${new Intl.NumberFormat("de-DE").format(parseFloat(JsonResultRow.price))}</b>`;
 						}
 					},
 				]

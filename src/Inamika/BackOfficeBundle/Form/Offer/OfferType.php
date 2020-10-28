@@ -43,7 +43,8 @@ class OfferType extends AbstractType
         ))
         ->add('type',ChoiceType::class, array('label'=>'Tipo de oferta','label_attr'=>array('class'=>'control-label'),'attr'=>array('class'=>'form-control'),'choices' => array(
             'Por producto' => 'BY_PRODUCT',
-            'Por categoría' => 'BY_CATEGORY'
+            'Por categoría' => 'BY_CATEGORY',
+            'Flyer' => 'BY_FLYER',
             )))
         ->add('dateTo',DateType::class,array(
             'label'=>'Val. hasta',

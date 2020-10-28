@@ -1,0 +1,4 @@
+api_budgets_post:
+    path:     /budgets
+    defaults: { _controller: InamikaApiBundle:Budgets:post }
+    methods: [POST]

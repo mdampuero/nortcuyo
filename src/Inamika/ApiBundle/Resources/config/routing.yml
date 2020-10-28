@@ -13,6 +13,9 @@ api_products:
 api_orders:
     resource: "@InamikaApiBundle/Resources/config/orders.yml"
 
+api_budgets:
+    resource: "@InamikaApiBundle/Resources/config/budgets.yml"
+
 api_customers:
     resource: "@InamikaApiBundle/Resources/config/customers.yml"
 

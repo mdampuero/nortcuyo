@@ -43,6 +43,9 @@
                             case 'BY_PRODUCT':
                                 return 'Por producto';
                                 break;
+                            case 'BY_FLYER':
+                                return 'Flyer';
+                                break;
                         }
                     }
                 },  
@@ -58,6 +61,9 @@
                                 break;
                             case 'BY_PRODUCT':
                                 return row.product.code;
+                                break;
+                            case 'BY_FLYER':
+                                return 'No aplica';
                                 break;
                         }
                     }
