@@ -33,6 +33,11 @@ class DefaultController extends FOSRestController{
                 'width'=> 800,
                 'height'=> null,
                 'path'=> 'uploads/lg/',
+            ),
+            'xl'=>array(
+                'width'=> 1600,
+                'height'=> null,
+                'path'=> 'uploads/xl/',
             )
         )
     );

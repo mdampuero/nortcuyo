@@ -34,3 +34,21 @@
         </div>
     </div>
 {% endif %}
+{% if offer.type == 'BY_FLYER' %}
+    <div class="col-item">
+        <div class="photo" style="height: 250px;">
+            <div class="ribbon" >{{ offer.ribbon }}</div>
+            {% if offer.picture %}
+            <a href="{{ asset('uploads/or/') }}{{ offer.picture }}" target="_blank"><img src="{{ asset('uploads/sm/') }}{{ offer.picture }}" class="img-responsive center"  /></a>
+            {% else %}
+            <img src="{{ asset("bundles/inamikabackoffice/assets/images/image_not_found.jpg") }}" class="img-responsive center"  />
+            {% endif %}
+        </div>
+        <div class="info">
+            <div class="price">
+                <h6 style="height: 40px;">{{ offer.title | capitalize }}</h6>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+{% endif %}

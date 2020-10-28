@@ -7,7 +7,7 @@
 		</ol>
 		<div class="carousel-inner" role="listbox">
 			{% for key, slider in data.result.data  %}
-				<div class="carousel-item {% if key == 0 %}active{% endif %}" style="background-image: url('{{ asset('uploads') }}/lg/{{ slider.picture }}')">
+				<div class="carousel-item {% if key == 0 %}active{% endif %}" style="background-image: url('{{ asset('uploads') }}/xl/{{ slider.picture }}')">
 					<div class="carousel-caption d-none d-md-block">
                         <a class="btn btn-primary" href="{{ slider.link | default('#hero') }}" role="button">{{ slider.name }}</a>
 					</div>
