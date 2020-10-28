@@ -44,9 +44,13 @@
 			{{ product.code }}</h6>
 		<div class="row">
 			<div class="col-sm-6">
-				<h3 class="price-text-color" style="margin-bottom: 10px;">
-					{{ product.currency.symbol }} {{ (product.price * app.session.get('_security_main').category.discount) | number_format(2, ',', '.') }}</h3>
+				<h5 class="price-text-color" style="margin-bottom: 10px;">P.L: {{ product.currency.symbol }} {{ (product.price) | number_format(2, ',', '.') }}</h5>
 			</div>
+			<div class="col-sm-6">
+				<h5 class="price-text-color" style="margin-bottom: 10px;">P.C: {{ product.currency.symbol }} {{ (product.price * app.session.get('_security_main').category.discount) | number_format(2, ',', '.') }}</h5>
+			</div>
+		</div>
+		<div class="row">	
 			<div class="col-sm-6">
 				<div class="input-group">
 					<span class="input-group-btn">
@@ -63,7 +67,8 @@
 				</div>
 			</div>
 		</div>
-		<p class="text-muted">Unidad:
+		<hr>
+		<p class="text-muted">Unidad de venta:
 			{{ product.unit}}</p>
 		<button class="btn btn-primary" onclick="addCart(this,'{{ product.code }}',$('#quantityInput').val())">
 		{{ btnLabel }}
