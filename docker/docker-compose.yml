@@ -1,0 +1,41 @@
+version: "3"
+services:
+    nortcuyo_apache:
+        build: .
+        image: php:7.4-apache
+        container_name: nortcuyo_apache
+        extra_hosts:
+            - "dev.nortcuyo.com:127.0.0.1"
+        volumes:
+            - .:/application:cached
+            - .:/app:cached
+            - ../www/:/var/www/html
+            - ./config/php.ini:/usr/local/etc/php/conf.d/php.ini
+            - ./config/dev.nortcuyo.com.conf:/etc/apache2/sites-enabled/dev.nortcuyo.com.conf
+            - ../logs:/var/log/apache2
+        expose:
+            - 80
+        ports:
+            - 80:80
+        links: 
+            - nortcuyo_mysql
+            - nortcuyo_memcached
+
+    nortcuyo_mysql:
+        image: mysql:5.7
+        container_name: nortcuyo_mysql
+        ports:
+            - 3306:3306
+        expose:
+            - 3306
+        volumes:
+            - ../db/working:/var/lib/mysql
+            - ../db/backups:/var/db/backups
+        environment:
+            - MYSQL_DATABASE=nortcuyo
+            - MYSQL_ROOT_PASSWORD=Secreta007
+            - MYSQL_USER=nortcuyo
+            - MYSQL_PASSWORD=Secreta007
+    nortcuyo_memcached:
+        image: memcached:latest
+        container_name: nortcuyo_memcached
