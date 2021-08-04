@@ -60,6 +60,11 @@
                         <i class="mdi mdi-archive"></i><span class="hide-menu">Listas de precios</span>
                     </a>
                 </li>
+                <li class="{% if 'inamika_backoffice_preformatteds' in app.request.get('_route') %}active{% endif %}">
+                    <a href="{{ path('inamika_backoffice_preformatteds')}}" aria-expanded="false">
+                        <i class="fa fa-list"></i><span class="hide-menu">Lista preformateada</span>
+                    </a>
+                </li>
                 {% if is_granted('ROLE_SUPER') %}
                 <li class="{% if 'inamika_backoffice_users' in app.request.get('_route') %}active{% endif %}">
                     <a href="{{ path('inamika_backoffice_users')}}" aria-expanded="false">

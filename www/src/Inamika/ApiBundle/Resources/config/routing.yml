@@ -58,3 +58,9 @@ api_brands:
 api_sliders:
     resource: "@InamikaApiBundle/Resources/config/sliders.yml"
 
+api_preformatteds:
+    resource: "@InamikaApiBundle/Resources/config/preformatteds.yml"
+
+api_preformatted_items:
+    resource: "@InamikaApiBundle/Resources/config/preformattedItems.yml"
+

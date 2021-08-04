@@ -111,3 +111,7 @@ inamika_backoffice_sliders:
     resource: "@InamikaBackOfficeBundle/Resources/config/sliders.yml"
     prefix:   /sliders
 
+inamika_backoffice_preformatteds:
+    resource: "@InamikaBackOfficeBundle/Resources/config/preformatteds.yml"
+    prefix:   /preformatteds
+

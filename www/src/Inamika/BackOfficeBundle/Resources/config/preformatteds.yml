@@ -1,0 +1,32 @@
+inamika_backoffice_preformatteds:
+    path:     /
+    defaults: 
+        _controller: InamikaBackOfficeBundle:Preformatteds:index
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Lista preformateada
+            parent_route: inamika_backoffice_homepage
+            
+inamika_backoffice_preformatteds_add:
+    path:     /new
+    defaults: { _controller: InamikaBackOfficeBundle:Preformatteds:add }
+    options:
+        breadcrumb:
+            label: Subir lista
+            parent_route: inamika_backoffice_preformatteds
+    methods: [GET,POST]
+
+inamika_backoffice_preformattedsItems_edit:
+    path:     /edit/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Preformatteds:edit }
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Editar preformateada
+            parent_route: inamika_backoffice_preformatteds
+
+inamika_backoffice_preformatteds_delete:
+    path:     /delete/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Preformatteds:delete }
+    methods: [POST,DELETE]

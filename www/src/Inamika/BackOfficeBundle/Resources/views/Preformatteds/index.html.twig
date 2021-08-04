@@ -1,5 +1,5 @@
-{% set pathBase='inamika_backoffice_products' %}
-{% set pathBaseApi='api_products' %}
+{% set pathBase='inamika_backoffice_preformattedsItems' %}
+{% set pathBaseApi='api_preformatted_items' %}
 {% extends "InamikaBackOfficeBundle::layout.html.twig" %}
 {% block body %} 
 {{ parent()}}
@@ -8,11 +8,10 @@
         {{ (app.request.attributes.get('_route_params')['_breadcrumbs']|last)['label'] | trans }}
     {% endif %}
     <div class="btn-group pull-right">
-        <button type="button" class="btn btn-success btn-rounded " onclick="location.href='{{ path(pathBase~'_add')}}'"><i class="fa fa-plus"></i> {{ 'ADD' | trans }}</button>
-        <button type="button" class="btn btn-info btn-rounded " onclick="location.href='{{ path('inamika_backoffice_prices_add')}}'"><i class="fa fa-upload"></i> {{ 'Subir lista' | trans }}</button>
-        <button type="button" class="btn btn-warning btn-rounded " onclick="location.href='{{ path('api_prices_download')}}'"><i class="fa fa-download"></i> {{ 'Descargar lista' | trans }}</button>
+        <button type="button" class="btn btn-info btn-rounded " onclick="location.href='{{ path('inamika_backoffice_preformatteds_add')}}'"><i class="fa fa-upload"></i> {{ 'Subir lista' | trans }}</button>
+        <button type="button" class="btn btn-warning btn-rounded " onclick="location.href='{{ path('api_preformatted_items_download')}}'"><i class="fa fa-download"></i> {{ 'Descargar lista' | trans }}</button>
     </div>
-    </h3>
+</h3>
 <div class="table-responsive">
     <table id="{{ pathBase }}_dataTable" class="display nowrap table table-striped table-bordered" cellspacing="0" width="100%">
     </table>
@@ -37,20 +36,20 @@
                     title: '',
                     orderable: false,
                     render: function (data, type, JsonResultRow, meta) {
-                        if(JsonResultRow.picture){
-                            return '<img width="80" src="{{ asset('uploads') }}/xs/'+JsonResultRow.picture+'">';
+                        if(JsonResultRow.product.picture){
+                            return '<img width="80" src="{{ asset('uploads') }}/xs/'+JsonResultRow.product.picture+'">';
                         }else{
                             return '<img width="80" src="{{ asset("bundles/inamikabackoffice/assets/images/image_not_found.jpg") }}">';
                         }
                     }
                 },
-                { title:"Código",data: "code" },
-                { title:"Producto",data: "name" },
+                { title:"Código",data: "product.code" },
+                { title:"Producto",data: "product.name" },
                 { 
                     title:"Precio lista",
                     className: "text-right",
                     render: function (data, type, JsonResultRow, meta) {
-                        return `<b>${JsonResultRow.currency.symbol} ${new Intl.NumberFormat("de-DE").format(parseFloat(JsonResultRow.price))}</b>`;
+                        return `<b>${JsonResultRow.product.currency.symbol} ${new Intl.NumberFormat("de-DE").format(parseFloat(JsonResultRow.product.price))}</b>`;
                     }
                 },
                 {
@@ -58,7 +57,7 @@
                     orderable: false,
                     className: "text-center",
                     defaultContent: `
-                    <button type="button" class="btn-edit btn btn-outline-info btn-circle"><i class="fa fa-pencil"></i></button>
+                    
                     <button type="button" class="btn-remove btn btn-outline-danger btn-circle"><i class="fa fa-trash"></i></button>
                     `
                 }

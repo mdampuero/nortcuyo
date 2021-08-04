@@ -1,0 +1,15 @@
+api_preformatted_items:
+    path:     /preformattedsItems
+    defaults: { _controller: InamikaApiBundle:PreformattedItems:index }
+    methods: [GET]
+    
+api_preformatted_items_download:
+    path:     /preformattedsItems/download
+    defaults: { _controller: InamikaApiBundle:PreformattedItems:download }
+    methods: [GET]
+
+api_preformatted_items_delete:
+    path:     /preformattedsItems/{id}
+    defaults: { _controller: InamikaApiBundle:PreformattedItems:delete }
+    methods: [DELETE]
+

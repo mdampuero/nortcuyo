@@ -6,11 +6,11 @@ parameters:
     database_user: c2230935_app
     database_password: nomoZI62li
     mailer_transport: smtp
-    mailer_host: mail.apachecms.com.ar
-    mailer_port: 587
+    mailer_host: c2230935.ferozo.com
+    mailer_port: 465
     mailer_encryption: ssl
-    mailer_user: pedidos@apachecms.com.ar
-    mailer_password: '****'
+    mailer_user: pedidos@nortcuyo.com
+    mailer_password: qxR/Sz80fR
     secret: 99b2af404f070f6d849dea5705fd9375b130a628
     uploads_directory:
         path: '%kernel.project_dir%/web/uploads/or/'
