@@ -9,6 +9,12 @@ jQuery(document).ready(function($) {
             $('.back-to-top').fadeOut('slow');
             $('#header').removeClass('header-fixed');
         }
+       // console.log($(this).scrollTop());
+        if ($(this).scrollTop() > 160) {
+            $("#cartFloat").addClass("totalFixed");
+        } else {
+            $("#cartFloat").removeClass("totalFixed");
+        }
     });
     $('.back-to-top').click(function() {
         $('html, body').animate({ scrollTop: 0 }, 1500, 'easeInOutExpo');

@@ -3,6 +3,11 @@ api_cart_post:
     defaults: { _controller: InamikaApiBundle:Cart:post }
     methods: [POST]
 
+api_cart_put:
+    path:     /cart
+    defaults: { _controller: InamikaApiBundle:Cart:put }
+    methods: [PUT]
+
 api_cart_post_empty:
     path:     /cartEmpty
     defaults: { _controller: InamikaApiBundle:Cart:empty }

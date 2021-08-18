@@ -28,7 +28,7 @@
 <script type="text/javascript">
     $(function () {
         $('#{{ pathBase }}_dataTable').DataTable({
-            order: [[ 1, 'desc' ]],
+            order: [[ 3, 'asc' ]],
             "processing": false,
             "serverSide": true,
             columns: [
@@ -44,7 +44,9 @@
                     }
                 },
                 { title:"Código",data: "product.code" },
+                
                 { title:"Producto",data: "product.name" },
+                { title:"Posición",data: "position" },
                 { 
                     title:"Precio lista",
                     className: "text-right",

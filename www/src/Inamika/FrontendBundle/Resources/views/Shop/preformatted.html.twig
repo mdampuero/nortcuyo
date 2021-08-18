@@ -1,0 +1,185 @@
+{% extends "InamikaFrontendBundle::layoutShop.html.twig" %}
+{% block body %}
+	{{ parent()}}
+	<main id="main" class="offset-header background-gray">
+		{% block headerPage %}
+			{% include 'InamikaFrontendBundle:_partials:headerPage.html.twig' %}
+		{% endblock headerPage %}
+		<section>
+            <div class="container wow fadeIn">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Productos de alta rotación</h5>
+                                <hr>
+                                <div class="text-center">
+                                    <button role="button" class="btn btn-primary" onclick="location.href='{{ path('api_preformatted_items_download')}}'"><i class="fa fa-download"></i> Descargar lista</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card" id="cartFloat">
+                            <div class="card-body">
+                                <h5 class="card-title">Mi carrito</h5>
+                                <hr>
+                                <div class="text-center" id="bodyCart">
+                                    {% if app.session.get('_security_main').cart | length %}
+                                        {% for key, total in app.session.get('_security_main').cart.totals %}
+                                            <h4 class="text-right">Total: {{ key }} {{ total.totalVat | number_format(2, ',', '.') }}</h4>
+                                        {% endfor %}
+                                        <div class="text-center"><a role="button" class="btn btn-primary" href="{{ path('inamika_frontend_shop_cart')}}"><i class="fa fa-shopping-cart"></i> Continuar</a></div>
+                                    {% else %}
+                                        <div class="text-center text-muted">No tiene productos en el carrito</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table id="example" class="table table-condensed table-reduced">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-left">Código</th>
+                                    <th scope="col" class="text-left">Descripción</th>
+                                    <th scope="col" class="text-right">Costo S/I</th>
+                                    <th scope="col" class="text-center">Cantidad</th>
+                                    <th scope="col" class="text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableResult"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+		</sction>
+	</main>
+{% endblock body %}
+{% block javascripts %}
+	{{ parent()}}
+	<script>
+        var cartShop=[];
+        var amount = new Array();
+        var discount=parseFloat("{{ app.session.get('_security_main').category.discount }}");
+        $(function (){
+            {% if app.session.get('_security_main').cart | length %}
+                {% for key, item in app.session.get('_security_main').cart.items %}
+                    cartShop.push({ code: '{{ key }}', val:'{{ item.quantity }}' });
+                    amount["{{ key }}"]="{{ item.quantity }}";
+                {% endfor %}
+            {% endif %}
+            loadData();
+        });
+        function loadData(){
+            loading.show();
+            $.ajax({
+                url: "{{ path('api_preformatted_items') }}?length=100&search[value]=",
+                type: 'GET',
+                crossDomain: true,
+                success: function(data) {
+                    table='';
+                    for(var i=0; i<data.data.length; i++){
+                        const product=data.data[i].product;
+                        table+=`<tr>
+                                    <td><small>${product.code}</small></td>
+                                    <td><small>${product.description}</small></td>
+                                    <td class="text-right"><small>${product.currency.symbol} ${Math.round(product.price * discount * 100) / 100 }</small></td>
+                                    <td class="text-center" style="width: 150px;">
+                                        <div class="input-group text-center" >
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default btn-number-multi"  data-type="minus" data-field="input${ product.id }">
+                                                    <span class="fa fa-minus"></span>
+                                                </button>
+                                            </span>
+                                            <input type="text" id="input${ product.id }" class="form-control input-number-multi text-center" data-code="${product.code}" value="${getValue(product.code)}" min="${ product.unit }" max="10000" step="${ product.unit }">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default btn-number-multi" data-type="plus" data-field="input${ product.id }">
+                                                    <span class="fa fa-plus"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="text-center"><a href="javascript:quickViewProduct('${product.code}')" class="hidden-sm"><i class="fa fa-search-plus"></i></a></td>
+                                </tr>`;
+                    } 
+                    $("#tableResult").html(table);  
+                    $(".btn-number-multi").on('click',function (){
+                        let direction=$(this).data('type');
+                        let input=$(this).data('field');
+                        let val=parseInt($("#"+input).val());
+                        if(direction=='minus'){
+                            if(val>0)
+                                $("#"+input).val(val-1);
+                        }else{
+                            $("#"+input).val(val+1);
+                        }
+
+                        $("#"+input).trigger('change');
+                    });
+                    $(".input-number-multi").on('change',function (){
+                        refreshCart();
+                    });
+                },  
+                complete:function(){
+                    loading.hide();
+                },
+                error: function(data, status, error) {
+                    
+                }
+            });
+        }
+
+        function getValue(code){
+            console.log(amount[code]);
+            if(amount[code]!=undefined){
+                return amount[code];
+            }else{
+                return 0;
+            }
+        }
+
+        function refreshCart(){
+            $("#bodyCart").html('<p><i class="fa fa-spinner fa-2x fa-spin" aria-hidden="true"></i></p>');
+            cartShop=[];
+            $('.input-number-multi').each(function(){
+                let val = $(this).val();
+                if(val > 0){
+                    let code = $(this).data('code');
+                    cartShop.push({ code: code, val:val });
+                }
+            });
+            $.ajax({
+                url: "{{ path('api_cart_put') }}",
+                type: 'PUT',
+                data: JSON.stringify({ cart: cartShop }),
+                crossDomain: true,
+                success: function(data) {
+                    console.log(data);
+                    var html=``;
+                    $.each(data.cart.totals, function(index, value){
+                        /*html=`
+                            <h5 class="text-right text-muted">Total sin IVA: ${index} ${Math.round(value.total * 100) / 100}</h5>
+                            <h5 class="text-right text-muted">IVA: ${index} ${value.totalVat - value.total}</h5>
+                            <h2 class="text-right">Total: ${index} ${value.total}</h2>
+                        `;*/
+                        html+=`
+                            <h4 class="text-right">Total: ${index} ${Math.round(value.totalVat *100) / 100 }</h4>
+                        `;
+                    });
+                    html+=`<div class="text-center"><a role="button" class="btn btn-primary" href="{{ path('inamika_frontend_shop_cart')}}"><i class="fa fa-shopping-cart"></i> Continuar</a></div>`;
+                    $("#bodyCart").html(html);
+                },  
+                complete:function(){
+                    
+                },
+                error: function(data, status, error) {
+                    
+                }
+            });
+        }
+	</script>
+{% endblock javascripts %}

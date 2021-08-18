@@ -38,6 +38,29 @@ class CartController extends FOSRestController
         $this->get('session')->set('_security_main', $dataCustomer);
         return $this->handleView($this->view($dataCustomer, Response::HTTP_OK));
     }
+    
+    public function putAction(Request $request){
+        $dataCustomer=$this->get('session')->get('_security_main');
+        $content=json_decode($request->getContent(), true);
+        if(!isset($content["cart"]))
+            return $this->handleView($this->view(null, Response::HTTP_BAD_REQUEST));
+        $dataCustomer["cart"]["items"]=[];
+        foreach($content["cart"] as $key=> $item){
+            $product=$this->getDoctrine()->getRepository(Product::class)->findOneByCode($item["code"]);
+            if(!$product)
+                return $this->handleView($this->view(null, Response::HTTP_BAD_REQUEST));
+            $dataCustomer["cart"]["items"][$item["code"]]=[
+                'quantity'=>(int)$item["val"],
+                'product'=>$product,
+                'subtotal'=>$product->getPrice()*(int)$item["val"]*$dataCustomer["category"]->getDiscount(),
+                'subtotalVat'=>$product->getPrice()*(int)$item["val"]*$product->getVat()*$dataCustomer["category"]->getDiscount(),
+            ];
+        }
+
+        $dataCustomer=$this->calcTotal($dataCustomer);
+        $this->get('session')->set('_security_main', $dataCustomer);
+        return $this->handleView($this->view($dataCustomer, Response::HTTP_OK));
+    }
 
     private function calcTotal($dataCustomer){
         $currencies=$this->getDoctrine()->getRepository(Currency::class)->getAll()->getQuery()->getResult();

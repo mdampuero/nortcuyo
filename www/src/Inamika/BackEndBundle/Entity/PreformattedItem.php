@@ -34,6 +34,14 @@ class PreformattedItem
     private $product;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="position", type="integer")
+     * @Expose
+     */
+    private $position;
+
+    /**
      * Get id.
      *
      * @return int
@@ -65,6 +73,30 @@ class PreformattedItem
     public function getProduct()
     {
         return $this->product;
+    }
+
+    /**
+     * Set position.
+     *
+     * @param float|null $position
+     *
+     * @return Brand
+     */
+    public function setPosition($position = null)
+    {
+        $this->position = $position;
+
+        return $this;
+    }
+
+    /**
+     * Get position.
+     *
+     * @return float|null
+     */
+    public function getPosition()
+    {
+        return $this->position;
     }
 
 }

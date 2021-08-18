@@ -53,6 +53,7 @@ class PreformattedsController extends Controller{
                             $countCreated++;
                             $item=new PreformattedItem();
                             $item->setProduct($product);
+                            $item->setPosition($countCreated);
                             $em->persist($item);
                         }
                     }

@@ -142,4 +142,10 @@ class ShopController extends Controller{
             return $this->redirectToRoute('inamika_frontend_shop_login');
         return $this->render('InamikaFrontendBundle:Shop:orders.html.twig',array('data'=>$this->get('ApiCall')->get($this->generateUrl('api_customers_orders',['id'=>$this->get('session')->get('_security_main')["customer"]->getId()],UrlGenerator::ABSOLUTE_URL))));
     }
+    
+    public function preformattedAction(){
+        if(!$this->get('session')->get('_security_main'))
+            return $this->redirectToRoute('inamika_frontend_shop_login');
+        return $this->render('InamikaFrontendBundle:Shop:preformatted.html.twig');
+    }
 }

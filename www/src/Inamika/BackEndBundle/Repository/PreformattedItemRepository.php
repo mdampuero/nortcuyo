@@ -16,17 +16,20 @@ class PreformattedItemRepository extends \Doctrine\ORM\EntityRepository
         ->join('e.product','product')
         ->where('product.isDelete = :isDelete')
         ->setParameter('isDelete',false)
-        ->orderBy("e.id","DESC");
+        ->orderBy("e.position","ASC");
     }
 
     public function search($query=null,$limit=0,$offset=0,$sort=null,$direction=null){
         if($limit>100) $limit=100;
         if($limit==0) $limit=30;
         $qb= $this->getAll()
-        ->setFirstResult($offset)
-        ->setMaxResults($limit)
-        ->orderBy("product.id","DESC");
+        ->setFirstResult($offset);
+        if($limit!="-1")
+            $qb->setMaxResults($limit);
+
+        $qb->orderBy("product.id","DESC");
         if($sort){
+            if($sort=="position") $sort="e.position";
             $qb->orderBy($sort,$direction);
         }else{
             $qb->orderBy('RAND()');

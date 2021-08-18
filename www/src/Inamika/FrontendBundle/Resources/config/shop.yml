@@ -88,6 +88,15 @@ inamika_frontend_shop_orders:
             label: Mis pedidos
             parent_route: inamika_frontend_shop_account
 
+inamika_frontend_shop_preformatted:
+    path:     /ListaPreformateada
+    defaults: 
+        _controller: InamikaFrontendBundle:Shop:preformatted
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Productos de alta rotación
+            parent_route: inamika_frontend_shop
 # inamika_frontend_shop_add:
 #     path:     /new
 #     defaults: { _controller: InamikaFrontendBundle:Customers:add }

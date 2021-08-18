@@ -42,9 +42,7 @@ class PreformattedItemsController extends DefaultController
             ->setTitle("Lista de productos reducida Nortcuyo")
             ->setSubject("Lista de productos reducida Nortcuyo")
             ->setDescription("Este documento contiene la lista de productos reducida de nortcuyo");
-        $data=$this->getDoctrine()->getRepository(PreformattedItem::class)->getAll()
-        ->orderBy('product.code','DESC')
-        ->getQuery()->getResult();
+        $data=$this->getDoctrine()->getRepository(PreformattedItem::class)->getAll()->getQuery()->getResult();
         
         $phpExcelObject->setActiveSheetIndex(0)
             ->setCellValue('A1','Código')
