@@ -8,3 +8,24 @@ api_preformatteds_delete:
     defaults: { _controller: InamikaApiBundle:Preformatteds:delete }
     methods: [DELETE]
 
+api_preformatteds_search:
+    path:     /preformatteds/search
+    defaults: { _controller: InamikaApiBundle:Preformatteds:search }
+    methods: [GET]
+
+api_preformatteds_get:
+    path:     /preformatteds/{id}
+    defaults: { _controller: InamikaApiBundle:Preformatteds:get }
+    methods: [GET]
+
+api_preformatteds_post:
+    path:     /preformatteds
+    defaults: { _controller: InamikaApiBundle:Preformatteds:post }
+    methods: [POST]
+
+api_preformatteds_put:
+    path:     /preformatteds/{id}
+    defaults: { _controller: InamikaApiBundle:Preformatteds:put }
+    methods: [PUT]
+
+

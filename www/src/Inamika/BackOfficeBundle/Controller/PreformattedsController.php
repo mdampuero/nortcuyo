@@ -22,7 +22,7 @@ class PreformattedsController extends Controller{
 	public function indexAction(){
 		return $this->render('InamikaBackOfficeBundle:Preformatteds:index.html.twig',array(
             'formDelete'=>$this->createFormBuilder()
-            ->setAction($this->generateUrl('api_preformatted_items_delete', array('id' => ':ENTITY_ID')))
+            ->setAction($this->generateUrl('api_preformatteds_delete', array('id' => ':ENTITY_ID')))
             ->setMethod('DELETE')
             ->getForm()->createView()
         ));
@@ -52,7 +52,16 @@ class PreformattedsController extends Controller{
                         if($i>1 && $product=$em->getRepository(Product::class)->findOneBy(['code'=>$data[0],'isDelete'=>false])){
                             $countCreated++;
                             $item=new PreformattedItem();
+                            $item->setPreformatted($entity);
                             $item->setProduct($product);
+                            $item->setPosition($countCreated);
+                            $em->persist($item);
+                        }elseif(substr($data[0], 0, 2)=='--'){
+                            $countCreated++;
+                            $item=new PreformattedItem();
+                            $item->setPreformatted($entity);
+                            $item->setProduct(null);
+                            $item->setTitle(substr($data[0],2));
                             $item->setPosition($countCreated);
                             $em->persist($item);
                         }
@@ -64,7 +73,7 @@ class PreformattedsController extends Controller{
                     $entity->setCountCreated($countCreated);
                     $em->persist($entity);
                     /** Elimina las anteriores */
-                    $em->getRepository(PreformattedItem::class)->removeAll();
+                    //$em->getRepository(PreformattedItem::class)->removeAll();
                     /** Escribe en base */
                     $em->flush();
                 }
@@ -76,4 +85,14 @@ class PreformattedsController extends Controller{
             'form' => $form->createView()
         ));
     }	
+
+    public function detailAction($id){
+		return $this->render('InamikaBackOfficeBundle:Preformatteds:detail.html.twig',array(
+            'entity'=>$this->getDoctrine()->getRepository(Preformatted::class)->find($id),
+            'formDelete'=>$this->createFormBuilder()
+            ->setAction($this->generateUrl('api_preformatted_items_delete', array('id' => ':ENTITY_ID')))
+            ->setMethod('DELETE')
+            ->getForm()->createView()
+        ));
+    }
 }

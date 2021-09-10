@@ -1,0 +1,98 @@
+{% set pathBase='inamika_backoffice_preformatteds' %}
+{% set pathBaseApi='api_preformatted_items' %}
+{% extends "InamikaBackOfficeBundle::layout.html.twig" %}
+{% block body %} 
+{{ parent()}}
+<h3 class="card-title">
+    {{ entity.title }}
+    <div class="btn-group pull-right">
+        {# <button type="button" class="btn btn-success btn-rounded " onclick="location.href='{{ path(pathBase~'_add')}}'"><i class="fa fa-plus"></i> {{ 'ADD' | trans }}</button> #}
+        {# <button type="button" class="btn btn-info btn-rounded " onclick="location.href='{{ path('inamika_backoffice_preformatteds_add')}}'"><i class="fa fa-plus"></i> {{ 'Subir lista'   | trans }}</button> #}
+        <button type="button" class="btn btn-warning btn-rounded " onclick="location.href='{{ path('api_preformatted_items_download_by_group',{ id: entity.id })}}'"><i class="fa fa-download"></i> {{ 'Descargar lista' | trans }}</button>
+    </div>
+</h3>
+<div class="table-responsive">
+    <table id="{{ pathBase }}_dataTable" class="display nowrap table table-striped table-bordered" cellspacing="0" width="100%">
+    </table>
+</div>
+
+{{ form_start(formDelete, {'attr': {'id':id|default('formDelete')}}) }}
+{{ form_widget(formDelete) }}
+{{ form_end(formDelete) }}
+
+{% endblock body %} 
+{% block javascripts %} 
+{{ parent() }}
+{% include 'InamikaBackOfficeBundle:_partials:dataTableScripts.html.twig' with { pathBase:pathBase,loadData:pathBaseApi,urlApi: path('api_preformatted_items_group',{ 'id' : entity.id } ) } %}
+<script type="text/javascript">
+    $(function () {
+        $('#{{ pathBase }}_dataTable').DataTable({
+            order: [[ 3, 'asc' ]],
+            "processing": false,
+            "serverSide": true,
+            columns: [
+                {
+                    title: '',
+                    orderable: false,
+                    render: function (data, type, JsonResultRow, meta) {
+                        if(JsonResultRow.product){
+                            if(JsonResultRow.product.picture){
+                                return '<img width="80" src="{{ asset('uploads') }}/xs/'+JsonResultRow.product.picture+'">';
+                            }else{
+                                return '<img width="80" src="{{ asset("bundles/inamikabackoffice/assets/images/image_not_found.jpg") }}">';
+                            }
+                        }else{
+                            return '';
+                        }
+                    }
+                },
+                {
+                    title: 'Código',
+                    orderable: false,
+                    render: function (data, type, JsonResultRow, meta) {
+                        if(JsonResultRow.product){
+                            return JsonResultRow.product.code;
+                        }else{
+                            return '';
+                        }
+                    }
+                },
+                {
+                    title: 'Producto',
+                    orderable: false,
+                    render: function (data, type, JsonResultRow, meta) {
+                        if(JsonResultRow.product){
+                            return JsonResultRow.product.name;
+                        }else{
+                            return '<b>'+JsonResultRow.title+'</b>';
+                        }
+                    }
+                },
+                { title:"Posición",data: "position" },
+                { 
+                    title:"Precio lista",
+                    orderable: false,
+                    className: "text-right",
+                    render: function (data, type, JsonResultRow, meta) {
+                        if(JsonResultRow.product){
+                            return `<b>${JsonResultRow.product.currency.symbol} ${new Intl.NumberFormat("de-DE").format(parseFloat(JsonResultRow.product.price))}</b>`;
+                        }else{
+                            return '';
+                        }
+                    }
+                },
+                {
+                    data: null,
+                    orderable: false,
+                    className: "text-center",
+                    //<button type="button" class="btn-download btn btn-outline-warning btn-circle"><i class="fa fa-download"></i></button>
+                    defaultContent: `
+                    
+                    <button type="button" class="btn-remove btn btn-outline-danger btn-circle"><i class="fa fa-trash"></i></button>
+                    `
+                }
+            ]
+        });
+    });
+</script>
+{% endblock %}

@@ -1,3 +1,8 @@
+api_cart:
+    path:     /cart
+    defaults: { _controller: InamikaApiBundle:Cart:get }
+    methods: [GET]
+
 api_cart_post:
     path:     /cart
     defaults: { _controller: InamikaApiBundle:Cart:post }

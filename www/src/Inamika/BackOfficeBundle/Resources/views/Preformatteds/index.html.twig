@@ -1,5 +1,5 @@
-{% set pathBase='inamika_backoffice_preformattedsItems' %}
-{% set pathBaseApi='api_preformatted_items' %}
+{% set pathBase='inamika_backoffice_preformatteds' %}
+{% set pathBaseApi='api_preformatteds' %}
 {% extends "InamikaBackOfficeBundle::layout.html.twig" %}
 {% block body %} 
 {{ parent()}}
@@ -8,8 +8,9 @@
         {{ (app.request.attributes.get('_route_params')['_breadcrumbs']|last)['label'] | trans }}
     {% endif %}
     <div class="btn-group pull-right">
-        <button type="button" class="btn btn-info btn-rounded " onclick="location.href='{{ path('inamika_backoffice_preformatteds_add')}}'"><i class="fa fa-upload"></i> {{ 'Subir lista' | trans }}</button>
-        <button type="button" class="btn btn-warning btn-rounded " onclick="location.href='{{ path('api_preformatted_items_download')}}'"><i class="fa fa-download"></i> {{ 'Descargar lista' | trans }}</button>
+        <button type="button" class="btn btn-success btn-rounded " onclick="location.href='{{ path(pathBase~'_add')}}'"><i class="fa fa-plus"></i> {{ 'ADD' | trans }}</button>
+        {# <button type="button" class="btn btn-info btn-rounded " onclick="location.href='{{ path('inamika_backoffice_preformatteds_add')}}'"><i class="fa fa-plus"></i> {{ 'Subir lista'   | trans }}</button> #}
+        {# <button type="button" class="btn btn-warning btn-rounded " onclick="location.href='{{ path('api_preformatted_items_download')}}'"><i class="fa fa-download"></i> {{ 'Descargar lista' | trans }}</button> #}
     </div>
 </h3>
 <div class="table-responsive">
@@ -28,42 +29,33 @@
 <script type="text/javascript">
     $(function () {
         $('#{{ pathBase }}_dataTable').DataTable({
-            order: [[ 3, 'asc' ]],
+            order: [[ 1, 'asc' ]],
             "processing": false,
             "serverSide": true,
             columns: [
-                {
-                    title: '',
-                    orderable: false,
-                    render: function (data, type, JsonResultRow, meta) {
-                        if(JsonResultRow.product.picture){
-                            return '<img width="80" src="{{ asset('uploads') }}/xs/'+JsonResultRow.product.picture+'">';
-                        }else{
-                            return '<img width="80" src="{{ asset("bundles/inamikabackoffice/assets/images/image_not_found.jpg") }}">';
-                        }
-                    }
-                },
-                { title:"Código",data: "product.code" },
-                
-                { title:"Producto",data: "product.name" },
-                { title:"Posición",data: "position" },
-                { 
-                    title:"Precio lista",
-                    className: "text-right",
-                    render: function (data, type, JsonResultRow, meta) {
-                        return `<b>${JsonResultRow.product.currency.symbol} ${new Intl.NumberFormat("de-DE").format(parseFloat(JsonResultRow.product.price))}</b>`;
-                    }
-                },
+                { title:"Título",data: "title" },
+                { title:"Cant. productos",data: "countCreated" },
                 {
                     data: null,
                     orderable: false,
                     className: "text-center",
                     defaultContent: `
-                    
+                    <button type="button" class="btn-download btn btn-outline-warning btn-circle"><i class="fa fa-download"></i></button>
+                    <button type="button" class="btn-detail btn btn-outline-success btn-circle"><i class="fa fa-eye"></i></button>
                     <button type="button" class="btn-remove btn btn-outline-danger btn-circle"><i class="fa fa-trash"></i></button>
                     `
                 }
             ]
+        });
+        $('#{{ pathBase }}_dataTable').on('click', 'button.btn-detail', function () {
+            var data = $('#{{ pathBase }}_dataTable').DataTable().row( $(this).parents('tr') ).data();
+            var url="{{ path(pathBase~'_detail',{ id: 'ENTITY_ID' })}}";
+            location.href=url.replace('ENTITY_ID',data.id);
+        });
+        $('#{{ pathBase }}_dataTable').on('click', 'button.btn-download', function () {
+            var data = $('#{{ pathBase }}_dataTable').DataTable().row( $(this).parents('tr') ).data();
+            var url="{{ path('api_preformatted_items_download_by_group',{ id: 'ENTITY_ID' })}}";
+            location.href=url.replace('ENTITY_ID',data.id);
         });
     });
 </script>

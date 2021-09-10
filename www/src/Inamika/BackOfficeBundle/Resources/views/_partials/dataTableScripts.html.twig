@@ -27,11 +27,15 @@ $('#{{ pathBase }}_dataTable').on('preXhr.dt', function (e, settings, data) {
 });
 $.extend( true, $.fn.dataTable.defaults, {
     dom: 'Bfrtip',
-
+    
     pageLength: 50,
     lengthMenu: [15, 25, 50],
     ajax: {
-        url: "{{ path(loadData)}}",
+        {% if urlApi is defined %}
+            url: '{{ urlApi }}',
+        {% else %}
+            url: "{{ path(loadData)}}",
+        {% endif %}
         dataSrc: "data"
     },
     language: {
@@ -39,8 +43,8 @@ $.extend( true, $.fn.dataTable.defaults, {
         dataSrc: ''
     },
     buttons: [
-    {# 'excel',
-    'pdf' #}
+        // 'excel',
+        // 'pdf'
     ],
 });
 $('#{{ pathBase }}_dataTable').on('click', 'button.btn-edit', function () {

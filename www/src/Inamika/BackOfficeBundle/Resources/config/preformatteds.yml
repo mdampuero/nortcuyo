@@ -5,7 +5,7 @@ inamika_backoffice_preformatteds:
     methods: [GET]
     options:
         breadcrumb:
-            label: Lista preformateada
+            label: Listas preformateadas
             parent_route: inamika_backoffice_homepage
             
 inamika_backoffice_preformatteds_add:
@@ -13,17 +13,26 @@ inamika_backoffice_preformatteds_add:
     defaults: { _controller: InamikaBackOfficeBundle:Preformatteds:add }
     options:
         breadcrumb:
-            label: Subir lista
+            label: Agregar lista
             parent_route: inamika_backoffice_preformatteds
     methods: [GET,POST]
 
-inamika_backoffice_preformattedsItems_edit:
+inamika_backoffice_preformatteds_edit:
     path:     /edit/{id}
     defaults: { _controller: InamikaBackOfficeBundle:Preformatteds:edit }
     methods: [GET]
     options:
         breadcrumb:
             label: Editar preformateada
+            parent_route: inamika_backoffice_preformatteds
+
+inamika_backoffice_preformatteds_detail:
+    path:     /detail/{id}
+    defaults: { _controller: InamikaBackOfficeBundle:Preformatteds:detail }
+    methods: [GET]
+    options:
+        breadcrumb:
+            label: Lista preformateada
             parent_route: inamika_backoffice_preformatteds
 
 inamika_backoffice_preformatteds_delete:

@@ -37,14 +37,12 @@ class PreformattedsController extends DefaultController
         )));
     }
 
-    public function deleteAction(Request $request, $id)
-    {
-        if (!$entity = $this->getDoctrine()->getRepository(Preformatted::class)->find($id))
+    public function deleteAction(Request $request,$id){
+        if(!$entity=$this->getDoctrine()->getRepository(Preformatted::class)->find($id))
             return $this->handleView($this->view(null, Response::HTTP_NOT_FOUND));
-
         $form = $this->createFormBuilder(null, array('csrf_protection' => false))->setMethod('DELETE')->getForm();
         $form->submit(json_decode($request->getContent(), true));
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()){
             $entity->setIsDelete(true);
             $this->getDoctrine()->getManager()->flush();
             return $this->handleView($this->view($entity, Response::HTTP_OK));

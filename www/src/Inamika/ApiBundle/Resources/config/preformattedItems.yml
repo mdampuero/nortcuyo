@@ -2,9 +2,19 @@ api_preformatted_items:
     path:     /preformattedsItems
     defaults: { _controller: InamikaApiBundle:PreformattedItems:index }
     methods: [GET]
+
+api_preformatted_items_group:
+    path:     /preformattedsItemsByPreformatted/{id}
+    defaults: { _controller: InamikaApiBundle:PreformattedItems:byPreformatted }
+    methods: [GET]
     
-api_preformatted_items_download:
-    path:     /preformattedsItems/download
+# api_preformatted_items_download:
+#     path:     /preformattedsItems/download
+#     defaults: { _controller: InamikaApiBundle:PreformattedItems:download }
+#     methods: [GET]
+
+api_preformatted_items_download_by_group:
+    path:     /preformattedsItems/download/{id}
     defaults: { _controller: InamikaApiBundle:PreformattedItems:download }
     methods: [GET]
 

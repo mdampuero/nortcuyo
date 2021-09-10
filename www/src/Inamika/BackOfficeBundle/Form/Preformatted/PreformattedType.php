@@ -27,6 +27,7 @@ class PreformattedType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+        ->add('title',TextType::class,array('label'=>'TITLE','label_attr'=>array('class'=>'control-label'),'attr'=>array('class'=>'form-control')))
         ->add('file',FileType::class,array('label'=>'Archivo CSV',
         'label_attr'=>array('class'=>'control-label'),'attr'=>array('class'=>'form-control')))
         ;

@@ -7,15 +7,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 
 /**
- * Preformatted
+ * Category
  *
- * @ORM\Table(name="preformatted")
- * @ORM\Entity(repositoryClass="Inamika\BackEndBundle\Repository\PreformattedRepository")
+ * @ORM\Table(name="category")
+ * @ORM\Entity(repositoryClass="Inamika\BackEndBundle\Repository\CategoryRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @ExclusionPolicy("all")
  */
-class Preformatted
+class Category
 {
     /**
      * @var string
@@ -26,31 +29,22 @@ class Preformatted
      * @Expose
      */
     private $id;
-    
+
+    /**
+     * Many Categories have One Category.
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
+     */
+    private $parent;
+
     /**
      * @var string
      *
-     * @ORM\Column(name="file", type="string", length=64, nullable=true)
+     * @ORM\Column(name="name", type="string", length=255)
      * @Assert\NotBlank()
      * @Expose
      */
-    private $file;
-    
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=64, nullable=true)
-     * @Assert\NotBlank()
-     * @Expose
-     */
-    private $title;
-    
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="count_created", type="integer")
-     */
-    private $countCreated;
+    private $name;
 
     /**
      * @var \DateTime
@@ -73,7 +67,11 @@ class Preformatted
      */
     private $isDelete=false;
 
-    
+
+    public function __construct() {
+        //$this->children = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Get id.
      *
@@ -85,75 +83,47 @@ class Preformatted
     }
 
     /**
-     * Set file
+     * Set name.
      *
-     * @param string $file
+     * @param string $name
      *
-     * @return Preformatted
+     * @return Category
      */
-    public function setFile($file)
+    public function setName($name)
     {
-        $this->file = $file;
+        $this->name = $name;
 
         return $this;
     }
 
     /**
-     * Get file
+     * Get name.
      *
      * @return string
      */
-    public function getFile()
+    public function getName()
     {
-        return $this->file;
-    }
-
-    /**
-     * Set title
-     *
-     * @param string $title
-     *
-     * @return Preformatted
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
+        return $this->name;
     }
     
     /**
-     * Set countCreated
+     * Get parent.
      *
-     * @param string $countCreated
-     *
-     * @return Preformatted
+     * @return int
      */
-    public function setCountCreated($countCreated)
+    public function getParent()
     {
-        $this->countCreated = $countCreated;
-
-        return $this;
+        return $this->parent;
     }
-
+    
     /**
-     * Get countCreated
+     * Set parent.
      *
-     * @return string
+     * @return Orders
      */
-    public function getCountCreated()
+    public function setParent($parent)
     {
-        return $this->countCreated;
+        return $this->parent=$parent;
     }
 
     /**
@@ -161,7 +131,7 @@ class Preformatted
      *
      * @param \DateTime $createdAt
      *
-     * @return Preformatted
+     * @return Category
      */
     public function setCreatedAt($createdAt)
     {
@@ -185,7 +155,7 @@ class Preformatted
      *
      * @param \DateTime $updatedAt
      *
-     * @return Preformatted
+     * @return Category
      */
     public function setUpdateAt($updatedAt)
     {
@@ -209,7 +179,7 @@ class Preformatted
      *
      * @param bool $isDelete
      *
-     * @return Preformatted
+     * @return Category
      */
     public function setIsDelete($isDelete)
     {

@@ -13,26 +13,24 @@ class PreformattedItemRepository extends \Doctrine\ORM\EntityRepository
     public function getAll(){
         return $this->createQueryBuilder('e')
         ->select('e')
-        ->join('e.product','product')
-        ->where('product.isDelete = :isDelete')
-        ->setParameter('isDelete',false)
+        ->leftJoin('e.product','product')
+        //->where('product.isDelete = :isDelete')->setParameter('isDelete',false)
         ->orderBy("e.position","ASC");
     }
 
-    public function search($query=null,$limit=0,$offset=0,$sort=null,$direction=null){
+    public function search($preformatted=null,$query=null,$limit=0,$offset=0,$sort=null,$direction=null){
         if($limit>100) $limit=100;
         if($limit==0) $limit=30;
         $qb= $this->getAll()
         ->setFirstResult($offset);
         if($limit!="-1")
             $qb->setMaxResults($limit);
-
-        $qb->orderBy("product.id","DESC");
+        if($preformatted)
+            $qb->andWhere('e.preformatted=:preformatted')->setParameter('preformatted',$preformatted);
+       
         if($sort){
             if($sort=="position") $sort="e.position";
             $qb->orderBy($sort,$direction);
-        }else{
-            $qb->orderBy('RAND()');
         }
         if($query){
             $words=explode(" ",$query);
@@ -60,8 +58,8 @@ class PreformattedItemRepository extends \Doctrine\ORM\EntityRepository
         return (int)$resultTotal['total'];
     }
    
-    public function total(){
-        $resultTotal=$this->search()
+    public function total($preformatted=null){
+        $resultTotal=$this->search($preformatted=null)
         ->setFirstResult(null)
         ->where('product.isDelete = :isDelete')
         ->setParameter('isDelete',false)

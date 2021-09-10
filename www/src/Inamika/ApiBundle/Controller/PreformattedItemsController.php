@@ -25,24 +25,41 @@ class PreformattedItemsController extends DefaultController
         $limit = $request->query->get('length', 30);
         $sort = $request->query->get('sort', null);
         $direction = $request->query->get('direction', null);
-        $results=$this->getDoctrine()->getRepository(PreformattedItem::class)->search($search["value"], $limit, $offset, $sort, $direction)->getQuery()->getResult();
+        $results=$this->getDoctrine()->getRepository(PreformattedItem::class)->search(null,$search["value"], $limit, $offset, $sort, $direction)->getQuery()->getResult();
         return $this->handleView($this->view(array(
             'data' => $results,
-            'recordsTotal' => $this->getDoctrine()->getRepository(PreformattedItem::class)->total(),
-            'recordsFiltered' => $this->getDoctrine()->getRepository(PreformattedItem::class)->searchTotal($search["value"], $limit, $offset),
+            'recordsTotal' => $this->getDoctrine()->getRepository(PreformattedItem::class)->total(null),
+            'recordsFiltered' => $this->getDoctrine()->getRepository(PreformattedItem::class)->searchTotal(null,$search["value"], $limit, $offset),
+            'offset' => $offset,
+            'limit' => $limit,
+        )));
+    }
+    
+    public function byPreformattedAction(Request $request,$id)
+    {
+        $search = $request->query->get('search', array());
+        $offset = $request->query->get('start', 0);
+        $limit = $request->query->get('length', 30);
+        $sort = $request->query->get('sort', null);
+        $direction = $request->query->get('direction', null);
+        $results=$this->getDoctrine()->getRepository(PreformattedItem::class)->search($id,$search["value"], $limit, $offset, $sort, $direction)->getQuery()->getResult();
+        return $this->handleView($this->view(array(
+            'data' => $results,
+            'recordsTotal' => $this->getDoctrine()->getRepository(PreformattedItem::class)->total($id),
+            'recordsFiltered' => $this->getDoctrine()->getRepository(PreformattedItem::class)->searchTotal($id,$search["value"], $limit, $offset),
             'offset' => $offset,
             'limit' => $limit,
         )));
     }
 
-    public function downloadAction(){
+    public function downloadAction($id){
         $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
         $phpExcelObject->getProperties()->setCreator("Nortcuyo")
             ->setLastModifiedBy("Nortcuyo")
             ->setTitle("Lista de productos reducida Nortcuyo")
             ->setSubject("Lista de productos reducida Nortcuyo")
             ->setDescription("Este documento contiene la lista de productos reducida de nortcuyo");
-        $data=$this->getDoctrine()->getRepository(PreformattedItem::class)->getAll()->getQuery()->getResult();
+        $data=$this->getDoctrine()->getRepository(PreformattedItem::class)->getAll()->andWhere('e.preformatted=:preformatted')->setParameter('preformatted',$id)->getQuery()->getResult();
         
         $phpExcelObject->setActiveSheetIndex(0)
             ->setCellValue('A1','Código')
@@ -54,14 +71,16 @@ class PreformattedItemsController extends DefaultController
         $row=2;
         foreach ($data as $key => $r) {
             $d=$r->getProduct();
-            $phpExcelObject->setActiveSheetIndex(0)
+            if($d){
+                $phpExcelObject->setActiveSheetIndex(0)
                 ->setCellValue('A'.$row, $d->getCode())
                 ->setCellValue('B'.$row, $d->getName())
                 ->setCellValue('C'.$row, $d->getCurrency()->getSymbol())
                 ->setCellValue('D'.$row, (String)round($d->getPrice(),2))
                 ->setCellValue('E'.$row, (String)round(($d->getPrice()*$d->getVat()),2))
                 ->setCellValue('F'.$row, (String)$d->getVat());
-            $row++;
+                $row++;
+            }
         }
         foreach(range('A','F') as $columnID) {
             $phpExcelObject->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);

@@ -7,15 +7,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 
 /**
- * Preformatted
+ * Cron
  *
- * @ORM\Table(name="preformatted")
- * @ORM\Entity(repositoryClass="Inamika\BackEndBundle\Repository\PreformattedRepository")
+ * @ORM\Table(name="cron")
+ * @ORM\Entity(repositoryClass="Inamika\BackEndBundle\Repository\CronRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @ExclusionPolicy("all")
  */
-class Preformatted
+class Cron
 {
     /**
      * @var string
@@ -26,36 +29,39 @@ class Preformatted
      * @Expose
      */
     private $id;
-    
+
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="file", type="string", length=64, nullable=true)
+     * @ORM\Column(name="category", type="integer")
      * @Assert\NotBlank()
      * @Expose
      */
-    private $file;
+    private $category;
     
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="title", type="string", length=64, nullable=true)
+     * @ORM\Column(name="offset", type="integer")
      * @Assert\NotBlank()
      * @Expose
      */
-    private $title;
+    private $offset;
     
     /**
-     * @var integer
+     * @var int
      *
-     * @ORM\Column(name="count_created", type="integer")
+     * @ORM\Column(name="limit", type="integer")
+     * @Assert\NotBlank()
+     * @Expose
      */
-    private $countCreated;
+    private $limit;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
+     * @Expose
      */
     private $createdAt;
 
@@ -63,6 +69,7 @@ class Preformatted
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime")
+     * @Expose
      */
     private $updatedAt;
 
@@ -70,10 +77,15 @@ class Preformatted
      * @var bool
      *
      * @ORM\Column(name="is_delete", type="boolean")
+     * @Expose
      */
     private $isDelete=false;
 
-    
+
+    public function __construct() {
+        //$this->children = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Get id.
      *
@@ -85,83 +97,81 @@ class Preformatted
     }
 
     /**
-     * Set file
+     * Set category.
      *
-     * @param string $file
+     * @param string $category
      *
-     * @return Preformatted
+     * @return Cron
      */
-    public function setFile($file)
+    public function setCategory($category)
     {
-        $this->file = $file;
+        $this->category = $category;
 
         return $this;
     }
 
     /**
-     * Get file
+     * Get category.
      *
      * @return string
      */
-    public function getFile()
+    public function getCategory()
     {
-        return $this->file;
+        return $this->category;
     }
-
     /**
-     * Set title
+     * Set offset.
      *
-     * @param string $title
+     * @param string $offset
      *
-     * @return Preformatted
+     * @return Cron
      */
-    public function setTitle($title)
+    public function setOffset($offset)
     {
-        $this->title = $title;
+        $this->offset = $offset;
 
         return $this;
     }
 
     /**
-     * Get title
+     * Get offset.
      *
      * @return string
      */
-    public function getTitle()
+    public function getOffset()
     {
-        return $this->title;
+        return $this->offset;
+    }
+    /**
+     * Set limit.
+     *
+     * @param string $limit
+     *
+     * @return Cron
+     */
+    public function setLimit($limit)
+    {
+        $this->limit = $limit;
+
+        return $this;
+    }
+
+    /**
+     * Get limit.
+     *
+     * @return string
+     */
+    public function getLimit()
+    {
+        return $this->limit;
     }
     
-    /**
-     * Set countCreated
-     *
-     * @param string $countCreated
-     *
-     * @return Preformatted
-     */
-    public function setCountCreated($countCreated)
-    {
-        $this->countCreated = $countCreated;
-
-        return $this;
-    }
-
-    /**
-     * Get countCreated
-     *
-     * @return string
-     */
-    public function getCountCreated()
-    {
-        return $this->countCreated;
-    }
-
     /**
      * Set createdAt.
      *
      * @param \DateTime $createdAt
      *
-     * @return Preformatted
+     * @return Cron
      */
     public function setCreatedAt($createdAt)
     {
@@ -185,7 +195,7 @@ class Preformatted
      *
      * @param \DateTime $updatedAt
      *
-     * @return Preformatted
+     * @return Cron
      */
     public function setUpdateAt($updatedAt)
     {
@@ -209,7 +219,7 @@ class Preformatted
      *
      * @param bool $isDelete
      *
-     * @return Preformatted
+     * @return Cron
      */
     public function setIsDelete($isDelete)
     {

@@ -84,14 +84,10 @@
   <script>
   var loading={
         show: function (text){
-            if(typeof text !== "undefined") $('#loading').attr('data-text',text);
-            {# $('#loading').show(); #}
             $(".preloader").fadeIn();
-            return true;
+            return true; 
         },
         hide: function (){
-            {# $('#loading').removeAttr('data-text');
-            $('#loading').hide(); #}
             $(".preloader").fadeOut();
             return true;
         }

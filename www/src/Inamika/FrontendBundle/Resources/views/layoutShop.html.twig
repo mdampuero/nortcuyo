@@ -393,6 +393,9 @@
         }else{
             $("#menu-icon-cart a").html(`<i class="fa fa-shopping-cart"></i><div class="badge-cart" id="badge-cart">${quantity}</div>`);
         }
+        {% if app.request.get('_route') == 'inamika_frontend_shop_preformatted' %}
+            getCart();
+        {% endif %}
         return;
     }
   </script>

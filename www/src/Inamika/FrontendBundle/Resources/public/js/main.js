@@ -11,9 +11,9 @@ jQuery(document).ready(function($) {
         }
        // console.log($(this).scrollTop());
         if ($(this).scrollTop() > 160) {
-            $("#cartFloat").addClass("totalFixed");
+            $("#containerLeft").addClass("position-fixed");
         } else {
-            $("#cartFloat").removeClass("totalFixed");
+            $("#containerLeft").removeClass("position-fixed");
         }
     });
     $('.back-to-top').click(function() {

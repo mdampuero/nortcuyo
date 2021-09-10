@@ -8,6 +8,13 @@
             <div class="row p-t-20">
                 <div class="col-md-12">
                     <div class="form-group">
+                        {{form_label(form.title)}}
+                        {{form_widget(form.title)}}
+                        <div class="form-errors">{{ form_errors(form.title)}} </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
                         {{form_label(form.file)}}
                         {{form_widget(form.file)}}
                         <div class="form-errors">{{ form_errors(form.file)}} </div>
@@ -17,7 +24,9 @@
             </div>
         </div>
         <div class="form-actions">
-            <button type="submit" class="btn btn-success" onclick="$('form').submit();$(this).attr('disabled',true)"> <i class="fa fa-upload"></i> {{ 'Subir lista' | trans }}</button>
+            <button type="submit" class="btn btn-success" onclick="loading.show();$('form').submit();$(this).attr('disabled',true)">
+			    <i class="fa fa-check"></i> {{ 'SAVE' | trans }}
+            </button>
             <button type="button" class="btn btn-inverse" onclick="location.href='{{ path(pathBase) }}'">{{ 'CANCEL' | trans }}</button>
         </div>
     {{ form_end(form) }}

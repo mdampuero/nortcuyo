@@ -61,6 +61,10 @@ class CartController extends FOSRestController
         $this->get('session')->set('_security_main', $dataCustomer);
         return $this->handleView($this->view($dataCustomer, Response::HTTP_OK));
     }
+    
+    public function getAction(Request $request){
+        return $this->handleView($this->view($this->calcTotal($this->get('session')->get('_security_main')), Response::HTTP_OK));
+    }
 
     private function calcTotal($dataCustomer){
         $currencies=$this->getDoctrine()->getRepository(Currency::class)->getAll()->getQuery()->getResult();

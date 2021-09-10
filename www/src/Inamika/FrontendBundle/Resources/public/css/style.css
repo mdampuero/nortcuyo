@@ -1254,7 +1254,18 @@ body.mobile-nav-active #mobile-nav-toggle {
     background-color: #f36639;
     border-color: #f36639;
 }
+.badge-primary {
+    color: #fff;
+    background-color: #f36639;
+    border-color: #f36639;
+}
 
+.list-group-item.active {
+    z-index: 2;
+    color: #fff;
+    background-color: #f36639;
+    border-color: #f36639;
+}
 .btn-primary:not([disabled]):not(.disabled).active,
 .btn-primary:not([disabled]):not(.disabled):active,
 .show>.btn-primary.dropdown-toggle {
@@ -1462,7 +1473,6 @@ div.badge-cart {
 
 .table-reduced td, .table-reduced th{
     padding: 0.25rem;
-    white-space: nowrap;
 }
 
 #cartFloat{
@@ -1476,4 +1486,21 @@ div.badge-cart {
     width: 300px;
     right: 0;
     z-index: 25;
+}
+.nowrap{
+    white-space: nowrap;
+}
+.table thead th {
+    vertical-align: middle;
+    background-color: #e9ecef;
+    border-bottom: 2px solid #e9ecef;
+    height: 50px;
+}
+td.divider{
+    color: #f36639;
+    height: 50px;
+    vertical-align: middle;
+    font-weight: bold;
+    text-align: center;
+    background: #e9ecef;
 }

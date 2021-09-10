@@ -7,3 +7,13 @@ api_crons_offers:
     path:     /crons/offers
     defaults: { _controller: InamikaApiBundle:Crons:offers }
     methods: [GET]
+
+api_crons_preciosClaros:
+    path:     /crons/preciosClaros
+    defaults: { _controller: InamikaApiBundle:Crons:preciosClaros }
+    methods: [GET]
+
+api_crons_count:
+    path:     /crons/count
+    defaults: { _controller: InamikaApiBundle:Crons:count }
+    methods: [GET]
