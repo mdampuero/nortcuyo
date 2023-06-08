@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MessDetectorOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PHPCSFixerOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PHPCodeSnifferOptionsConfiguration">
+    <option name="highlightLevel" value="WARNING" />
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/www/vendor/doctrine/cache" />
+      <path value="$PROJECT_DIR$/www/vendor/doctrine/reflection" />
+      <path value="$PROJECT_DIR$/www/vendor/doctrine/event-manager" />
+      <path value="$PROJECT_DIR$/www/vendor/doctrine/persistence" />
+      <path value="$PROJECT_DIR$/www/vendor/doctrine/instantiator" />
+      <path value="$PROJECT_DIR$/www/vendor/doctrine/doctrine-bundle" />
+      <path value="$PROJECT_DIR$/www/vendor/doctrine/inflector" />
+      <path value="$PROJECT_DIR$/www/vendor/doctrine/common" />
+      <path value="$PROJECT_DIR$/www/vendor/doctrine/lexer" />
+      <path value="$PROJECT_DIR$/www/vendor/doctrine/dbal" />
+      <path value="$PROJECT_DIR$/www/vendor/doctrine/deprecations" />
+      <path value="$PROJECT_DIR$/www/vendor/doctrine/doctrine-cache-bundle" />
+      <path value="$PROJECT_DIR$/www/vendor/doctrine/orm" />
+      <path value="$PROJECT_DIR$/www/vendor/doctrine/collections" />
+      <path value="$PROJECT_DIR$/www/vendor/doctrine/annotations" />
+      <path value="$PROJECT_DIR$/www/vendor/doctrine/data-fixtures" />
+      <path value="$PROJECT_DIR$/www/vendor/doctrine/doctrine-fixtures-bundle" />
+      <path value="$PROJECT_DIR$/www/vendor/incenteev/composer-parameter-handler" />
+      <path value="$PROJECT_DIR$/www/vendor/phpoffice/phpexcel" />
+      <path value="$PROJECT_DIR$/www/vendor/phpoption/phpoption" />
+      <path value="$PROJECT_DIR$/www/vendor/thormeier/breadcrumb-bundle" />
+      <path value="$PROJECT_DIR$/www/vendor/sensiolabs/security-checker" />
+      <path value="$PROJECT_DIR$/www/vendor/willdurand/jsonp-callback-validator" />
+      <path value="$PROJECT_DIR$/www/vendor/willdurand/negotiation" />
+      <path value="$PROJECT_DIR$/www/vendor/swiftmailer/swiftmailer" />
+      <path value="$PROJECT_DIR$/www/vendor/kriswallsmith/assetic" />
+      <path value="$PROJECT_DIR$/www/vendor/phpcollection/phpcollection" />
+      <path value="$PROJECT_DIR$/www/vendor/friendsofsymfony/rest-bundle" />
+      <path value="$PROJECT_DIR$/www/vendor/composer" />
+      <path value="$PROJECT_DIR$/www/vendor/fig/link-util" />
+      <path value="$PROJECT_DIR$/www/vendor/jms/serializer" />
+      <path value="$PROJECT_DIR$/www/vendor/jms/serializer-bundle" />
+      <path value="$PROJECT_DIR$/www/vendor/jms/parser-lib" />
+      <path value="$PROJECT_DIR$/www/vendor/jms/metadata" />
+      <path value="$PROJECT_DIR$/www/vendor/psr/log" />
+      <path value="$PROJECT_DIR$/www/vendor/psr/cache" />
+      <path value="$PROJECT_DIR$/www/vendor/psr/link" />
+      <path value="$PROJECT_DIR$/www/vendor/psr/container" />
+      <path value="$PROJECT_DIR$/www/vendor/psr/simple-cache" />
+      <path value="$PROJECT_DIR$/www/vendor/twig/twig" />
+      <path value="$PROJECT_DIR$/www/vendor/jdorn/sql-formatter" />
+      <path value="$PROJECT_DIR$/www/vendor/nelmio/cors-bundle" />
+      <path value="$PROJECT_DIR$/www/vendor/sensio/distribution-bundle" />
+      <path value="$PROJECT_DIR$/www/vendor/sensio/framework-extra-bundle" />
+      <path value="$PROJECT_DIR$/www/vendor/sensio/generator-bundle" />
+      <path value="$PROJECT_DIR$/www/vendor/gregwar/cache" />
+      <path value="$PROJECT_DIR$/www/vendor/gregwar/image" />
+      <path value="$PROJECT_DIR$/www/vendor/gregwar/image-bundle" />
+      <path value="$PROJECT_DIR$/www/vendor/liuggio/excelbundle" />
+      <path value="$PROJECT_DIR$/www/vendor/monolog/monolog" />
+      <path value="$PROJECT_DIR$/www/vendor/symfony/assetic-bundle" />
+      <path value="$PROJECT_DIR$/www/vendor/symfony/polyfill-intl-icu" />
+      <path value="$PROJECT_DIR$/www/vendor/symfony/mime" />
+      <path value="$PROJECT_DIR$/www/vendor/symfony/polyfill-php72" />
+      <path value="$PROJECT_DIR$/www/vendor/symfony/http-client" />
+      <path value="$PROJECT_DIR$/www/vendor/symfony/monolog-bundle" />
+      <path value="$PROJECT_DIR$/www/vendor/symfony/polyfill-php73" />
+      <path value="$PROJECT_DIR$/www/vendor/symfony/symfony" />
+      <path value="$PROJECT_DIR$/www/vendor/symfony/polyfill-intl-normalizer" />
+      <path value="$PROJECT_DIR$/www/vendor/symfony/polyfill-php80" />
+      <path value="$PROJECT_DIR$/www/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/www/vendor/symfony/http-client-contracts" />
+      <path value="$PROJECT_DIR$/www/vendor/symfony/polyfill-apcu" />
+      <path value="$PROJECT_DIR$/www/vendor/symfony/service-contracts" />
+      <path value="$PROJECT_DIR$/www/vendor/symfony/polyfill-intl-idn" />
+      <path value="$PROJECT_DIR$/www/vendor/symfony/phpunit-bridge" />
+      <path value="$PROJECT_DIR$/www/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/www/vendor/symfony/swiftmailer-bundle" />
+      <path value="$PROJECT_DIR$/www/vendor/symfony/polyfill-ctype" />
+    </include_path>
+  </component>
+  <component name="PhpProjectSharedConfiguration" php_language_level="7.0">
+    <option name="suggestChangeDefaultLanguageLevel" value="false" />
+  </component>
+  <component name="PhpStanOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PhpUnit">
+    <phpunit_settings>
+      <PhpUnitSettings configuration_file_path="$PROJECT_DIR$/www/phpunit.xml.dist" custom_loader_path="$PROJECT_DIR$/www/vendor/autoload.php" use_configuration_file="true" />
+    </phpunit_settings>
+  </component>
+  <component name="PsalmOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+</project>
